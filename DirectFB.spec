@@ -154,11 +154,13 @@ CPPFLAGS="-I/usr/include/libmpeg3"
 	--disable-debug \
 	%{!?with_mpg:--disable-libmpeg3} \
 	--enable-sdl \
-%ifarch i586 i686 athlon
+%ifarch %{ix86}
+%ifnarch i386 i486
 	--enable-mmx \
 %endif
-%ifarch i686 athlon
+%ifnarch i386 i486 i586
 	--enable-sse
+%endif
 %endif
 
 %{__make}
