@@ -15,6 +15,7 @@ Patch1:		%{name}-pmake.patch
 Patch2:		%{name}-fix.patch
 # missing files taken from DirectFB CVS
 Patch3:		%{name}-missing-files.patch
+Patch4:		%{name}-sh.patch
 URL:		http://www.directfb.org/
 BuildRequires:	SDL-devel
 BuildRequires:	autoconf >= 2.52
@@ -127,6 +128,7 @@ Ten pakiet zawiera wtyczkê dla DirectFB dostarczaj±c± grafikê PNG.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 sed -i -e 's@sysfs/libsysfs.h@libsysfs.h@' \
 	configure.in gfxdrivers/{nvidia/nvidia.c,matrox/matrox_maven.c}
