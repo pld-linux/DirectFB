@@ -1,8 +1,8 @@
 Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
-Version:	0.9.12
-Release:	2
+Version:	0.9.13
+Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://www.directfb.org/download/%{name}/%{name}-%{version}.tar.gz
@@ -11,7 +11,7 @@ Patch0:		%{name}-am.patch
 URL:		http://www.directfb.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
-BuildRequires:	flash-devel
+BuildRequires:	flash-devel >= 0.4.10-5
 BuildRequires:	freetype-devel >= 2.0.2
 BuildRequires:	gettext-devel
 BuildRequires:	libjpeg-devel >= 6b
@@ -98,7 +98,7 @@ Ten pakiet zawiera wtyczkê dla DirectFB dostarczaj±c± obraz SWF
 rm -f missing
 %{__libtoolize}
 %{__gettextize}
-aclocal
+%{__aclocal}
 %{__autoconf}
 %{__automake}
 # paths for libmpeg3 and libflash
