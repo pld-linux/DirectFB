@@ -1,14 +1,3 @@
---- DirectFB-0.9.21/inputdrivers/linux_input/linux_input.c.orig	2004-12-20 02:22:57.000000000 +0100
-+++ DirectFB-0.9.21/inputdrivers/linux_input/linux_input.c	2005-01-09 23:53:42.772463240 +0100
-@@ -884,7 +884,7 @@
-  * Fetch one entry from the kernel keymap.
-  */
- static DFBResult
--driver_get_keymap_entry( InputDevice               *device,
-+driver_get_keymap_entry( CoreInputDevice           *device,
-                          void                      *driver_data,
-                          DFBInputDeviceKeymapEntry *entry )
- {
 --- DirectFB-0.9.21/gfxdrivers/cle266/Makefile.am.orig	2004-10-09 01:44:31.000000000 +0200
 +++ DirectFB-0.9.21/gfxdrivers/cle266/Makefile.am	2005-01-15 15:07:27.813759856 +0100
 @@ -32,7 +32,7 @@
