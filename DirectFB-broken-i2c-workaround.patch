@@ -1,0 +1,16 @@
+--- DirectFB-0.9.20/gfxdrivers/matrox/matrox_maven.c.orig	2003-07-08 14:44:19.000000000 +0000
++++ DirectFB-0.9.20/gfxdrivers/matrox/matrox_maven.c	2003-11-11 18:29:42.000000000 +0000
+@@ -29,6 +29,13 @@
+ #include <sys/stat.h>
+ #include <fcntl.h>
+ #include <sys/ioctl.h>
++/* i2c-dev.h is broken in i2c 2.8.[01] - must include <linux/version.h> first :/
++ * but <linux/version.h> is included in <linux/i2c.h>, which is needed too
++ * ...and i2c.h is broken even (MUCH!) more, because it uses internal kernel types
++ * inside not #ifdef __KERNEL__-ed part!!! argh!!! */
++#define __KERNEL__
++#include <linux/i2c.h>
++#undef __KERNEL__
+ #include <linux/i2c-dev.h>
+ 
+ #include <misc/memcpy.h>
