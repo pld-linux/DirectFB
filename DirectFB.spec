@@ -12,6 +12,7 @@ Group:		Libraries
 Source0:	http://www.directfb.org/download/%{name}/%{name}-%{version}.tar.gz
 Source1:	http://www.directfb.org/download/DirectFB/DFBTutorials-0.5.0.tar.gz
 Patch0:		%{name}-am.patch
+Patch1:         %{name}-pmake.patch
 URL:		http://www.directfb.org/
 #BuildRequires:	SDL-devel
 BuildRequires:	autoconf
@@ -121,6 +122,7 @@ Ten pakiet zawiera wtyczkê dla DirectFB dostarczajac± obraz MPEG
 %prep
 %setup -q -a1
 %patch0 -p1
+%patch1 -p1
 
 %build
 rm -f missing
