@@ -1,176 +1,21 @@
---- DirectFB-0.9.12/configure.in.orig	Mon Jun 10 13:39:16 2002
-+++ DirectFB-0.9.12/configure.in	Sun Sep  1 01:29:59 2002
-@@ -62,6 +62,7 @@
- AC_PROG_MAKE_SET
+--- DirectFB-0.9.14/configure.in.orig	Mon Oct 28 19:20:06 2002
++++ DirectFB-0.9.14/configure.in	Thu Nov  7 11:21:17 2002
+@@ -64,6 +64,7 @@
  AC_HEADER_STDC
  AC_C_CONST
+ AC_C_BIGENDIAN
 +AM_PROG_AS
  
  AC_PATH_PROGS(PERL, perl5 perl)
  
-@@ -259,23 +260,23 @@
-   dnl Test for libz
-     if test -z "$LIBZ"; then
-       AC_CHECK_LIB(z, gzsetparams,
--        AC_CHECK_HEADER(zlib.h,
-+        [AC_CHECK_HEADER(zlib.h,
- 	  LIBZ='-lz',
--	  AC_MSG_WARN([
--*** libz header files not found. PNG image provider will not be built.])),
--        AC_MSG_WARN([
--*** libz not found. PNG image provider will not be built.]))
-+	  [AC_MSG_WARN([
-+*** libz header files not found. PNG image provider will not be built.])])],
-+        [AC_MSG_WARN([
-+*** libz not found. PNG image provider will not be built.])])
+@@ -230,9 +231,8 @@
+ if test "x$enable_debug" = xyes; then
+     AC_DEFINE(DFB_DEBUG,1,[Define to 1 if you want debugging support.])
+     DFB_INTERNAL_CFLAGS="$DFB_INTERNAL_CFLAGS -DDFB_DEBUG"
+-    DFB_CFLAGS="$DFB_CFLAGS -O3 -g3 -fno-inline"
++    DFB_CFLAGS="$DFB_CFLAGS -fno-inline"
+ else
+-    DFB_CFLAGS="$DFB_CFLAGS -O3 -g"
+     if test "x$enable_profiling" = xno; then
+         DFB_CFLAGS_OMIT_FRAME_POINTER="-fomit-frame-pointer"
      fi
- 
-   dnl Test for libpng
-     if test -z "$LIBPNG" && test -n "$LIBZ"; then
-       AC_CHECK_LIB(png, png_read_info,
--        AC_CHECK_HEADER(png.h,
-+        [AC_CHECK_HEADER(png.h,
- 	  png_ok=yes,
--	  AC_MSG_WARN([
--*** PNG header files not found. PNG image provider will not be built.])),
--        AC_MSG_WARN([
--*** PNG library not found. PNG image provider will not be built.]), $LIBZ -lm)
-+	  [AC_MSG_WARN([
-+*** PNG header files not found. PNG image provider will not be built.])])],
-+        [AC_MSG_WARN([
-+*** PNG library not found. PNG image provider will not be built.])], $LIBZ -lm)
-       if test "$png_ok" = yes; then
-         AC_MSG_CHECKING([for png_structp in png.h])
-         AC_TRY_COMPILE([#include <png.h>],
-@@ -363,13 +364,13 @@
- 
-   if test x$enable_flash = xyes; then
-     AC_CHECK_LIB(flash, FlashGetInfo,
--      AC_CHECK_HEADER(flash.h,
-+      [AC_CHECK_HEADER(flash.h,
- 	FLASH=yes
- 	LIBFLASH='-lflash',
--	AC_MSG_WARN([
--*** libflash headers not found -- Flash media provider will not be built.])),
--      AC_MSG_WARN([
--*** libflash not found -- Flash media provider will not be built.]), $LIBJPEG $LIBZ -lm)
-+	[AC_MSG_WARN([
-+*** libflash headers not found -- Flash media provider will not be built.])])],
-+      [AC_MSG_WARN([
-+*** libflash not found -- Flash media provider will not be built.])], $LIBJPEG $LIBZ -lm)
-   fi
- 
- AM_CONDITIONAL(FLASH_PROVIDER, test x$FLASH = xyes)
-@@ -381,13 +382,13 @@
- 
-   if test x$enable_mpeg3 = xyes; then
-     AC_CHECK_LIB(mpeg3, mpeg3_open,
--      AC_CHECK_HEADER(libmpeg3.h,
-+      [AC_CHECK_HEADER(libmpeg3.h,
-         MPEG3=yes
-         LIBMPEG3='-lmpeg3',
--        AC_MSG_WARN([
--*** libmpeg3 headers not found -- Libmpeg3 video provider will not be built.])),
--      AC_MSG_WARN([
--*** libmpeg3 not found -- Libmpeg3 video provider will not be build.]), -lm -lpthread)
-+        [AC_MSG_WARN([
-+*** libmpeg3 headers not found -- Libmpeg3 video provider will not be built.])])],
-+      [AC_MSG_WARN([
-+*** libmpeg3 not found -- Libmpeg3 video provider will not be build.])], -lm -lpthread)
-   fi
- 
- AM_CONDITIONAL(LIBMPEG3_PROVIDER, test x$MPEG3 = xyes)
-@@ -415,9 +416,9 @@
-   yes
- #endif
- ], matrox=yes, 
--  matrox=no  
-+  [matrox=no  
-   AC_MSG_WARN([
--*** Matrox G200/400/450/550 gfxdriver will not be built.]))
-+*** Matrox G200/400/450/550 gfxdriver will not be built.])])
- 
- AM_CONDITIONAL(GFX_MATROX, test x$matrox = xyes)
- 
-@@ -429,9 +430,9 @@
-   yes
- #endif
- ], tdfx=yes, 
--  tdfx=no  
-+  [tdfx=no  
-   AC_MSG_WARN([
--*** 3DFX Voodoo/Banshee gfxdriver will not be built.]))
-+*** 3DFX Voodoo/Banshee gfxdriver will not be built.])])
- 
- AM_CONDITIONAL(GFX_TDFX, test x$tdfx = xyes)
- 
-@@ -443,9 +444,9 @@
-   yes
- #endif
- ], nvidia=yes, 
--  nvidia=no  
-+  [nvidia=no  
-   AC_MSG_WARN([
--*** nVidia RIVA TNT gfxdriver will not be built.]))
-+*** nVidia RIVA TNT gfxdriver will not be built.])])
- 
- AM_CONDITIONAL(GFX_NVIDIA, test x$nvidia = xyes)
- 
-@@ -457,9 +458,9 @@
-   yes
- #endif
- ], savage=yes,
--  savage=no   
-+  [savage=no   
-   AC_MSG_WARN([
--*** Savage gfxdriver will not be built.]))
-+*** Savage gfxdriver will not be built.])])
- 
- AM_CONDITIONAL(GFX_SAVAGE, test x$savage = xyes)
- 
-@@ -469,25 +470,25 @@
- 
- 
- dnl Test for H3600 Touchscreen support
--AC_CHECK_HEADER( [linux/h3600_ts.h], h3600_ts=yes, h3600_ts=no  
-+AC_CHECK_HEADER( [linux/h3600_ts.h], h3600_ts=yes, [h3600_ts=no  
-   AC_MSG_WARN([
--*** H3600 Touchscreen driver will not be built.]))
-+*** H3600 Touchscreen driver will not be built.])])
- 
- AM_CONDITIONAL(H3600_TS, test x$h3600_ts = xyes)
- 
- 
- dnl Test for SonyPI Jogdial support
--AC_CHECK_HEADER( [linux/sonypi.h], sonypi=yes, sonypi=no  
-+AC_CHECK_HEADER( [linux/sonypi.h], sonypi=yes, [sonypi=no  
-   AC_MSG_WARN([
--*** SonyPI Jogdial driver will not be built.]))
-+*** SonyPI Jogdial driver will not be built.])])
- 
- AM_CONDITIONAL(SONYPI, test x$sonypi = xyes)
- 
- 
- dnl Test for DBox2 Remote support
--AC_CHECK_HEADER( [dbox/fp.h], dbox2remote=yes, dbox2remote=no
-+AC_CHECK_HEADER( [dbox/fp.h], dbox2remote=yes, [dbox2remote=no
-   AC_MSG_WARN([
--*** DBox2 Remote driver will not be built.]))
-+*** DBox2 Remote driver will not be built.])])
- 
- AM_CONDITIONAL(DBOX2REMOTE, test x$dbox2remote = xyes)
- 
-@@ -496,11 +496,11 @@
- DFB_CFLAGS="$DFB_CFLAGS $DFB_INTERNAL_CFLAGS"
- DFB_CXXFLAGS="$DFB_CFLAGS"
- 
--if test x$cflags_set != xset ; then
-+if test "x$cflags_set" != "xset" ; then
-   DFB_CFLAGS="$DFB_CFLAGS $CFLAGS"
- fi
- 
--if test x$cxxflags_set != xset ; then
-+if test "x$cxxflags_set" != "xset" ; then
-   DFB_CXXFLAGS="$DFB_CXXFLAGS $CXXFLAGS"
- fi
- 
