@@ -17,7 +17,7 @@ Patch2:		%{name}-fix.patch
 Patch3:		%{name}-missing-files.patch
 URL:		http://www.directfb.org/
 BuildRequires:	SDL-devel
-BuildRequires:	autoconf
+BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
 BuildRequires:	freetype-devel >= 2.0.2
 BuildRequires:	libjpeg-devel >= 6b
