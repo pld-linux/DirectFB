@@ -316,7 +316,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files doc
 %defattr(644,root,root,755)
-%doc docs/html/*
+%doc docs/html/*.{html,png}
 %{_examplesdir}/%{name}-%{version}
 
 %files core-sdl
