@@ -1,15 +1,15 @@
 Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
-Version:	0.9.4
+Version:	0.9.9
 Release:	1
 License:	GPL
 Group:		Libraries
 Source0:	http://www.directfb.org/download/%{name}/%{name}-%{version}.tar.gz
 URL:		http://www.directfb.org/
-BuildRequires:	libpng-devel >= 1.0.10
+BuildRequires:	libpng-devel >= 1.2.0
 BuildRequires:	zlib-devel >= 1.1.3
-BuildRequires:	libjpeg-devel
+BuildRequires:	libjpeg-devel >= 6b
 BuildRequires:	freetype-devel >= 2.0.2
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -48,6 +48,9 @@ Dokumentacja dla systemu DirectFB wraz z przyk³adami.
 %setup -q
 
 %build
+rm -f missing
+libtoolize --copy --force
+gettextize --copy --force
 aclocal
 autoconf
 automake -a -c
@@ -77,16 +80,15 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/*
-%attr(755,root,root) %{_libdir}/directfb/*/*.so
+%attr(755,root,root) %{_libdir}/directfb
 %attr(755,root,root) %{_libdir}/*.so
-%{_pkgconfigdir}/directfb.pc
-%dir %{_datadir}/directfb
-%dir %{_datadir}/directfb/fonts
-%{_datadir}/directfb/cursor.dat
+%{_pkgconfigdir}/*
+%{_datadir}/directfb
 
 %files devel
 %defattr(644,root,root,755)
 %{_includedir}/directfb.h
+%{_includedir}/directfb-internal
 %{_libdir}/directfb/*/*.la
 %{_libdir}/*.la
 %{_libdir}/lib*.so.*
@@ -94,4 +96,3 @@ rm -rf $RPM_BUILD_ROOT
 %files doc
 %defattr(644,root,root,755)
 %doc docs/html/*
-%dir %{_datadir}/directfb/examples
