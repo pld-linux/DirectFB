@@ -10,7 +10,9 @@ Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://www.directfb.org/download/%{name}/%{name}-%{version}.tar.gz
+# Source0-md5:	d373fa1d604ab5ea4e8fdcb875876cfd
 Source1:	http://www.directfb.org/download/DirectFB/DFBTutorials-0.5.0.tar.gz
+# Source1-md5:	13e443a64bddd68835b574045d9025e9
 Patch0:		%{name}-am.patch
 Patch1:         %{name}-pmake.patch
 URL:		http://www.directfb.org/
