@@ -1,14 +1,7 @@
---- DirectFB-0.9.18/configure.in.orig	2003-04-24 14:12:15.000000000 +0200
-+++ DirectFB-0.9.18/configure.in	2003-07-12 14:34:09.000000000 +0200
-@@ -67,6 +67,7 @@
- AC_HEADER_STDC
- AC_C_CONST
- AC_C_BIGENDIAN
-+AM_PROG_AS
- 
- AC_PATH_PROGS(PERL, perl5 perl)
- 
-@@ -88,13 +89,6 @@
+diff -aurN DirectFB-0.9.19.orig/configure.in DirectFB-0.9.19/configure.in
+--- DirectFB-0.9.19.orig/configure.in	2003-07-14 17:18:25.000000000 +0200
++++ DirectFB-0.9.19/configure.in	2003-07-21 21:26:22.000000000 +0200
+@@ -93,13 +93,6 @@
  AM_CONDITIONAL(FBDEV_CORE, test x$enable_fbdev = xyes)
  
  
@@ -17,16 +10,8 @@
 -  CFLAGS=
 -fi
 -
--CFLAGS="-O3 -pipe $CFLAGS"
+-CFLAGS="-O3 -ffast-math -pipe $CFLAGS"
 -
- if test "x$GCC" = xyes; then
-   CFLAGS="-Wall $CFLAGS"
- fi
-@@ -258,6 +252,7 @@
- if test "x$enable_debug" = xyes; then
-     DFB_INTERNAL_CFLAGS="$DFB_INTERNAL_CFLAGS -DDFB_DEBUG"
-     CFLAGS="$CFLAGS -g3 -fno-inline"
-+    DFB_CFLAGS_OMIT_FRAME_POINTER=""
- fi
- AM_CONDITIONAL(ENABLE_DEBUG, test "x$enable_debug" = xyes)
- 
+ AC_ARG_ENABLE(extra-warnings,
+   [  --enable-extra-warnings   enable extra warnings [default=no]],,
+   enable_extra_warnings=no)

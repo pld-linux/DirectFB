@@ -1,10 +1,13 @@
---- DirectFB-0.9.16/src/Makefile.am	Mon Oct 28 15:54:26 2002
-+++ DirectFB-0.9.16.new/src/Makefile.am	Mon Mar  3 17:48:45 2003
-@@ -61,6 +61,7 @@
+diff -aurN DirectFB-0.9.19.orig/src/Makefile.am DirectFB-0.9.19/src/Makefile.am
+--- DirectFB-0.9.19.orig/src/Makefile.am	2003-07-02 04:22:25.000000000 +0200
++++ DirectFB-0.9.19/src/Makefile.am	2003-07-21 21:31:00.000000000 +0200
+@@ -59,7 +59,8 @@
  	cp -af libdirectfb_fixed.a .libs/libdirectfb.a
  
- .libs/libdirectfb.a:
+ .libs/libdirectfb.a: libdirectfb.la
+-
 +	-mkdir .libs
- 
++	
  else
  
+ clean-local:
