@@ -1,6 +1,6 @@
---- DirectFB-0.9.14/configure.in.orig	Mon Oct 28 19:20:06 2002
-+++ DirectFB-0.9.14/configure.in	Thu Nov  7 11:21:17 2002
-@@ -64,6 +64,7 @@
+--- DirectFB-0.9.18/configure.in.orig	2003-04-24 14:12:15.000000000 +0200
++++ DirectFB-0.9.18/configure.in	2003-07-12 14:34:09.000000000 +0200
+@@ -67,6 +67,7 @@
  AC_HEADER_STDC
  AC_C_CONST
  AC_C_BIGENDIAN
@@ -8,14 +8,25 @@
  
  AC_PATH_PROGS(PERL, perl5 perl)
  
-@@ -230,9 +231,8 @@
+@@ -88,13 +89,6 @@
+ AM_CONDITIONAL(FBDEV_CORE, test x$enable_fbdev = xyes)
+ 
+ 
+-dnl Clear default CFLAGS
+-if test x"$CFLAGS" = x"-g -O2"; then
+-  CFLAGS=
+-fi
+-
+-CFLAGS="-O3 -pipe $CFLAGS"
+-
+ if test "x$GCC" = xyes; then
+   CFLAGS="-Wall $CFLAGS"
+ fi
+@@ -258,6 +252,7 @@
  if test "x$enable_debug" = xyes; then
-     AC_DEFINE(DFB_DEBUG,1,[Define to 1 if you want debugging support.])
      DFB_INTERNAL_CFLAGS="$DFB_INTERNAL_CFLAGS -DDFB_DEBUG"
--    DFB_CFLAGS="$DFB_CFLAGS -O3 -g3 -fno-inline"
-+    DFB_CFLAGS="$DFB_CFLAGS -fno-inline"
- else
--    DFB_CFLAGS="$DFB_CFLAGS -O3 -g"
-     if test "x$enable_profiling" = xno; then
-         DFB_CFLAGS_OMIT_FRAME_POINTER="-fomit-frame-pointer"
-     fi
+     CFLAGS="$CFLAGS -g3 -fno-inline"
++    DFB_CFLAGS_OMIT_FRAME_POINTER=""
+ fi
+ AM_CONDITIONAL(ENABLE_DEBUG, test "x$enable_debug" = xyes)
+ 
