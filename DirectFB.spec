@@ -5,13 +5,6 @@ Version:	0.9.4
 Release:	1
 License:	GPL
 Group:		Libraries
-Group(de):	Libraries
-Group(es):	Bibliotecas
-Group(fr):	Librairies
-Group(pl):	Biblioteki
-Group(pt_BR):	Bibliotecas
-Group(ru):	Библиотеки
-Group(uk):	Б╕бл╕отеки
 Source0:	http://www.directfb.org/download/%{name}/%{name}-%{version}.tar.gz
 URL:		http://www.directfb.org/
 BuildRequires:	libpng-devel >= 1.0.10
@@ -32,13 +25,6 @@ Wspomaganie grafiki DirectFB - biblioteki.
 Summary:	DirectFB - development package
 Summary(pl):	DirectFB - pliki nagЁСwkowe
 Group:		Development/Libraries
-Group(de):	Entwicklung/Libraries
-Group(es):	Desarrollo/Bibliotecas
-Group(fr):	Development/Librairies
-Group(pl):	Programowanie/Biblioteki
-Group(pt_BR):	Desenvolvimento/Bibliotecas
-Group(ru):	Разработка/Библиотеки
-Group(uk):	Розробка/Б╕бл╕отеки
 Requires:	%{name} = %{version}
 
 %description devel
@@ -51,13 +37,6 @@ Pliki nagЁСwkowe dla DirectFB.
 Summary:	DirectFB - documentation
 Summary(pl):	DirectFB - dokumantacja
 Group:		Development/Libraries
-Group(de):	Entwicklung/Libraries
-Group(es):	Desarrollo/Bibliotecas
-Group(fr):	Development/Librairies
-Group(pl):	Programowanie/Biblioteki
-Group(pt_BR):	Desenvolvimento/Bibliotecas
-Group(ru):	Разработка/Библиотеки
-Group(uk):	Розробка/Б╕бл╕отеки
 
 %description doc
 DirectFB documentation and examples.
