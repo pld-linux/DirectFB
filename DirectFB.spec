@@ -1,14 +1,13 @@
 Summary:	DirectFB - Hardware graphics accelration.
 Summary(pl):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
-Version:	0.9.0
+Version:	0.9.1
 Release:	1
 License:	GPL
-Group:		X11
-Group(de):	X11
-Group(pl):	X11
-Source0:	http://directfb.org/download/%{name}-%{version}.tar.gz
-URL:		htt://directfs.org/
+Group:		System/Graphics
+Group(pl):	System/Grafika
+Source0:	http://www.directfb.org/download/%{name}/%{name}-%{version}.tar.gz
+URL:		htt://www.directfb.org/
 BuildRequires:	libpng >= 1.0.10
 Buildrequires:	zlib >= 1.1.3
 BuildRequires:	libjpeg 
@@ -21,9 +20,8 @@ Buildroot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %description -l pl
 
 %package devel
-Group:		X11
-Group(de):	X11
-Group(pl):	X11
+Group:		System/Development
+Group(pl):	System/Programowanie
 Summary:	DirectFB - development package.
 Summary(pl):	DirectFB - pliki naglowkowe.
 
@@ -34,17 +32,16 @@ DirectFB header files.
 Pliki naglowkowe dla DirectFB.
 
 %package doc
-Group:		X11
-Group(de):	X11
-Group(pl):	X11
+Group:		System/Documentation
+Group(pl):	System/Dokumantacja
 Summary:	DirectFB - documentation.
 Summary(pl):	DirectFB - dokumantacja.
 
 %description doc
-DirectFB documentation
+DirectFB documentation and examples
 
 %description -l pl doc
-Dokumentacja dla systemu DirectFB
+Dokumentacja dla systemu DirectFB wraz z przykladami
 
 %prep
 %setup -q
