@@ -84,19 +84,18 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/*
-%attr(755,root,root) %{_libdir}/directfb
-%attr(755,root,root) %{_libdir}/*.so
-%{_pkgconfigdir}/*
+%attr(755,root,root) %{_libdir}/lib*.so.*.*
+%{_libdir}/directfb
 %{_datadir}/directfb
 
 %files devel
 %defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/directfb-config
 %{_includedir}/directfb.h
 %{_includedir}/directfb-internal
-%{_libdir}/directfb/*/*.la
+%{_pkgconfigdir}/*
 %{_libdir}/*.la
-%{_libdir}/lib*.so.*
+%{_libdir}/*.so
 
 %files doc
 %defattr(644,root,root,755)
