@@ -6,7 +6,7 @@
 Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
-Version:	0.9.14
+Version:	0.9.15
 Release:	1
 License:	LGPL v2+
 Group:		Libraries
@@ -203,11 +203,13 @@ rm -rf $RPM_BUILD_ROOT
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/directfb-config
+%attr(755,root,root) %{_bindir}/directfb-csource
 %{_includedir}/directfb
 %{_includedir}/directfb-internal
 %{_pkgconfigdir}/*
 %{_libdir}/*.la
 %{_libdir}/*.so
+%{_mandir}/man1/directfb-csource.1*
 
 %files static
 %defattr(644,root,root,755)
