@@ -5,17 +5,16 @@
 Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
-Version:	0.9.19
-Release:	2
+Version:	0.9.20
+Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://www.directfb.org/download/%{name}/%{name}-%{version}.tar.gz
-# Source0-md5:	8af7f3b5d2c3cc2cb7aba4662ec0b73f
+# Source0-md5:	e42e8ae43f0ad873643f73cc0a9ae7d0
 Source1:	http://www.directfb.org/download/DirectFB/DFBTutorials-0.5.0.tar.gz
 # Source1-md5:	13e443a64bddd68835b574045d9025e9
 Patch0:		%{name}-am.patch
 Patch1:		%{name}-pmake.patch
-Patch2:		%{name}-i810.patch
 URL:		http://www.directfb.org/
 BuildRequires:	SDL-devel
 BuildRequires:	autoconf
@@ -138,10 +137,8 @@ Ten pakiet zawiera wtyczkê dla DirectFB dostarczajac± obraz MPEG
 %setup -q -a1
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
 
 %build
-rm -f missing
 %{__libtoolize}
 %{__aclocal}
 %{__autoconf}
