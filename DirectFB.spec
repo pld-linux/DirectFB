@@ -16,7 +16,7 @@ Source1:	http://www.directfb.org/download/DirectFB/DFBTutorials-0.5.0.tar.gz
 Patch0:		%{name}-am.patch
 Patch1:         %{name}-pmake.patch
 URL:		http://www.directfb.org/
-#BuildRequires:	SDL-devel
+BuildRequires:	SDL-devel
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	freetype-devel >= 2.0.2
@@ -69,6 +69,18 @@ DirectFB documentation and tutorials.
 
 %description doc -l pl
 Dokumentacja dla systemu DirectFB wraz z wprowadzeniem.
+
+%package core-sdl
+Summary:	SDL core system for DirectFB
+Summary(pl):	System SDL dla DirectFB
+Group:		Libraries
+Requires:	%{name} = %{version}
+
+%description core-sdl
+This package contains SDL core system module for DirectFB.
+
+%description core-sdl -l pl
+Ten pakiet zawiera modu³ systemu SDL dla DirectFB.
 
 %package font-ft2
 Summary:	FreeType2 font provider for DirectFB
@@ -133,16 +145,15 @@ rm -f missing
 %{__autoconf}
 %{__automake}
 CPPFLAGS="-I/usr/include/libmpeg3"
-# SDL core disabled (used directly, not through plugin - too many deps)
 # MMX and SSE are detected at runtime, so it's safe to enable
 %configure \
 	--disable-maintainer-mode \
 	--enable-shared \
 	--enable-static \
-	--disable-fast-install \
+	--enable-fast-install \
 	--disable-debug \
 	%{?_without_mpg:--disable-libmpeg3} \
-	--disable-sdl \
+	--enable-sdl \
 %ifarch i586 i686 athlon
 	--enable-mmx \
 %endif
@@ -175,25 +186,23 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{dfbdir}
 %dir %{dfbdir}/gfxdrivers
 %attr(755,root,root) %{dfbdir}/gfxdrivers/*.so
-%{dfbdir}/gfxdrivers/*.la
 %dir %{dfbdir}/inputdrivers
-%attr(755,root,root) %{dfbdir}/inputdrivers/*.so
-%{dfbdir}/inputdrivers/*.la
+%attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_joystick.so
+%attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_keyboard.so
+%attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_lirc.so
+%attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_ps2mouse.so
+%attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_serialmouse.so
+%attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_sonypi.so
 %dir %{dfbdir}/interfaces
 %dir %{dfbdir}/interfaces/IDirectFBFont
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBFont/libidirectfbfont_default.so
-%{dfbdir}/interfaces/IDirectFBFont/libidirectfbfont_default.la
 %dir %{dfbdir}/interfaces/IDirectFBImageProvider
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_gif.so
-%{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_gif.la
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_mpeg2.so
-%{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_mpeg2.la
 %dir %{dfbdir}/interfaces/IDirectFBVideoProvider
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBVideoProvider/libidirectfbvideoprovider_v4l.so
-%{dfbdir}/interfaces/IDirectFBVideoProvider/libidirectfbvideoprovider_v4l.la
 %dir %{dfbdir}/systems
 %attr(755,root,root) %{dfbdir}/systems/libdirectfb_fbdev.so
-%{dfbdir}/systems/libdirectfb_fbdev.la
 %{_datadir}/directfb-%{version}
 %{_mandir}/man5/*
 
@@ -211,34 +220,35 @@ rm -rf $RPM_BUILD_ROOT
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/lib*.a
-%{dfbdir}/gfxdrivers/*.a
-%{dfbdir}/inputdrivers/*.a
-%{dfbdir}/interfaces/*/*.a
-%{dfbdir}/systems/*.a
+%{dfbdir}/gfxdrivers/*.*a
+%{dfbdir}/inputdrivers/*.*a
+%{dfbdir}/interfaces/*/*.*a
+%{dfbdir}/systems/*.*a
 
 %files doc
 %defattr(644,root,root,755)
 %doc docs/html/*
 %{_examplesdir}/%{name}-%{version}
 
+%files core-sdl
+%defattr(644,root,root,755)
+%attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_sdlinput.so
+%attr(755,root,root) %{dfbdir}/systems/libdirectfb_sdl.so
+
 %files font-ft2
 %defattr(644,root,root,755)
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBFont/libidirectfbfont_ft2.so
-%{dfbdir}/interfaces/IDirectFBFont/libidirectfbfont_ft2.la
 
 %files image-jpeg
 %defattr(644,root,root,755)
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_jpeg.so
-%{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_jpeg.la
 
 %files image-png
 %defattr(644,root,root,755)
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_png.so
-%{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_png.la
 
 %if 0%{!?_without_mpg:1}
 %files video-libmpeg3
 %defattr(644,root,root,755)
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBVideoProvider/libidirectfbvideoprovider_libmpeg3.so
-%{dfbdir}/interfaces/IDirectFBVideoProvider/libidirectfbvideoprovider_libmpeg3.la
 %endif
