@@ -132,7 +132,7 @@ DirectFB. It uses libmpeg3 library.
 
 %description video-libmpeg3 -l pl
 Ten pakiet zawiera wtyczkê dla DirectFB dostarczajac± obraz MPEG
-(MPEG-1 i MPEG-2) przy u¿yciu biblioteki libmpeg3. 
+(MPEG-1 i MPEG-2) przy u¿yciu biblioteki libmpeg3.
 
 %prep
 %setup -q -a1
