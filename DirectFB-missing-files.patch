@@ -1,0 +1,1095 @@
+--- DirectFB-0.9.21/rules/libobject.make.orig	1970-01-01 01:00:00.000000000 +0100
++++ DirectFB-0.9.21/rules/libobject.make	2005-01-10 00:25:55.144698008 +0100
+@@ -0,0 +1,9 @@
++%.o: .libs/%.a %.la
++	rm -f $<.tmp/*.o
++	if test -d $<.tmp; then rmdir $<.tmp; fi
++	mkdir $<.tmp
++	(cd $<.tmp && ar x ../../$<)
++	$(LD) -o $@ -r $<.tmp/*.o
++	rm -f $<.tmp/*.o && rmdir $<.tmp
++
++.PHONY: $(LTLIBRARIES:%.la=.libs/%.a)
+--- DirectFB-0.9.21/lib/voodoo/types.h.orig	1970-01-01 01:00:00.000000000 +0100
++++ DirectFB-0.9.21/lib/voodoo/types.h	2005-01-10 00:25:55.149697248 +0100
+@@ -0,0 +1,65 @@
++/*
++   (c) Copyright 2000-2002  convergence integrated media GmbH.
++   (c) Copyright 2002-2004  convergence GmbH.
++
++   All rights reserved.
++
++   Written by Denis Oliver Kropp <dok@directfb.org>,
++              Andreas Hundt <andi@fischlustig.de>,
++              Sven Neumann <neo@directfb.org> and
++              Ville Syrjälä <syrjala@sci.fi>.
++
++   This library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2 of the License, or (at your option) any later version.
++
++   This library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with this library; if not, write to the
++   Free Software Foundation, Inc., 59 Temple Place - Suite 330,
++   Boston, MA 02111-1307, USA.
++*/
++
++#ifndef __VOODOO__TYPES_H__
++#define __VOODOO__TYPES_H__
++
++#include <direct/types.h>
++
++
++typedef __u32 VoodooInstanceID;
++typedef __u32 VoodooMethodID;
++typedef __u64 VoodooMessageSerial;
++
++#define VOODOO_INSTANCE_NONE  ((VoodooInstanceID) 0)
++
++
++typedef struct __V_VoodooMessageHeader   VoodooMessageHeader;
++typedef struct __V_VoodooSuperMessage    VoodooSuperMessage;
++typedef struct __V_VoodooRequestMessage  VoodooRequestMessage;
++typedef struct __V_VoodooResponseMessage VoodooResponseMessage;
++
++
++typedef struct __V_VoodooClient          VoodooClient;
++typedef struct __V_VoodooConfig          VoodooConfig;
++typedef struct __V_VoodooManager         VoodooManager;
++typedef struct __V_VoodooServer          VoodooServer;
++
++
++typedef DirectResult (*VoodooSuperConstruct)( VoodooServer         *server,
++                                              VoodooManager        *manager,
++                                              const char           *name,
++                                              void                 *ctx,
++                                              VoodooInstanceID     *ret_instance );
++
++typedef DirectResult (*VoodooDispatch)      ( void                 *dispatcher,
++                                              void                 *real,
++                                              VoodooManager        *manager,
++                                              VoodooRequestMessage *msg );
++
++#endif
++
+--- DirectFB-0.9.21/proxy/dispatcher/idirectfbdatabuffer_dispatcher.h.orig	1970-01-01 01:00:00.000000000 +0100
++++ DirectFB-0.9.21/proxy/dispatcher/idirectfbdatabuffer_dispatcher.h	2005-01-10 22:22:50.411551600 +0100
+@@ -0,0 +1,45 @@
++/*
++   (c) Copyright 2000-2002  convergence integrated media GmbH.
++   (c) Copyright 2002-2004  convergence GmbH.
++
++   All rights reserved.
++
++   Written by Denis Oliver Kropp <dok@directfb.org>,
++              Andreas Hundt <andi@fischlustig.de>,
++              Sven Neumann <neo@directfb.org> and
++              Ville Syrjälä <syrjala@sci.fi>.
++
++   This library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2 of the License, or (at your option) any later version.
++
++   This library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with this library; if not, write to the
++   Free Software Foundation, Inc., 59 Temple Place - Suite 330,
++   Boston, MA 02111-1307, USA.
++*/
++
++#ifndef __IDIRECTFBDATABUFFER_DISPATCHER_H__
++#define __IDIRECTFBDATABUFFER_DISPATCHER_H__
++
++#define IDIRECTFBDATABUFFER_METHOD_ID_AddRef                     1
++#define IDIRECTFBDATABUFFER_METHOD_ID_Release                    2
++#define IDIRECTFBDATABUFFER_METHOD_ID_Flush                      3
++#define IDIRECTFBDATABUFFER_METHOD_ID_SeekTo                     4
++#define IDIRECTFBDATABUFFER_METHOD_ID_GetPosition                5
++#define IDIRECTFBDATABUFFER_METHOD_ID_GetLength                  6
++#define IDIRECTFBDATABUFFER_METHOD_ID_WaitForData                7
++#define IDIRECTFBDATABUFFER_METHOD_ID_WaitForDataWithTimeout     8
++#define IDIRECTFBDATABUFFER_METHOD_ID_GetData                    9
++#define IDIRECTFBDATABUFFER_METHOD_ID_PeekData                  10
++#define IDIRECTFBDATABUFFER_METHOD_ID_HasData                   11
++#define IDIRECTFBDATABUFFER_METHOD_ID_PutData                   12
++#define IDIRECTFBDATABUFFER_METHOD_ID_CreateImageProvider       13
++
++#endif
+--- DirectFB-0.9.21/proxy/dispatcher/idirectfb_dispatcher.h.orig	1970-01-01 01:00:00.000000000 +0100
++++ DirectFB-0.9.21/proxy/dispatcher/idirectfb_dispatcher.h	2005-01-10 22:22:50.415550992 +0100
+@@ -0,0 +1,72 @@
++/*
++   (c) Copyright 2000-2002  convergence integrated media GmbH.
++   (c) Copyright 2002-2004  convergence GmbH.
++
++   All rights reserved.
++
++   Written by Denis Oliver Kropp <dok@directfb.org>,
++              Andreas Hundt <andi@fischlustig.de>,
++              Sven Neumann <neo@directfb.org> and
++              Ville Syrjälä <syrjala@sci.fi>.
++
++   This library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2 of the License, or (at your option) any later version.
++
++   This library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with this library; if not, write to the
++   Free Software Foundation, Inc., 59 Temple Place - Suite 330,
++   Boston, MA 02111-1307, USA.
++*/
++
++#ifndef __IDIRECTFB_DISPATCHER_H__
++#define __IDIRECTFB_DISPATCHER_H__
++
++#include <directfb.h>
++
++#define IDIRECTFB_METHOD_ID_AddRef                     1
++#define IDIRECTFB_METHOD_ID_Release                    2
++#define IDIRECTFB_METHOD_ID_SetCooperativeLevel        3
++#define IDIRECTFB_METHOD_ID_GetCardCapabilities        4
++#define IDIRECTFB_METHOD_ID_EnumVideoModes             5
++#define IDIRECTFB_METHOD_ID_SetVideoMode               6
++#define IDIRECTFB_METHOD_ID_CreateSurface              7
++#define IDIRECTFB_METHOD_ID_CreatePalette              8
++#define IDIRECTFB_METHOD_ID_EnumScreens                9
++#define IDIRECTFB_METHOD_ID_GetScreen                 10
++#define IDIRECTFB_METHOD_ID_EnumDisplayLayers         11
++#define IDIRECTFB_METHOD_ID_GetDisplayLayer           12
++#define IDIRECTFB_METHOD_ID_EnumInputDevices          13
++#define IDIRECTFB_METHOD_ID_GetInputDevice            14
++#define IDIRECTFB_METHOD_ID_CreateEventBuffer         15
++#define IDIRECTFB_METHOD_ID_CreateInputEventBuffer    16
++#define IDIRECTFB_METHOD_ID_CreateImageProvider       17
++#define IDIRECTFB_METHOD_ID_CreateVideoProvider       18
++#define IDIRECTFB_METHOD_ID_CreateFont                19
++#define IDIRECTFB_METHOD_ID_CreateDataBuffer          20
++#define IDIRECTFB_METHOD_ID_SetClipboardData          21
++#define IDIRECTFB_METHOD_ID_GetClipboardData          22
++#define IDIRECTFB_METHOD_ID_GetClipboardTimeStamp     23
++#define IDIRECTFB_METHOD_ID_Suspend                   24
++#define IDIRECTFB_METHOD_ID_Resume                    25
++#define IDIRECTFB_METHOD_ID_WaitIdle                  26
++#define IDIRECTFB_METHOD_ID_WaitForSync               27
++#define IDIRECTFB_METHOD_ID_GetInterface              28
++
++typedef struct {
++     DFBScreenID          screen_id;
++     DFBScreenDescription desc;
++} IDirectFB_Dispatcher_EnumScreens_Item;
++
++typedef struct {
++     DFBInputDeviceID          device_id;
++     DFBInputDeviceDescription desc;
++} IDirectFB_Dispatcher_EnumInputDevices_Item;
++
++#endif
+--- DirectFB-0.9.21/proxy/dispatcher/idirectfbdisplaylayer_dispatcher.h.orig	1970-01-01 01:00:00.000000000 +0100
++++ DirectFB-0.9.21/proxy/dispatcher/idirectfbdisplaylayer_dispatcher.h	2005-01-10 22:22:50.420550232 +0100
+@@ -0,0 +1,76 @@
++/*
++   (c) Copyright 2000-2002  convergence integrated media GmbH.
++   (c) Copyright 2002-2004  convergence GmbH.
++
++   All rights reserved.
++
++   Written by Denis Oliver Kropp <dok@directfb.org>,
++              Andreas Hundt <andi@fischlustig.de>,
++              Sven Neumann <neo@directfb.org> and
++              Ville Syrjälä <syrjala@sci.fi>.
++
++   This library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2 of the License, or (at your option) any later version.
++
++   This library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with this library; if not, write to the
++   Free Software Foundation, Inc., 59 Temple Place - Suite 330,
++   Boston, MA 02111-1307, USA.
++*/
++
++#ifndef __IDIRECTFBDISPLAYLAYER_DISPATCHER_H__
++#define __IDIRECTFBDISPLAYLAYER_DISPATCHER_H__
++
++#define IDIRECTFBDISPLAYLAYER_METHOD_ID_AddRef                     1
++#define IDIRECTFBDISPLAYLAYER_METHOD_ID_Release                    2
++#define IDIRECTFBDISPLAYLAYER_METHOD_ID_GetID                      3
++#define IDIRECTFBDISPLAYLAYER_METHOD_ID_GetDescription             4
++#define IDIRECTFBDISPLAYLAYER_METHOD_ID_GetSurface                 5
++#define IDIRECTFBDISPLAYLAYER_METHOD_ID_GetScreen                  6
++#define IDIRECTFBDISPLAYLAYER_METHOD_ID_SetCooperativeLevel        7
++#define IDIRECTFBDISPLAYLAYER_METHOD_ID_SetOpacity                 8
++#define IDIRECTFBDISPLAYLAYER_METHOD_ID_GetCurrentOutputField      9
++#define IDIRECTFBDISPLAYLAYER_METHOD_ID_SetScreenLocation         10
++#define IDIRECTFBDISPLAYLAYER_METHOD_ID_SetSrcColorKey            11
++#define IDIRECTFBDISPLAYLAYER_METHOD_ID_SetDstColorKey            12
++#define IDIRECTFBDISPLAYLAYER_METHOD_ID_GetLevel                  13
++#define IDIRECTFBDISPLAYLAYER_METHOD_ID_SetLevel                  14
++#define IDIRECTFBDISPLAYLAYER_METHOD_ID_GetConfiguration          15
++#define IDIRECTFBDISPLAYLAYER_METHOD_ID_TestConfiguration         16
++#define IDIRECTFBDISPLAYLAYER_METHOD_ID_SetConfiguration          17
++#define IDIRECTFBDISPLAYLAYER_METHOD_ID_SetBackgroundMode         18
++#define IDIRECTFBDISPLAYLAYER_METHOD_ID_SetBackgroundColor        19
++#define IDIRECTFBDISPLAYLAYER_METHOD_ID_SetBackgroundImage        20
++#define IDIRECTFBDISPLAYLAYER_METHOD_ID_GetColorAdjustment        21
++#define IDIRECTFBDISPLAYLAYER_METHOD_ID_SetColorAdjustment        22
++#define IDIRECTFBDISPLAYLAYER_METHOD_ID_CreateWindow              23
++#define IDIRECTFBDISPLAYLAYER_METHOD_ID_GetWindow                 24
++#define IDIRECTFBDISPLAYLAYER_METHOD_ID_WarpCursor                25
++#define IDIRECTFBDISPLAYLAYER_METHOD_ID_SetCursorAcceleration     26
++#define IDIRECTFBDISPLAYLAYER_METHOD_ID_EnableCursor              27
++#define IDIRECTFBDISPLAYLAYER_METHOD_ID_GetCursorPosition         28
++#define IDIRECTFBDISPLAYLAYER_METHOD_ID_SetCursorShape            29
++#define IDIRECTFBDISPLAYLAYER_METHOD_ID_SetCursorOpacity          30
++#define IDIRECTFBDISPLAYLAYER_METHOD_ID_SetFieldParity            31
++#define IDIRECTFBDISPLAYLAYER_METHOD_ID_WaitForSync               32
++
++/*
++ * private data struct of IDirectFBDisplayLayer_Dispatcher
++ */
++typedef struct {
++     int                    ref;      /* reference counter */
++
++     IDirectFBDisplayLayer *real;
++
++     VoodooInstanceID       self;
++     VoodooInstanceID       super;
++} IDirectFBDisplayLayer_Dispatcher_data;
++
++#endif
+--- DirectFB-0.9.21/proxy/dispatcher/idirectfbeventbuffer_dispatcher.h.orig	1970-01-01 01:00:00.000000000 +0100
++++ DirectFB-0.9.21/proxy/dispatcher/idirectfbeventbuffer_dispatcher.h	2005-01-10 22:22:50.420550232 +0100
+@@ -0,0 +1,62 @@
++/*
++   (c) Copyright 2000-2002  convergence integrated media GmbH.
++   (c) Copyright 2002-2004  convergence GmbH.
++
++   All rights reserved.
++
++   Written by Denis Oliver Kropp <dok@directfb.org>,
++              Andreas Hundt <andi@fischlustig.de>,
++              Sven Neumann <neo@directfb.org> and
++              Ville Syrjälä <syrjala@sci.fi>.
++
++   This library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2 of the License, or (at your option) any later version.
++
++   This library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with this library; if not, write to the
++   Free Software Foundation, Inc., 59 Temple Place - Suite 330,
++   Boston, MA 02111-1307, USA.
++*/
++
++#ifndef __IDIRECTFBEVENTBUFFER_DISPATCHER_H__
++#define __IDIRECTFBEVENTBUFFER_DISPATCHER_H__
++
++#include <voodoo/types.h>
++
++#include <directfb.h>
++
++#define IDIRECTFBEVENTBUFFER_METHOD_ID_AddRef                     1
++#define IDIRECTFBEVENTBUFFER_METHOD_ID_Release                    2
++#define IDIRECTFBEVENTBUFFER_METHOD_ID_Reset                      3
++#define IDIRECTFBEVENTBUFFER_METHOD_ID_WaitForEvent               4
++#define IDIRECTFBEVENTBUFFER_METHOD_ID_WaitForEventWithTimeout    5
++#define IDIRECTFBEVENTBUFFER_METHOD_ID_GetEvent                   6
++#define IDIRECTFBEVENTBUFFER_METHOD_ID_PeekEvent                  7
++#define IDIRECTFBEVENTBUFFER_METHOD_ID_HasEvent                   8
++#define IDIRECTFBEVENTBUFFER_METHOD_ID_PostEvent                  9
++#define IDIRECTFBEVENTBUFFER_METHOD_ID_WakeUp                    10
++#define IDIRECTFBEVENTBUFFER_METHOD_ID_CreateFileDescriptor      11
++
++/*
++ * private data struct of IDirectFBEventBuffer_Dispatcher
++ */
++typedef struct {
++     int                   ref;      /* reference counter */
++
++     IDirectFBEventBuffer *real;
++
++     VoodooInstanceID      self;         /* The instance of this dispatcher itself. */
++     VoodooInstanceID      super;        /* The instance of the super interface. */
++
++     VoodooManager        *manager;
++} IDirectFBEventBuffer_Dispatcher_data;
++
++
++#endif
+--- DirectFB-0.9.21/proxy/dispatcher/idirectfbfont_dispatcher.h.orig	1970-01-01 01:00:00.000000000 +0100
++++ DirectFB-0.9.21/proxy/dispatcher/idirectfbfont_dispatcher.h	2005-01-10 22:22:50.421550080 +0100
+@@ -0,0 +1,42 @@
++/*
++   (c) Copyright 2000-2002  convergence integrated media GmbH.
++   (c) Copyright 2002-2004  convergence GmbH.
++
++   All rights reserved.
++
++   Written by Denis Oliver Kropp <dok@directfb.org>,
++              Andreas Hundt <andi@fischlustig.de>,
++              Sven Neumann <neo@directfb.org> and
++              Ville Syrjälä <syrjala@sci.fi>.
++
++   This library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2 of the License, or (at your option) any later version.
++
++   This library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with this library; if not, write to the
++   Free Software Foundation, Inc., 59 Temple Place - Suite 330,
++   Boston, MA 02111-1307, USA.
++*/
++
++#ifndef __IDIRECTFBFONT_DISPATCHER_H__
++#define __IDIRECTFBFONT_DISPATCHER_H__
++
++#define IDIRECTFBFONT_METHOD_ID_AddRef                     1
++#define IDIRECTFBFONT_METHOD_ID_Release                    2
++#define IDIRECTFBFONT_METHOD_ID_GetAscender                3
++#define IDIRECTFBFONT_METHOD_ID_GetDescender               4
++#define IDIRECTFBFONT_METHOD_ID_GetHeight                  5
++#define IDIRECTFBFONT_METHOD_ID_GetMaxAdvance              6
++#define IDIRECTFBFONT_METHOD_ID_GetKerning                 7
++#define IDIRECTFBFONT_METHOD_ID_GetStringWidth             8
++#define IDIRECTFBFONT_METHOD_ID_GetStringExtents           9
++#define IDIRECTFBFONT_METHOD_ID_GetGlyphExtents           10
++
++#endif
+--- DirectFB-0.9.21/proxy/dispatcher/idirectfbimageprovider_dispatcher.h.orig	1970-01-01 01:00:00.000000000 +0100
++++ DirectFB-0.9.21/proxy/dispatcher/idirectfbimageprovider_dispatcher.h	2005-01-10 22:22:50.421550080 +0100
+@@ -0,0 +1,38 @@
++/*
++   (c) Copyright 2000-2002  convergence integrated media GmbH.
++   (c) Copyright 2002-2004  convergence GmbH.
++
++   All rights reserved.
++
++   Written by Denis Oliver Kropp <dok@directfb.org>,
++              Andreas Hundt <andi@fischlustig.de>,
++              Sven Neumann <neo@directfb.org> and
++              Ville Syrjälä <syrjala@sci.fi>.
++
++   This library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2 of the License, or (at your option) any later version.
++
++   This library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with this library; if not, write to the
++   Free Software Foundation, Inc., 59 Temple Place - Suite 330,
++   Boston, MA 02111-1307, USA.
++*/
++
++#ifndef __IDIRECTFBIMAGEPROVIDER_DISPATCHER_H__
++#define __IDIRECTFBIMAGEPROVIDER_DISPATCHER_H__
++
++#define IDIRECTFBIMAGEPROVIDER_METHOD_ID_AddRef                     1
++#define IDIRECTFBIMAGEPROVIDER_METHOD_ID_Release                    2
++#define IDIRECTFBIMAGEPROVIDER_METHOD_ID_GetSurfaceDescription      3
++#define IDIRECTFBIMAGEPROVIDER_METHOD_ID_GetImageDescription        4
++#define IDIRECTFBIMAGEPROVIDER_METHOD_ID_RenderTo                   5
++#define IDIRECTFBIMAGEPROVIDER_METHOD_ID_SetRenderCallback          6
++
++#endif
+--- DirectFB-0.9.21/proxy/dispatcher/idirectfbinputdevice_dispatcher.h.orig	1970-01-01 01:00:00.000000000 +0100
++++ DirectFB-0.9.21/proxy/dispatcher/idirectfbinputdevice_dispatcher.h	2005-01-10 22:22:50.422549928 +0100
+@@ -0,0 +1,58 @@
++/*
++   (c) Copyright 2000-2002  convergence integrated media GmbH.
++   (c) Copyright 2002-2004  convergence GmbH.
++
++   All rights reserved.
++
++   Written by Denis Oliver Kropp <dok@directfb.org>,
++              Andreas Hundt <andi@fischlustig.de>,
++              Sven Neumann <neo@directfb.org> and
++              Ville Syrjälä <syrjala@sci.fi>.
++
++   This library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2 of the License, or (at your option) any later version.
++
++   This library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with this library; if not, write to the
++   Free Software Foundation, Inc., 59 Temple Place - Suite 330,
++   Boston, MA 02111-1307, USA.
++*/
++
++#ifndef __IDIRECTFBINPUTDEVICE_DISPATCHER_H__
++#define __IDIRECTFBINPUTDEVICE_DISPATCHER_H__
++
++#define IDIRECTFBINPUTDEVICE_METHOD_ID_AddRef                     1
++#define IDIRECTFBINPUTDEVICE_METHOD_ID_Release                    2
++#define IDIRECTFBINPUTDEVICE_METHOD_ID_GetID                      3
++#define IDIRECTFBINPUTDEVICE_METHOD_ID_GetDescription             4
++#define IDIRECTFBINPUTDEVICE_METHOD_ID_GetKeymapEntry             5
++#define IDIRECTFBINPUTDEVICE_METHOD_ID_CreateEventBuffer          6
++#define IDIRECTFBINPUTDEVICE_METHOD_ID_AttachEventBuffer          7
++#define IDIRECTFBINPUTDEVICE_METHOD_ID_GetKeyState                8
++#define IDIRECTFBINPUTDEVICE_METHOD_ID_GetModifiers               9
++#define IDIRECTFBINPUTDEVICE_METHOD_ID_GetLockState              10
++#define IDIRECTFBINPUTDEVICE_METHOD_ID_GetButtons                11
++#define IDIRECTFBINPUTDEVICE_METHOD_ID_GetButtonState            12
++#define IDIRECTFBINPUTDEVICE_METHOD_ID_GetAxis                   13
++#define IDIRECTFBINPUTDEVICE_METHOD_ID_GetXY                     14
++
++/*
++ * private data struct of IDirectFBInputDevice_Dispatcher
++ */
++typedef struct {
++     int                   ref;      /* reference counter */
++
++     IDirectFBInputDevice *real;
++
++     VoodooInstanceID      self;
++     VoodooInstanceID      super;
++} IDirectFBInputDevice_Dispatcher_data;
++
++#endif
+--- DirectFB-0.9.21/proxy/dispatcher/idirectfbpalette_dispatcher.h.orig	1970-01-01 01:00:00.000000000 +0100
++++ DirectFB-0.9.21/proxy/dispatcher/idirectfbpalette_dispatcher.h	2005-01-10 22:22:50.422549928 +0100
+@@ -0,0 +1,40 @@
++/*
++   (c) Copyright 2000-2002  convergence integrated media GmbH.
++   (c) Copyright 2002-2004  convergence GmbH.
++
++   All rights reserved.
++
++   Written by Denis Oliver Kropp <dok@directfb.org>,
++              Andreas Hundt <andi@fischlustig.de>,
++              Sven Neumann <neo@directfb.org> and
++              Ville Syrjälä <syrjala@sci.fi>.
++
++   This library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2 of the License, or (at your option) any later version.
++
++   This library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with this library; if not, write to the
++   Free Software Foundation, Inc., 59 Temple Place - Suite 330,
++   Boston, MA 02111-1307, USA.
++*/
++
++#ifndef __IDIRECTFBPALETTE_DISPATCHER_H__
++#define __IDIRECTFBPALETTE_DISPATCHER_H__
++
++#define IDIRECTFBPALETTE_METHOD_ID_AddRef                     1
++#define IDIRECTFBPALETTE_METHOD_ID_Release                    2
++#define IDIRECTFBPALETTE_METHOD_ID_GetCapabilities            3
++#define IDIRECTFBPALETTE_METHOD_ID_GetSize                    4
++#define IDIRECTFBPALETTE_METHOD_ID_SetEntries                 5
++#define IDIRECTFBPALETTE_METHOD_ID_GetEntries                 6
++#define IDIRECTFBPALETTE_METHOD_ID_FindBestMatch              7
++#define IDIRECTFBPALETTE_METHOD_ID_CreateCopy                 8
++
++#endif
+--- DirectFB-0.9.21/proxy/dispatcher/idirectfbscreen_dispatcher.h.orig	1970-01-01 01:00:00.000000000 +0100
++++ DirectFB-0.9.21/proxy/dispatcher/idirectfbscreen_dispatcher.h	2005-01-10 22:22:50.423549776 +0100
+@@ -0,0 +1,51 @@
++/*
++   (c) Copyright 2000-2002  convergence integrated media GmbH.
++   (c) Copyright 2002-2004  convergence GmbH.
++
++   All rights reserved.
++
++   Written by Denis Oliver Kropp <dok@directfb.org>,
++              Andreas Hundt <andi@fischlustig.de>,
++              Sven Neumann <neo@directfb.org> and
++              Ville Syrjälä <syrjala@sci.fi>.
++
++   This library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2 of the License, or (at your option) any later version.
++
++   This library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with this library; if not, write to the
++   Free Software Foundation, Inc., 59 Temple Place - Suite 330,
++   Boston, MA 02111-1307, USA.
++*/
++
++#ifndef __IDIRECTFBSCREEN_DISPATCHER_H__
++#define __IDIRECTFBSCREEN_DISPATCHER_H__
++
++#define IDIRECTFBSCREEN_METHOD_ID_AddRef                     1
++#define IDIRECTFBSCREEN_METHOD_ID_Release                    2
++#define IDIRECTFBSCREEN_METHOD_ID_GetID                      3
++#define IDIRECTFBSCREEN_METHOD_ID_GetDescription             4
++#define IDIRECTFBSCREEN_METHOD_ID_EnumDisplayLayers          5
++#define IDIRECTFBSCREEN_METHOD_ID_SetPowerMode               6
++#define IDIRECTFBSCREEN_METHOD_ID_WaitForSync                7
++#define IDIRECTFBSCREEN_METHOD_ID_GetMixerDescriptions       8
++#define IDIRECTFBSCREEN_METHOD_ID_GetMixerConfiguration      9
++#define IDIRECTFBSCREEN_METHOD_ID_TestMixerConfiguration    10
++#define IDIRECTFBSCREEN_METHOD_ID_SetMixerConfiguration     11
++#define IDIRECTFBSCREEN_METHOD_ID_GetEncoderDescriptions    12
++#define IDIRECTFBSCREEN_METHOD_ID_GetEncoderConfiguration   13
++#define IDIRECTFBSCREEN_METHOD_ID_TestEncoderConfiguration  14
++#define IDIRECTFBSCREEN_METHOD_ID_SetEncoderConfiguration   15
++#define IDIRECTFBSCREEN_METHOD_ID_GetOutputDescriptions     16
++#define IDIRECTFBSCREEN_METHOD_ID_GetOutputConfiguration    17
++#define IDIRECTFBSCREEN_METHOD_ID_TestOutputConfiguration   18
++#define IDIRECTFBSCREEN_METHOD_ID_SetOutputConfiguration    19
++
++#endif
+--- DirectFB-0.9.21/proxy/dispatcher/idirectfbsurface_dispatcher.h.orig	1970-01-01 01:00:00.000000000 +0100
++++ DirectFB-0.9.21/proxy/dispatcher/idirectfbsurface_dispatcher.h	2005-01-10 22:22:50.423549776 +0100
+@@ -0,0 +1,75 @@
++/*
++   (c) Copyright 2000-2002  convergence integrated media GmbH.
++   (c) Copyright 2002-2004  convergence GmbH.
++
++   All rights reserved.
++
++   Written by Denis Oliver Kropp <dok@directfb.org>,
++              Andreas Hundt <andi@fischlustig.de>,
++              Sven Neumann <neo@directfb.org> and
++              Ville Syrjälä <syrjala@sci.fi>.
++
++   This library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2 of the License, or (at your option) any later version.
++
++   This library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with this library; if not, write to the
++   Free Software Foundation, Inc., 59 Temple Place - Suite 330,
++   Boston, MA 02111-1307, USA.
++*/
++
++#ifndef __IDIRECTFBSURFACE_DISPATCHER_H__
++#define __IDIRECTFBSURFACE_DISPATCHER_H__
++
++#define IDIRECTFBSURFACE_METHOD_ID_AddRef                     1
++#define IDIRECTFBSURFACE_METHOD_ID_Release                    2
++#define IDIRECTFBSURFACE_METHOD_ID_GetCapabilities            3
++#define IDIRECTFBSURFACE_METHOD_ID_GetSize                    4
++#define IDIRECTFBSURFACE_METHOD_ID_GetVisibleRectangle        5
++#define IDIRECTFBSURFACE_METHOD_ID_GetPixelFormat             6
++#define IDIRECTFBSURFACE_METHOD_ID_GetAccelerationMask        7
++#define IDIRECTFBSURFACE_METHOD_ID_GetPalette                 8
++#define IDIRECTFBSURFACE_METHOD_ID_SetPalette                 9
++#define IDIRECTFBSURFACE_METHOD_ID_Lock                      10
++#define IDIRECTFBSURFACE_METHOD_ID_Unlock                    11
++#define IDIRECTFBSURFACE_METHOD_ID_Flip                      12
++#define IDIRECTFBSURFACE_METHOD_ID_SetField                  13
++#define IDIRECTFBSURFACE_METHOD_ID_Clear                     14
++#define IDIRECTFBSURFACE_METHOD_ID_SetClip                   15
++#define IDIRECTFBSURFACE_METHOD_ID_SetColor                  16
++#define IDIRECTFBSURFACE_METHOD_ID_SetColorIndex             17
++#define IDIRECTFBSURFACE_METHOD_ID_SetSrcBlendFunction       18
++#define IDIRECTFBSURFACE_METHOD_ID_SetDstBlendFunction       19
++#define IDIRECTFBSURFACE_METHOD_ID_SetPorterDuff             20
++#define IDIRECTFBSURFACE_METHOD_ID_SetSrcColorKey            21
++#define IDIRECTFBSURFACE_METHOD_ID_SetSrcColorKeyIndex       22
++#define IDIRECTFBSURFACE_METHOD_ID_SetDstColorKey            23
++#define IDIRECTFBSURFACE_METHOD_ID_SetDstColorKeyIndex       24
++#define IDIRECTFBSURFACE_METHOD_ID_SetBlittingFlags          25
++#define IDIRECTFBSURFACE_METHOD_ID_Blit                      26
++#define IDIRECTFBSURFACE_METHOD_ID_TileBlit                  27
++#define IDIRECTFBSURFACE_METHOD_ID_BatchBlit                 28
++#define IDIRECTFBSURFACE_METHOD_ID_StretchBlit               29
++#define IDIRECTFBSURFACE_METHOD_ID_TextureTriangles          30
++#define IDIRECTFBSURFACE_METHOD_ID_SetDrawingFlags           31
++#define IDIRECTFBSURFACE_METHOD_ID_FillRectangle             32
++#define IDIRECTFBSURFACE_METHOD_ID_DrawLine                  33
++#define IDIRECTFBSURFACE_METHOD_ID_DrawLines                 34
++#define IDIRECTFBSURFACE_METHOD_ID_DrawRectangle             35
++#define IDIRECTFBSURFACE_METHOD_ID_FillTriangle              36
++#define IDIRECTFBSURFACE_METHOD_ID_SetFont                   37
++#define IDIRECTFBSURFACE_METHOD_ID_GetFont                   38
++#define IDIRECTFBSURFACE_METHOD_ID_DrawString                39
++#define IDIRECTFBSURFACE_METHOD_ID_DrawGlyph                 40
++#define IDIRECTFBSURFACE_METHOD_ID_GetSubSurface             41
++#define IDIRECTFBSURFACE_METHOD_ID_GetGL                     42
++#define IDIRECTFBSURFACE_METHOD_ID_Dump                      43
++
++#endif
+--- DirectFB-0.9.21/proxy/dispatcher/idirectfbwindow_dispatcher.h.orig	1970-01-01 01:00:00.000000000 +0100
++++ DirectFB-0.9.21/proxy/dispatcher/idirectfbwindow_dispatcher.h	2005-01-10 22:22:50.423549776 +0100
+@@ -0,0 +1,81 @@
++/*
++   (c) Copyright 2000-2002  convergence integrated media GmbH.
++   (c) Copyright 2002-2004  convergence GmbH.
++
++   All rights reserved.
++
++   Written by Denis Oliver Kropp <dok@directfb.org>,
++              Andreas Hundt <andi@fischlustig.de>,
++              Sven Neumann <neo@directfb.org> and
++              Ville Syrjälä <syrjala@sci.fi>.
++
++   This library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2 of the License, or (at your option) any later version.
++
++   This library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with this library; if not, write to the
++   Free Software Foundation, Inc., 59 Temple Place - Suite 330,
++   Boston, MA 02111-1307, USA.
++*/
++
++#ifndef __IDIRECTFBWINDOW_DISPATCHER_H__
++#define __IDIRECTFBWINDOW_DISPATCHER_H__
++
++#define IDIRECTFBWINDOW_METHOD_ID_AddRef                     1
++#define IDIRECTFBWINDOW_METHOD_ID_Release                    2
++#define IDIRECTFBWINDOW_METHOD_ID_CreateEventBuffer          3
++#define IDIRECTFBWINDOW_METHOD_ID_AttachEventBuffer          4
++#define IDIRECTFBWINDOW_METHOD_ID_EnableEvents               5
++#define IDIRECTFBWINDOW_METHOD_ID_DisableEvents              6
++#define IDIRECTFBWINDOW_METHOD_ID_GetID                      7
++#define IDIRECTFBWINDOW_METHOD_ID_GetPosition                8
++#define IDIRECTFBWINDOW_METHOD_ID_GetSize                    9
++#define IDIRECTFBWINDOW_METHOD_ID_GetSurface                10
++#define IDIRECTFBWINDOW_METHOD_ID_SetOptions                11
++#define IDIRECTFBWINDOW_METHOD_ID_GetOptions                12
++#define IDIRECTFBWINDOW_METHOD_ID_SetColorKey               13
++#define IDIRECTFBWINDOW_METHOD_ID_SetColorKeyIndex          14
++#define IDIRECTFBWINDOW_METHOD_ID_SetOpaqueRegion           15
++#define IDIRECTFBWINDOW_METHOD_ID_SetOpacity                16
++#define IDIRECTFBWINDOW_METHOD_ID_GetOpacity                17
++#define IDIRECTFBWINDOW_METHOD_ID_SetCursorShape            18
++#define IDIRECTFBWINDOW_METHOD_ID_RequestFocus              19
++#define IDIRECTFBWINDOW_METHOD_ID_GrabKeyboard              20
++#define IDIRECTFBWINDOW_METHOD_ID_UngrabKeyboard            21
++#define IDIRECTFBWINDOW_METHOD_ID_GrabPointer               22
++#define IDIRECTFBWINDOW_METHOD_ID_UngrabPointer             23
++#define IDIRECTFBWINDOW_METHOD_ID_GrabKey                   24
++#define IDIRECTFBWINDOW_METHOD_ID_UngrabKey                 25
++#define IDIRECTFBWINDOW_METHOD_ID_Move                      26
++#define IDIRECTFBWINDOW_METHOD_ID_MoveTo                    27
++#define IDIRECTFBWINDOW_METHOD_ID_Resize                    28
++#define IDIRECTFBWINDOW_METHOD_ID_SetStackingClass          29
++#define IDIRECTFBWINDOW_METHOD_ID_Raise                     30
++#define IDIRECTFBWINDOW_METHOD_ID_Lower                     31
++#define IDIRECTFBWINDOW_METHOD_ID_RaiseToTop                32
++#define IDIRECTFBWINDOW_METHOD_ID_LowerToBottom             33
++#define IDIRECTFBWINDOW_METHOD_ID_PutAtop                   34
++#define IDIRECTFBWINDOW_METHOD_ID_PutBelow                  35
++#define IDIRECTFBWINDOW_METHOD_ID_Close                     36
++#define IDIRECTFBWINDOW_METHOD_ID_Destroy                   37
++
++/*
++ * private data struct of IDirectFBWindow_Dispatcher
++ */
++typedef struct {
++     int                  ref;      /* reference counter */
++
++     IDirectFBWindow     *real;
++
++     VoodooInstanceID     self;
++     VoodooInstanceID     super;
++} IDirectFBWindow_Dispatcher_data;
++
++#endif
+--- DirectFB-0.9.21/proxy/requestor/idirectfbdisplaylayer_requestor.h.orig	1970-01-01 01:00:00.000000000 +0100
++++ DirectFB-0.9.21/proxy/requestor/idirectfbdisplaylayer_requestor.h	2005-01-10 22:27:44.044912544 +0100
+@@ -0,0 +1,44 @@
++/*
++   (c) Copyright 2000-2002  convergence integrated media GmbH.
++   (c) Copyright 2002-2004  convergence GmbH.
++
++   All rights reserved.
++
++   Written by Denis Oliver Kropp <dok@directfb.org>,
++              Andreas Hundt <andi@fischlustig.de>,
++              Sven Neumann <neo@directfb.org> and
++              Ville Syrjälä <syrjala@sci.fi>.
++
++   This library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2 of the License, or (at your option) any later version.
++
++   This library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with this library; if not, write to the
++   Free Software Foundation, Inc., 59 Temple Place - Suite 330,
++   Boston, MA 02111-1307, USA.
++*/
++
++#ifndef __IDIRECTFBDISPLAYLAYER_REQUESTOR_H__
++#define __IDIRECTFBDISPLAYLAYER_REQUESTOR_H__
++
++#include <voodoo/manager.h>
++
++/*
++ * private data struct of IDirectFBDisplayLayer_Requestor
++ */
++typedef struct {
++     int                  ref;      /* reference counter */
++
++     VoodooManager       *manager;
++     VoodooInstanceID     instance;
++} IDirectFBDisplayLayer_Requestor_data;
++
++#endif
++
+--- DirectFB-0.9.21/proxy/requestor/idirectfbeventbuffer_requestor.h.orig	1970-01-01 01:00:00.000000000 +0100
++++ DirectFB-0.9.21/proxy/requestor/idirectfbeventbuffer_requestor.h	2005-01-10 22:27:44.045912392 +0100
+@@ -0,0 +1,53 @@
++/*
++   (c) Copyright 2000-2002  convergence integrated media GmbH.
++   (c) Copyright 2002-2004  convergence GmbH.
++
++   All rights reserved.
++
++   Written by Denis Oliver Kropp <dok@directfb.org>,
++              Andreas Hundt <andi@fischlustig.de>,
++              Sven Neumann <neo@directfb.org> and
++              Ville Syrjälä <syrjala@sci.fi>.
++
++   This library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2 of the License, or (at your option) any later version.
++
++   This library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with this library; if not, write to the
++   Free Software Foundation, Inc., 59 Temple Place - Suite 330,
++   Boston, MA 02111-1307, USA.
++*/
++
++#ifndef __IDIRECTFBEVENTBUFFER_REQUESTOR_H__
++#define __IDIRECTFBEVENTBUFFER_REQUESTOR_H__
++
++#include <direct/types.h>
++#include <voodoo/types.h>
++
++#include <directfb.h>
++
++/*
++ * private data struct of IDirectFBEventBuffer_Requestor
++ */
++typedef struct {
++     int                   ref;      /* reference counter */
++
++     VoodooManager        *manager;
++     VoodooInstanceID      instance;
++
++     IDirectFBEventBuffer *src;
++     IDirectFBEventBuffer *dst;
++
++     bool                  stop;
++     DirectThread         *thread;
++} IDirectFBEventBuffer_Requestor_data;
++
++#endif
++
+--- DirectFB-0.9.21/proxy/requestor/idirectfbfont_requestor.h.orig	1970-01-01 01:00:00.000000000 +0100
++++ DirectFB-0.9.21/proxy/requestor/idirectfbfont_requestor.h	2005-01-10 22:27:44.045912392 +0100
+@@ -0,0 +1,44 @@
++/*
++   (c) Copyright 2000-2002  convergence integrated media GmbH.
++   (c) Copyright 2002-2004  convergence GmbH.
++
++   All rights reserved.
++
++   Written by Denis Oliver Kropp <dok@directfb.org>,
++              Andreas Hundt <andi@fischlustig.de>,
++              Sven Neumann <neo@directfb.org> and
++              Ville Syrjälä <syrjala@sci.fi>.
++
++   This library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2 of the License, or (at your option) any later version.
++
++   This library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with this library; if not, write to the
++   Free Software Foundation, Inc., 59 Temple Place - Suite 330,
++   Boston, MA 02111-1307, USA.
++*/
++
++#ifndef __IDIRECTFBFONT_REQUESTOR_H__
++#define __IDIRECTFBFONT_REQUESTOR_H__
++
++#include <voodoo/manager.h>
++
++/*
++ * private data struct of IDirectFBFont_Requestor
++ */
++typedef struct {
++     int                  ref;      /* reference counter */
++
++     VoodooManager       *manager;
++     VoodooInstanceID     instance;
++} IDirectFBFont_Requestor_data;
++
++#endif
++
+--- DirectFB-0.9.21/proxy/requestor/idirectfbinputdevice_requestor.h.orig	1970-01-01 01:00:00.000000000 +0100
++++ DirectFB-0.9.21/proxy/requestor/idirectfbinputdevice_requestor.h	2005-01-10 22:27:44.046912240 +0100
+@@ -0,0 +1,44 @@
++/*
++   (c) Copyright 2000-2002  convergence integrated media GmbH.
++   (c) Copyright 2002-2004  convergence GmbH.
++
++   All rights reserved.
++
++   Written by Denis Oliver Kropp <dok@directfb.org>,
++              Andreas Hundt <andi@fischlustig.de>,
++              Sven Neumann <neo@directfb.org> and
++              Ville Syrjälä <syrjala@sci.fi>.
++
++   This library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2 of the License, or (at your option) any later version.
++
++   This library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with this library; if not, write to the
++   Free Software Foundation, Inc., 59 Temple Place - Suite 330,
++   Boston, MA 02111-1307, USA.
++*/
++
++#ifndef __IDIRECTFBINPUTDEVICE_REQUESTOR_H__
++#define __IDIRECTFBINPUTDEVICE_REQUESTOR_H__
++
++#include <voodoo/manager.h>
++
++/*
++ * private data struct of IDirectFBInputDevice_Requestor
++ */
++typedef struct {
++     int                  ref;      /* reference counter */
++
++     VoodooManager       *manager;
++     VoodooInstanceID     instance;
++} IDirectFBInputDevice_Requestor_data;
++
++#endif
++
+--- DirectFB-0.9.21/proxy/requestor/idirectfbpalette_requestor.h.orig	1970-01-01 01:00:00.000000000 +0100
++++ DirectFB-0.9.21/proxy/requestor/idirectfbpalette_requestor.h	2005-01-10 22:27:44.046912240 +0100
+@@ -0,0 +1,44 @@
++/*
++   (c) Copyright 2000-2002  convergence integrated media GmbH.
++   (c) Copyright 2002-2004  convergence GmbH.
++
++   All rights reserved.
++
++   Written by Denis Oliver Kropp <dok@directfb.org>,
++              Andreas Hundt <andi@fischlustig.de>,
++              Sven Neumann <neo@directfb.org> and
++              Ville Syrjälä <syrjala@sci.fi>.
++
++   This library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2 of the License, or (at your option) any later version.
++
++   This library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with this library; if not, write to the
++   Free Software Foundation, Inc., 59 Temple Place - Suite 330,
++   Boston, MA 02111-1307, USA.
++*/
++
++#ifndef __IDIRECTFBPALETTE_REQUESTOR_H__
++#define __IDIRECTFBPALETTE_REQUESTOR_H__
++
++#include <voodoo/manager.h>
++
++/*
++ * private data struct of IDirectFBPalette_Requestor
++ */
++typedef struct {
++     int                  ref;      /* reference counter */
++
++     VoodooManager       *manager;
++     VoodooInstanceID     instance;
++} IDirectFBPalette_Requestor_data;
++
++#endif
++
+--- DirectFB-0.9.21/proxy/requestor/idirectfbsurface_requestor.h.orig	1970-01-01 01:00:00.000000000 +0100
++++ DirectFB-0.9.21/proxy/requestor/idirectfbsurface_requestor.h	2005-01-10 22:27:44.046912240 +0100
+@@ -0,0 +1,48 @@
++/*
++   (c) Copyright 2000-2002  convergence integrated media GmbH.
++   (c) Copyright 2002-2004  convergence GmbH.
++
++   All rights reserved.
++
++   Written by Denis Oliver Kropp <dok@directfb.org>,
++              Andreas Hundt <andi@fischlustig.de>,
++              Sven Neumann <neo@directfb.org> and
++              Ville Syrjälä <syrjala@sci.fi>.
++
++   This library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2 of the License, or (at your option) any later version.
++
++   This library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with this library; if not, write to the
++   Free Software Foundation, Inc., 59 Temple Place - Suite 330,
++   Boston, MA 02111-1307, USA.
++*/
++
++#ifndef __IDIRECTFBSURFACE_REQUESTOR_H__
++#define __IDIRECTFBSURFACE_REQUESTOR_H__
++
++#include <directfb.h>
++
++#include <voodoo/manager.h>
++
++/*
++ * private data struct of IDirectFBSurface_Requestor
++ */
++typedef struct {
++     int                    ref;      /* reference counter */
++
++     VoodooManager         *manager;
++     VoodooInstanceID       instance;
++
++     IDirectFBFont         *font;
++} IDirectFBSurface_Requestor_data;
++
++#endif
++
+--- DirectFB-0.9.21/proxy/requestor/idirectfbwindow_requestor.h.orig	1970-01-01 01:00:00.000000000 +0100
++++ DirectFB-0.9.21/proxy/requestor/idirectfbwindow_requestor.h	2005-01-10 22:27:44.047912088 +0100
+@@ -0,0 +1,44 @@
++/*
++   (c) Copyright 2000-2002  convergence integrated media GmbH.
++   (c) Copyright 2002-2004  convergence GmbH.
++
++   All rights reserved.
++
++   Written by Denis Oliver Kropp <dok@directfb.org>,
++              Andreas Hundt <andi@fischlustig.de>,
++              Sven Neumann <neo@directfb.org> and
++              Ville Syrjälä <syrjala@sci.fi>.
++
++   This library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2 of the License, or (at your option) any later version.
++
++   This library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with this library; if not, write to the
++   Free Software Foundation, Inc., 59 Temple Place - Suite 330,
++   Boston, MA 02111-1307, USA.
++*/
++
++#ifndef __IDIRECTFBWINDOW_REQUESTOR_H__
++#define __IDIRECTFBWINDOW_REQUESTOR_H__
++
++#include <voodoo/manager.h>
++
++/*
++ * private data struct of IDirectFBWindow_Requestor
++ */
++typedef struct {
++     int                  ref;      /* reference counter */
++
++     VoodooManager       *manager;
++     VoodooInstanceID     instance;
++} IDirectFBWindow_Requestor_data;
++
++#endif
++
