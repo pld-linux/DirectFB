@@ -18,6 +18,22 @@ Buildroot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description -l pl
 
+%package devel
+Group:		X11
+Group(pl):	X11
+Summary:	DirectFB - development package.
+Summary(pl):	DirectFB - pliki naglowkowe.
+%description devel
+%description -l pl devel
+
+%package doc
+Group:		X11
+Group(pl):	X11
+Summary:	DirectFB - documentation.
+Summary(pl):	DirectFB - dokumantacja.
+%description doc
+%description -l pl doc
+
 %prep
 %setup -q
 
@@ -38,6 +54,9 @@ rm -rf $RPM_BUILD_ROOT
 rm -rf $RPM_BUILD_ROOT
 
 %files
-%defattr(644,root,root,755)
-%doc
-%attr(,,)
+#%defattr(644,root,root,755)
+#%doc
+#%attr(,,)
+
+%files devel
+%files doc
