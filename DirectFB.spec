@@ -122,6 +122,48 @@ This package contains PNG image provider for DirectFB.
 %description image-png -l pl
 Ten pakiet zawiera wtyczkê dla DirectFB dostarczaj±c± grafikê PNG.
 
+%package input-elo
+Summary:	ELO touchscreen input driver for DirectFB
+Summary(pl):	Sterownik wej¶ciowy do touchscreenów ELO dla DirectFB
+Group:		Libraries
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+
+%description input-elo
+ELO touchscreen input driver for DirectFB.
+
+NOTE: currently it uses hardcoded /dev/ttyS0 port, so don't install it
+unless you don't have ELO device connected to this port. It can mess
+with other devices connected to this port (mouse, modem etc.).
+
+%description input-elo -l pl
+Sterownik wej¶ciowy do touchscreenów ELO dla DirectFB.
+
+UWAGA: aktualnie u¿ywa zakodowanego na sta³e portu /dev/ttyS0, wiêc nie
+nale¿y go instalowaæ, je¶li urz±dzenie ELO nie jest pod³±czone do tego
+portu. Sterownik mo¿e utrudniæ wspó³pracê z innymi urz±dzeniami
+pod³±czonymi do /dev/ttyS0 (jak mysz, modem itp.).
+
+%package input-mutouch
+Summary:	MuTouch touchscreen input driver for DirectFB
+Summary(pl):	Sterownik wej¶ciowy do touchscreenów MuTouch dla DirectFB
+Group:		Libraries
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+
+%description input-mutouch
+MuTouch touchscreen input driver for DirectFB.
+
+NOTE: currently it uses hardcoded /dev/ttyS0 port, so don't install it
+unless you don't have MuTouch device connected to this port. It can
+mess with other devices connected to this port (mouse, modem etc.).
+
+%description input-mutouch -l pl
+Sterownik wej¶ciowy do touchscreenów MuTouch dla DirectFB.
+
+UWAGA: aktualnie u¿ywa zakodowanego na sta³e portu /dev/ttyS0, wiêc nie
+nale¿y go instalowaæ, je¶li urz±dzenie MuTouch nie jest pod³±czone do
+tego portu. Sterownik mo¿e utrudniæ wspó³pracê z innymi urz±dzeniami
+pod³±czonymi do /dev/ttyS0 (jak mysz, modem itp.).
+
 %prep
 %setup -q -a1
 %patch0 -p1
@@ -200,12 +242,10 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{dfbdir}/gfxdrivers
 %attr(755,root,root) %{dfbdir}/gfxdrivers/*.so
 %dir %{dfbdir}/inputdrivers
-%attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_elo.so
 %attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_joystick.so
 %attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_keyboard.so
 %attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_linux_input.so
 %attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_lirc.so
-%attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_mutouch.so
 %attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_ps2mouse.so
 %attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_serialmouse.so
 %attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_sonypi.so
@@ -295,3 +335,11 @@ rm -rf $RPM_BUILD_ROOT
 %files image-png
 %defattr(644,root,root,755)
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_png.so
+
+%files input-elo
+%defattr(644,root,root,755)
+%attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_elo.so
+
+%files input-mutouch
+%defattr(644,root,root,755)
+%attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_mutouch.so
