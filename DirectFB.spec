@@ -1,7 +1,7 @@
 #
 # Conditional build:
-# _with_flash	- build FLASH support
-# _with_mpg	- build support for MPG/MPEG3
+# _without_flash	- don't build FLASH support
+# _without_mpg		- don't build support for MPG/MPEG3
 #
 Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl):	DirectFB - Wspomaganie grafiki
@@ -17,10 +17,10 @@ URL:		http://www.directfb.org/
 #BuildRequires:	SDL-devel
 BuildRequires:	autoconf
 BuildRequires:	automake
-%{?_with_flash:BuildRequires:	flash-devel >= 0.4.10-5}
+%{!?_without_flash:BuildRequires:	flash-devel >= 0.4.10-5}
 BuildRequires:	freetype-devel >= 2.0.2
 BuildRequires:	libjpeg-devel >= 6b
-%{?_with_mpg:BuildRequires:	libmpeg3-devel}
+%{!?_without_mpg:BuildRequires:	libmpeg3-devel}
 BuildRequires:	libpng-devel >= 1.0
 BuildRequires:	libtool
 BuildRequires:	zlib-devel >= 1.1.3
@@ -155,8 +155,8 @@ LDFLAGS="%{rpmldflags} -L/usr/X11R6/lib"
 	--enable-static \
 	--disable-fast-install \
 	--disable-debug \
-	%{!?_with_flash:--disable-flash} \
-	%{!?_with_mpg:--disable-libmpeg3} \
+	%{?_without_flash:--disable-flash} \
+	%{?_without_mpg:--disable-libmpeg3} \
 	--disable-avifile \
 	--disable-sdl \
 %ifarch i586 i686 athlon
@@ -235,13 +235,13 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_png.??
 
-%if %{?_with_mpg:1}%{!?_with_mpg:0}
+%if %{!?_without_mpg:1}%{?_without_mpg:0}
 %files video-libmpeg3
 %defattr(644,root,root,755)
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBVideoProvider/libidirectfbvideoprovider_libmpeg3.??
 %endif
 
-%if %{?_with_flash:1}%{!?_with_flash:0}
+%if %{!?_without_flash:1}%{?_without_flash:0}
 %files video-swf
 %defattr(644,root,root,755)
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBVideoProvider/libidirectfbvideoprovider_swf.??
