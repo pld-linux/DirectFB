@@ -5,12 +5,12 @@
 Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
-Version:	0.9.18
+Version:	0.9.19
 Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://www.directfb.org/download/%{name}/%{name}-%{version}.tar.gz
-# Source0-md5:	c90296dcf7fea2865baef5351e7003c5
+# Source0-md5:	8af7f3b5d2c3cc2cb7aba4662ec0b73f
 Source1:	http://www.directfb.org/download/DirectFB/DFBTutorials-0.5.0.tar.gz
 # Source1-md5:	13e443a64bddd68835b574045d9025e9
 Patch0:		%{name}-am.patch
@@ -191,6 +191,9 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{dfbdir}/interfaces/IDirectFBVideoProvider
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBVideoProvider/libidirectfbvideoprovider_v4l.so
 %{dfbdir}/interfaces/IDirectFBVideoProvider/libidirectfbvideoprovider_v4l.la
+%dir %{dfbdir}/systems
+%attr(755,root,root) %{dfbdir}/systems/libdirectfb_fbdev.so
+%{dfbdir}/systems/libdirectfb_fbdev.la
 %{_datadir}/directfb-%{version}
 %{_mandir}/man5/*
 
@@ -211,6 +214,7 @@ rm -rf $RPM_BUILD_ROOT
 %{dfbdir}/gfxdrivers/*.a
 %{dfbdir}/inputdrivers/*.a
 %{dfbdir}/interfaces/*/*.a
+%{dfbdir}/systems/*.a
 
 %files doc
 %defattr(644,root,root,755)
