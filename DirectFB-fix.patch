@@ -9,3 +9,25 @@
                           void                      *driver_data,
                           DFBInputDeviceKeymapEntry *entry )
  {
+--- DirectFB-0.9.21/gfxdrivers/cle266/Makefile.am.orig	2004-10-09 01:44:31.000000000 +0200
++++ DirectFB-0.9.21/gfxdrivers/cle266/Makefile.am	2005-01-15 15:07:27.813759856 +0100
+@@ -32,7 +32,7 @@
+ libdirectfb_cle266_la_LDFLAGS = \
+ 	-export-dynamic		\
+ 	-avoid-version		\
+-	$(DFB_LDFLAGS)
++	$(DFB_LDFLAGS) -lm
+ 
+ 
+ include $(top_srcdir)/rules/libobject.make
+--- DirectFB-0.9.21/gfxdrivers/unichrome/Makefile.am.orig	2004-10-09 01:48:19.000000000 +0200
++++ DirectFB-0.9.21/gfxdrivers/unichrome/Makefile.am	2005-01-15 15:07:38.104195472 +0100
+@@ -34,7 +34,7 @@
+ libdirectfb_unichrome_la_LDFLAGS = \
+ 	-export-dynamic		   \
+ 	-avoid-version		   \
+-	$(DFB_LDFLAGS)
++	$(DFB_LDFLAGS) -lm
+ 
+ 
+ include $(top_srcdir)/rules/libobject.make
