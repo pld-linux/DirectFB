@@ -2,7 +2,7 @@ Summary:	DirectFB - Hardware graphics accelration.
 Summary(pl):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
 Version:	0.9.1
-Release:	1
+Release:	2
 License:	GPL
 Group:		System/Graphics
 Group(pl):	System/Grafika
@@ -51,7 +51,6 @@ Dokumentacja dla systemu DirectFB wraz z przykladami
 %build
 %configure --prefix=%{_prefix} \
 	--disable-maintainer-mode \
-	--enable-static \
 	--enable-shared \
 	--disable-fast-install \
 	--disable-debug \
@@ -63,16 +62,18 @@ Dokumentacja dla systemu DirectFB wraz z przykladami
 rm -rf $RPM_BUILD_ROOT
 %{__make} DESTDIR=$RPM_BUILD_ROOT install
 
-%post
-%postun
+%post -p /sbin/ldconfig
+%postun -p /sbin/ldconfig
+
+%post devel -p /sbin/ldconfig
+%postun devel -p /sbin/ldconfig
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/df_*
-%attr(755,root,root) %{_bindir}/directfb-config
+%attr(755,root,root) %{_bindir}/*
 %dir %{_libdir}/directfb
 %dir %{_libdir}/directfb/*
 %attr(755,root,root) %{_libdir}/directfb/*/*.so
@@ -85,10 +86,9 @@ rm -rf $RPM_BUILD_ROOT
 %files devel
 %defattr(644,root,root,755)
 %{_includedir}/directfb.h
-%{_libdir}/directfb/*/*.a
 %{_libdir}/directfb/*/*.la
 %{_libdir}/*.la
-%{_libdir}/*.a
+%{_libdir}/lib*.so.*
 
 %files doc
 %defattr(644,root,root,755)
