@@ -54,7 +54,7 @@ rm -f missing
 libtoolize --copy --force
 gettextize --copy --force
 aclocal
-autoconf
+%{__autoconf}
 automake -a -c 
 if [ -f %{_pkgconfigdir}/libpng12.pc ] ; then
 	CPPFLAGS="`pkg-config libpng12 --cflags`"
