@@ -1,6 +1,6 @@
 #
 # Conditional build:
-# _without_mpg		- don't build support for MPG/MPEG3
+%bcond_without	mpg	# don't build support for MPG/MPEG3
 #
 Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl):	DirectFB - Wspomaganie grafiki
@@ -10,7 +10,9 @@ Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://www.directfb.org/download/%{name}/%{name}-%{version}.tar.gz
+# Source0-md5:	7a33720caed3f179d4f558821b2fff91
 Source1:	http://www.directfb.org/download/DirectFB/DFBTutorials-0.5.0.tar.gz
+# Source1-md5:	13e443a64bddd68835b574045d9025e9
 Patch0:		%{name}-am.patch
 Patch1:         %{name}-pmake.patch
 URL:		http://www.directfb.org/
@@ -19,7 +21,7 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	freetype-devel >= 2.0.2
 BuildRequires:	libjpeg-devel >= 6b
-%{!?_without_mpg:BuildRequires:	libmpeg3-devel}
+%{?with_mpg:BuildRequires:	libmpeg3-devel}
 BuildRequires:	libpng-devel >= 1.0
 BuildRequires:	libtool
 BuildRequires:	zlib-devel >= 1.1.3
@@ -139,7 +141,7 @@ CPPFLAGS="-I/usr/include/libmpeg3"
 	--enable-static \
 	--disable-fast-install \
 	--disable-debug \
-	%{?_without_mpg:--disable-libmpeg3} \
+	%{!?with_mpg:--disable-libmpeg3} \
 	--disable-sdl \
 %ifarch i586 i686 athlon
 	--enable-mmx \
@@ -226,7 +228,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_png.so
 %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_png.la
 
-%if 0%{!?_without_mpg:1}
+%if 0%{with mpg}
 %files video-libmpeg3
 %defattr(644,root,root,755)
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBVideoProvider/libidirectfbvideoprovider_libmpeg3.so
