@@ -1,12 +1,11 @@
 #
 # Conditional build:
-# _without_flash	- don't build FLASH support
 # _without_mpg		- don't build support for MPG/MPEG3
 #
 Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
-Version:	0.9.15
+Version:	0.9.16
 Release:	1
 License:	LGPL v2+
 Group:		Libraries
@@ -17,7 +16,6 @@ URL:		http://www.directfb.org/
 #BuildRequires:	SDL-devel
 BuildRequires:	autoconf
 BuildRequires:	automake
-%{!?_without_flash:BuildRequires:	flash-devel >= 0.4.10-5}
 BuildRequires:	freetype-devel >= 2.0.2
 BuildRequires:	libjpeg-devel >= 6b
 %{!?_without_mpg:BuildRequires:	libmpeg3-devel}
@@ -120,20 +118,6 @@ DirectFB. It uses libmpeg3 library.
 Ten pakiet zawiera wtyczkê dla DirectFB dostarczajac± obraz MPEG
 (MPEG-1 i MPEG-2) przy u¿yciu biblioteki libmpeg3. 
 
-%package video-swf
-Summary:	ShockWave Flash video provider for DirectFB
-Summary(pl):	DirectFB - wtyczka dostarczaj±ca obraz ShockWave Flash
-Group:		Libraries
-Requires:	%{name} = %{version}
-
-%description video-swf
-This package contains SWF (ShockWave Flash) video provider for
-DirectFB. It uses flash library.
-
-%description video-swf -l pl
-Ten pakiet zawiera wtyczkê dla DirectFB dostarczaj±c± obraz SWF
-(ShockWave Flash) przy u¿yciu biblioteki flash.
-
 %prep
 %setup -q -a1
 %patch0 -p1
@@ -144,9 +128,7 @@ rm -f missing
 %{__aclocal}
 %{__autoconf}
 %{__automake}
-# paths for libmpeg3 and libflash
-CPPFLAGS="-I/usr/include/libmpeg3 -I/usr/X11R6/include"
-LDFLAGS="%{rpmldflags} -L/usr/X11R6/lib"
+CPPFLAGS="-I/usr/include/libmpeg3"
 # SDL core disabled (used directly, not through plugin - too many deps)
 # MMX and SSE are detected at runtime, so it's safe to enable
 %configure \
@@ -155,9 +137,7 @@ LDFLAGS="%{rpmldflags} -L/usr/X11R6/lib"
 	--enable-static \
 	--disable-fast-install \
 	--disable-debug \
-	%{?_without_flash:--disable-flash} \
 	%{?_without_mpg:--disable-libmpeg3} \
-	--disable-avifile \
 	--disable-sdl \
 %ifarch i586 i686 athlon
 	--enable-mmx \
@@ -186,17 +166,23 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
 %dir %{dfbdir}
 %dir %{dfbdir}/gfxdrivers
-%attr(755,root,root) %{dfbdir}/gfxdrivers/*.??
+%attr(755,root,root) %{dfbdir}/gfxdrivers/*.so
+%{dfbdir}/gfxdrivers/*.la
 %dir %{dfbdir}/inputdrivers
-%attr(755,root,root) %{dfbdir}/inputdrivers/*.??
+%attr(755,root,root) %{dfbdir}/inputdrivers/*.so
+%{dfbdir}/inputdrivers/*.la
 %dir %{dfbdir}/interfaces
 %dir %{dfbdir}/interfaces/IDirectFBFont
-%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBFont/libidirectfbfont_default.??
+%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBFont/libidirectfbfont_default.so
+%{dfbdir}/interfaces/IDirectFBFont/libidirectfbfont_default.la
 %dir %{dfbdir}/interfaces/IDirectFBImageProvider
-%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_gif.??
-%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_mpeg2.??
+%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_gif.so
+%{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_gif.la
+%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_mpeg2.so
+%{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_mpeg2.la
 %dir %{dfbdir}/interfaces/IDirectFBVideoProvider
-%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBVideoProvider/libidirectfbvideoprovider_v4l.??
+%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBVideoProvider/libidirectfbvideoprovider_v4l.so
+%{dfbdir}/interfaces/IDirectFBVideoProvider/libidirectfbvideoprovider_v4l.la
 %{_datadir}/directfb-%{version}
 %{_mandir}/man5/*
 
@@ -204,11 +190,11 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/directfb-config
 %attr(755,root,root) %{_bindir}/directfb-csource
+%attr(755,root,root) %{_libdir}/*.so
+%{_libdir}/*.la
 %{_includedir}/directfb
 %{_includedir}/directfb-internal
 %{_pkgconfigdir}/*
-%{_libdir}/*.la
-%{_libdir}/*.so
 %{_mandir}/man1/directfb-csource.1*
 
 %files static
@@ -225,24 +211,22 @@ rm -rf $RPM_BUILD_ROOT
 
 %files font-ft2
 %defattr(644,root,root,755)
-%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBFont/libidirectfbfont_ft2.??
+%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBFont/libidirectfbfont_ft2.so
+%{dfbdir}/interfaces/IDirectFBFont/libidirectfbfont_ft2.la
 
 %files image-jpeg
 %defattr(644,root,root,755)
-%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_jpeg.??
+%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_jpeg.so
+%{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_jpeg.la
 
 %files image-png
 %defattr(644,root,root,755)
-%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_png.??
+%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_png.so
+%{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_png.la
 
-%if %{!?_without_mpg:1}%{?_without_mpg:0}
+%if 0%{!?_without_mpg:1}
 %files video-libmpeg3
 %defattr(644,root,root,755)
-%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBVideoProvider/libidirectfbvideoprovider_libmpeg3.??
-%endif
-
-%if %{!?_without_flash:1}%{?_without_flash:0}
-%files video-swf
-%defattr(644,root,root,755)
-%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBVideoProvider/libidirectfbvideoprovider_swf.??
+%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBVideoProvider/libidirectfbvideoprovider_libmpeg3.so
+%{dfbdir}/interfaces/IDirectFBVideoProvider/libidirectfbvideoprovider_libmpeg3.la
 %endif
