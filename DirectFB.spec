@@ -182,6 +182,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
+%doc AUTHORS ChangeLog NEWS README TODO
 %attr(755,root,root) %{_bindir}/dfbinfo
 %attr(755,root,root) %{_bindir}/dfblayer
 %attr(755,root,root) %{_bindir}/dfbproxy
