@@ -1,11 +1,12 @@
 Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
-Version:	0.9.9
+Version:	0.9.10
 Release:	1
 License:	GPL
 Group:		Libraries
 Source0:	http://www.directfb.org/download/%{name}/%{name}-%{version}.tar.gz
+Patch0:		%{name}-am.patch
 URL:		http://www.directfb.org/
 BuildRequires:	libpng-devel >= 1.2.0
 BuildRequires:	zlib-devel >= 1.1.3
@@ -45,16 +46,20 @@ DirectFB documentation and examples.
 Dokumentacja dla systemu DirectFB wraz z przyk³adami.
 
 %prep
-%setup -q
+%setup  -q
+%patch0 -p1
 
 %build
-#rm -f missing
-#libtoolize --copy --force
-#gettextize --copy --force
-#aclocal
-#autoconf
-#automake -a -c -f
-%configure2_13 \
+rm -f missing
+libtoolize --copy --force
+gettextize --copy --force
+aclocal
+autoconf
+automake -a -c 
+if [ -f %{_pkgconfigdir}/libpng12.pc ] ; then
+	CPPFLAGS="`pkg-config libpng12 --cflags`"
+fi
+%configure CPPFLAGS="$CPPFLAGS" \
 	--disable-maintainer-mode \
 	--enable-shared \
 	--disable-fast-install \
