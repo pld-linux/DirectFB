@@ -7,6 +7,7 @@ Summary(pl):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
 Version:	0.9.20
 Release:	1
+Epoch:		1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://www.directfb.org/download/%{name}/%{name}-%{version}.tar.gz
@@ -39,7 +40,7 @@ Wspomaganie grafiki DirectFB - biblioteki.
 Summary:	DirectFB - development package
 Summary(pl):	DirectFB - pliki nag³ówkowe
 Group:		Development/Libraries
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{epoch}:%{version}
 
 %description devel
 DirectFB header files.
