@@ -48,13 +48,13 @@ Dokumentacja dla systemu DirectFB wraz z przyk³adami.
 %setup -q
 
 %build
-rm -f missing
-libtoolize --copy --force
-gettextize --copy --force
-aclocal
-autoconf
-automake -a -c -f
-%configure --prefix=%{_prefix} \
+#rm -f missing
+#libtoolize --copy --force
+#gettextize --copy --force
+#aclocal
+#autoconf
+#automake -a -c -f
+%configure2_13 \
 	--disable-maintainer-mode \
 	--enable-shared \
 	--disable-fast-install \
