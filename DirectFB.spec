@@ -60,7 +60,7 @@ Statyczne biblioteki DirectFB.
 
 %package doc
 Summary:	DirectFB - documentation
-Summary(pl):	DirectFB - dokumantacja
+Summary(pl):	DirectFB - dokumentacja
 Group:		Development/Libraries
 
 %description doc
@@ -84,7 +84,7 @@ bibliotekê FreeType2.
 
 %package image-jpeg
 Summary:	JPEG image provider for DirectFB
-Summary(pl):	DirectFB - wtyczka dostarczajaca grafikê JPEG
+Summary(pl):	DirectFB - wtyczka dostarczaj±ca grafikê JPEG
 Group:		Libraries
 Requires:	%{name} = %{version}
 
@@ -96,7 +96,7 @@ Ten pakiet zawiera wtyczkê dla DirectFB dostarczaj±c± grafikê JPEG.
 
 %package image-png
 Summary:	PNG image provider for DirectFB
-Summary(pl):	DirectFB - wtyczka dostarczajaca grafikê PNG
+Summary(pl):	DirectFB - wtyczka dostarczaj±ca grafikê PNG
 Group:		Libraries
 Requires:	%{name} = %{version}
 
