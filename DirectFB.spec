@@ -1,27 +1,31 @@
+#
+# Conditional build:
 # _without_flash	- don't build FLASH support
 # _without_mpg		- don't build support for MPG/MPEG3
+#
 Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
 Version:	0.9.13
-Release:	2
+Release:	3
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://www.directfb.org/download/%{name}/%{name}-%{version}.tar.gz
-Source1:	http://www.directfb.org/download/DirectFB/DFBTutorials-0.4.2.tar.gz
+Source1:	http://www.directfb.org/download/DirectFB/DFBTutorials-0.5.0.tar.gz
 Patch0:		%{name}-am.patch
 URL:		http://www.directfb.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
 %{!?_without_flash:BuildRequires:	flash-devel >= 0.4.10-5}
 BuildRequires:	freetype-devel >= 2.0.2
-BuildRequires:	gettext-devel
 BuildRequires:	libjpeg-devel >= 6b
 %{!?_without_mpg:BuildRequires:	libmpeg3-devel}
-BuildRequires:	libpng-devel >= 1.2.0
+BuildRequires:	libpng-devel >= 1.0
 BuildRequires:	libtool
 BuildRequires:	zlib-devel >= 1.1.3
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+%define		dfbdir	%{_libdir}/directfb-%{version}
 
 %description
 DirectFB hardware graphics acceleration - libraries.
@@ -64,6 +68,43 @@ DirectFB documentation and tutorials.
 %description doc -l pl
 Dokumentacja dla systemu DirectFB wraz z wprowadzeniem.
 
+%package font-ft2
+Summary:	FreeType2 font provider for DirectFB
+Summary(pl):	DirectFB - wtyczka dostarczaj±ca fonty poprzez FreeType2
+Group:		Libraries
+Requires:	%{name} = %{version}
+
+%description font-ft2
+This package contains FreeType2 font provider for DirectFB.
+
+%description font-ft2 -l pl
+Ten pakiet zawiera wtyczkê dla DirectFB dostarczaj±c± fonty poprzez
+bibliotekê FreeType2.
+
+%package image-jpeg
+Summary:	JPEG image provider for DirectFB
+Summary(pl):	DirectFB - wtyczka dostarczajaca grafikê JPEG
+Group:		Libraries
+Requires:	%{name} = %{version}
+
+%description image-jpeg
+This package contains JPEG image provider for DirectFB.
+
+%description image-jpeg -l pl
+Ten pakiet zawiera wtyczkê dla DirectFB dostarczaj±c± grafikê JPEG.
+
+%package image-png
+Summary:	PNG image provider for DirectFB
+Summary(pl):	DirectFB - wtyczka dostarczajaca grafikê PNG
+Group:		Libraries
+Requires:	%{name} = %{version}
+
+%description image-png
+This package contains PNG image provider for DirectFB.
+
+%description image-png -l pl
+Ten pakiet zawiera wtyczkê dla DirectFB dostarczaj±c± grafikê PNG.
+
 %package video-libmpeg3
 Summary:	MPEG video provider for DirectFB
 Summary(pl):	DirectFB - wtyczka dostarczaj±ca obraz MPEG
@@ -99,7 +140,6 @@ Ten pakiet zawiera wtyczkê dla DirectFB dostarczaj±c± obraz SWF
 %build
 rm -f missing
 %{__libtoolize}
-%{__gettextize}
 %{__aclocal}
 %{__autoconf}
 %{__automake}
@@ -120,7 +160,7 @@ LDFLAGS="%{rpmldflags} -L/usr/X11R6/lib"
 %endif
 # MMX is detected at runtime, so it's safe
 
-%{__make} RPM_OPT_FLAGS="%{rpmcflags}"
+%{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -138,18 +178,18 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
-%dir %{_libdir}/directfb-%{version}
-%dir %{_libdir}/directfb-%{version}/gfxdrivers
-%attr(755,root,root) %{_libdir}/directfb-%{version}/gfxdrivers/*.??
-%dir %{_libdir}/directfb-%{version}/inputdrivers
-%attr(755,root,root) %{_libdir}/directfb-%{version}/inputdrivers/*.??
-%dir %{_libdir}/directfb-%{version}/interfaces
-%dir %{_libdir}/directfb-%{version}/interfaces/IDirectFBFont
-%attr(755,root,root) %{_libdir}/directfb-%{version}/interfaces/IDirectFBFont/*.??
-%dir %{_libdir}/directfb-%{version}/interfaces/IDirectFBImageProvider
-%attr(755,root,root) %{_libdir}/directfb-%{version}/interfaces/IDirectFBImageProvider/*.??
-%dir %{_libdir}/directfb-%{version}/interfaces/IDirectFBVideoProvider
-%attr(755,root,root) %{_libdir}/directfb-%{version}/interfaces/IDirectFBVideoProvider/libidirectfbvideoprovider_v4l.??
+%dir %{dfbdir}
+%dir %{dfbdir}/gfxdrivers
+%attr(755,root,root) %{dfbdir}/gfxdrivers/*.??
+%dir %{dfbdir}/inputdrivers
+%attr(755,root,root) %{dfbdir}/inputdrivers/*.??
+%dir %{dfbdir}/interfaces
+%dir %{dfbdir}/interfaces/IDirectFBFont
+%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBFont/libidirectfbfont_default.??
+%dir %{dfbdir}/interfaces/IDirectFBImageProvider
+%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_gif.??
+%dir %{dfbdir}/interfaces/IDirectFBVideoProvider
+%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBVideoProvider/libidirectfbvideoprovider_v4l.??
 %{_datadir}/directfb-%{version}
 %{_mandir}/man5/*
 
@@ -165,23 +205,35 @@ rm -rf $RPM_BUILD_ROOT
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/lib*.a
-%{_libdir}/directfb-%{version}/gfxdrivers/*.a
-%{_libdir}/directfb-%{version}/inputdrivers/*.a
-%{_libdir}/directfb-%{version}/interfaces/*/*.a
+%{dfbdir}/gfxdrivers/*.a
+%{dfbdir}/inputdrivers/*.a
+%{dfbdir}/interfaces/*/*.a
 
 %files doc
 %defattr(644,root,root,755)
 %doc docs/html/*
 %{_examplesdir}/%{name}-%{version}
 
+%files font-ft2
+%defattr(644,root,root,755)
+%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBFont/libidirectfbfont_ft2.??
+
+%files image-jpeg
+%defattr(644,root,root,755)
+%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_jpeg.??
+
+%files image-png
+%defattr(644,root,root,755)
+%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_png.??
+
 %if %{!?_without_mpg:1}%{?_without_mpg:0}
 %files video-libmpeg3
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/directfb-%{version}/interfaces/IDirectFBVideoProvider/libidirectfbvideoprovider_libmpeg3.??
+%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBVideoProvider/libidirectfbvideoprovider_libmpeg3.??
 %endif
 
 %if %{!?_without_flash:1}%{?_without_flash:0}
 %files video-swf
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/directfb-%{version}/interfaces/IDirectFBVideoProvider/libidirectfbvideoprovider_swf.??
+%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBVideoProvider/libidirectfbvideoprovider_swf.??
 %endif
