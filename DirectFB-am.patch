@@ -1,184 +1,176 @@
---- DirectFB-0.9.10/configure.in.wiget	Fri Apr 12 18:46:58 2002
-+++ DirectFB-0.9.10/configure.in	Fri Apr 26 12:25:54 2002
-@@ -107,6 +107,7 @@
-     ;;
- esac
- 
+--- DirectFB-0.9.12/configure.in.orig	Mon Jun 10 13:39:16 2002
++++ DirectFB-0.9.12/configure.in	Sun Sep  1 01:29:59 2002
+@@ -62,6 +62,7 @@
+ AC_PROG_MAKE_SET
+ AC_HEADER_STDC
+ AC_C_CONST
 +AM_PROG_AS
- if test "x$have_x86" = xon; then
- ##
- ## HACK HACK HACK automake uses @AS@ like a gcc
-@@ -198,17 +199,17 @@
- dnl Test for libjpeg
-   JPEG=no
  
--  AC_ARG_ENABLE(jpeg, [  --enable-jpeg           build JPEG image provider [default=yes]], enable_jpeg="$enableval", enable_jpeg=yes)
-+  AC_ARG_ENABLE(jpeg, [  --enable-jpeg           build JPEG image provider [default=yes]], [enable_jpeg="$enableval"], [enable_jpeg=yes])
+ AC_PATH_PROGS(PERL, perl5 perl)
  
-   if test x$enable_jpeg = xyes; then
-     if test -z "$LIBJPEG"; then
-       AC_CHECK_LIB(jpeg, jpeg_destroy_decompress,
--        jpeg_ok=yes,
--        jpeg_ok=no)
-+        [jpeg_ok=yes],
-+        [jpeg_ok=no])
-       if test "$jpeg_ok" = yes; then
-         AC_CHECK_HEADER(jpeglib.h,
--	  jpeg_ok=yes,
--          jpeg_ok=no)
-+	  [jpeg_ok=yes],
-+          [jpeg_ok=no])
-         if test "$jpeg_ok" = yes; then
- 	  JPEG=yes
- 	  LIBJPEG='-ljpeg'
-@@ -223,32 +224,32 @@
-     fi
-   fi
- 
--  AM_CONDITIONAL(JPEG_PROVIDER, test x$JPEG = xyes)
-+  AM_CONDITIONAL(JPEG_PROVIDER, [test x$JPEG = xyes])
- 
- 
- dnl Test for libpng and libz
-   PNG=no
- 
--  AC_ARG_ENABLE(png, [  --enable-png            build PNG image provider [default=yes]], enable_png="$enableval", enable_png=yes)
-+  AC_ARG_ENABLE(png, [  --enable-png            build PNG image provider [default=yes]], [enable_png="$enableval"], [enable_png=yes])
- 
-   if test x$enable_png = xyes; then
- 
+@@ -259,23 +260,23 @@
    dnl Test for libz
      if test -z "$LIBZ"; then
--      AC_CHECK_LIB(z, gzsetparams,
-+      AC_CHECK_LIB(z, gzsetparams,[
-         AC_CHECK_HEADER(zlib.h,
--	  LIBZ='-lz',
--	  AC_MSG_WARN([*** libz header files not found. PNG image provider will not be built.])),
--        AC_MSG_WARN([*** libz not found. PNG image provider will not be built.]))
-+	  [LIBZ='-lz'],
-+	  [AC_MSG_WARN([*** libz header files not found. PNG image provider will not be built.])])],
-+        [AC_MSG_WARN([*** libz not found. PNG image provider will not be built.])])
+       AC_CHECK_LIB(z, gzsetparams,
+-        AC_CHECK_HEADER(zlib.h,
++        [AC_CHECK_HEADER(zlib.h,
+ 	  LIBZ='-lz',
+-	  AC_MSG_WARN([
+-*** libz header files not found. PNG image provider will not be built.])),
+-        AC_MSG_WARN([
+-*** libz not found. PNG image provider will not be built.]))
++	  [AC_MSG_WARN([
++*** libz header files not found. PNG image provider will not be built.])])],
++        [AC_MSG_WARN([
++*** libz not found. PNG image provider will not be built.])])
      fi
  
    dnl Test for libpng
      if test -z "$LIBPNG" && test -n "$LIBZ"; then
        AC_CHECK_LIB(png, png_read_info,
 -        AC_CHECK_HEADER(png.h,
--	  png_ok=yes,
--	  AC_MSG_WARN([*** PNG header files not found. PNG image provider will not be built.])),
--        AC_MSG_WARN([*** PNG library not found. PNG image provider will not be built.]), $LIBZ -lm)
 +        [AC_CHECK_HEADER(png.h,
-+	  [png_ok=yes],
-+	  [AC_MSG_WARN([*** PNG header files not found. PNG image provider will not be built.])])],
-+        [AC_MSG_WARN([*** PNG library not found. PNG image provider will not be built.])], $LIBZ -lm)
+ 	  png_ok=yes,
+-	  AC_MSG_WARN([
+-*** PNG header files not found. PNG image provider will not be built.])),
+-        AC_MSG_WARN([
+-*** PNG library not found. PNG image provider will not be built.]), $LIBZ -lm)
++	  [AC_MSG_WARN([
++*** PNG header files not found. PNG image provider will not be built.])])],
++        [AC_MSG_WARN([
++*** PNG library not found. PNG image provider will not be built.])], $LIBZ -lm)
        if test "$png_ok" = yes; then
          AC_MSG_CHECKING([for png_structp in png.h])
          AC_TRY_COMPILE([#include <png.h>],
-@@ -256,7 +257,7 @@
- 	   png_infop info;
- 	   png_colorp cmap;
- 	   png_create_read_struct;],
--          png_ok=yes, png_ok=no)
-+          [png_ok=yes], [png_ok=no])
-         AC_MSG_RESULT($png_ok)
-         if test "$png_ok" = yes; then
- 	  PNG=yes
-@@ -276,7 +277,7 @@
+@@ -363,13 +364,13 @@
  
- 
- dnl Allow to disable GIF support
--  AC_ARG_ENABLE(gif, [  --enable-gif            build GIF image provider [default=yes]], enable_gif="$enableval", enable_gif=yes)
-+  AC_ARG_ENABLE(gif, [  --enable-gif            build GIF image provider [default=yes]], [enable_gif="$enableval"], [enable_gif=yes])
-  
-   AM_CONDITIONAL(GIF_PROVIDER, test x$enable_gif = xyes)
- 
-@@ -323,11 +324,11 @@
- 
-   if test -z "$LIBFLASH"; then
+   if test x$enable_flash = xyes; then
      AC_CHECK_LIB(flash, FlashGetInfo,
 -      AC_CHECK_HEADER(flash.h,
--	FLASH=yes
--	LIBFLASH='-lflash',
--	AC_MSG_WARN([*** libflash headers not found -- SWF media provider will not be built.])),
--      AC_MSG_WARN([*** libflash not found -- SWF media provider will not be built.]), $LIBJPEG $LIBZ -lm)
 +      [AC_CHECK_HEADER(flash.h,
-+	[FLASH=yes
-+	LIBFLASH='-lflash'],
-+	[AC_MSG_WARN([*** libflash headers not found -- SWF media provider will not be built.])])],
-+      [AC_MSG_WARN([*** libflash not found -- SWF media provider will not be built.])], [$LIBJPEG $LIBZ -lm])
+ 	FLASH=yes
+ 	LIBFLASH='-lflash',
+-	AC_MSG_WARN([
+-*** libflash headers not found -- Flash media provider will not be built.])),
+-      AC_MSG_WARN([
+-*** libflash not found -- Flash media provider will not be built.]), $LIBJPEG $LIBZ -lm)
++	[AC_MSG_WARN([
++*** libflash headers not found -- Flash media provider will not be built.])])],
++      [AC_MSG_WARN([
++*** libflash not found -- Flash media provider will not be built.])], $LIBJPEG $LIBZ -lm)
    fi
  
  AM_CONDITIONAL(FLASH_PROVIDER, test x$FLASH = xyes)
-@@ -360,8 +361,8 @@
-   yes
- #endif
- ], ati=yes, 
--  ati=no
--  AC_MSG_WARN(*** ATI Rage 128 gfxdriver will not be built.))
-+  [ati=no
-+  AC_MSG_WARN([*** ATI Rage 128 gfxdriver will not be built.])])
+@@ -381,13 +382,13 @@
  
- AM_CONDITIONAL(GFX_ATI, test x$ati = xyes)
+   if test x$enable_mpeg3 = xyes; then
+     AC_CHECK_LIB(mpeg3, mpeg3_open,
+-      AC_CHECK_HEADER(libmpeg3.h,
++      [AC_CHECK_HEADER(libmpeg3.h,
+         MPEG3=yes
+         LIBMPEG3='-lmpeg3',
+-        AC_MSG_WARN([
+-*** libmpeg3 headers not found -- Libmpeg3 video provider will not be built.])),
+-      AC_MSG_WARN([
+-*** libmpeg3 not found -- Libmpeg3 video provider will not be build.]), -lm -lpthread)
++        [AC_MSG_WARN([
++*** libmpeg3 headers not found -- Libmpeg3 video provider will not be built.])])],
++      [AC_MSG_WARN([
++*** libmpeg3 not found -- Libmpeg3 video provider will not be build.])], -lm -lpthread)
+   fi
  
-@@ -373,8 +374,8 @@
+ AM_CONDITIONAL(LIBMPEG3_PROVIDER, test x$MPEG3 = xyes)
+@@ -415,9 +416,9 @@
    yes
  #endif
  ], matrox=yes, 
 -  matrox=no  
--  AC_MSG_WARN(*** Matrox G200/400 gfxdriver will not be built.))
 +  [matrox=no  
-+  AC_MSG_WARN([*** Matrox G200/400 gfxdriver will not be built.])])
+   AC_MSG_WARN([
+-*** Matrox G200/400/450/550 gfxdriver will not be built.]))
++*** Matrox G200/400/450/550 gfxdriver will not be built.])])
  
  AM_CONDITIONAL(GFX_MATROX, test x$matrox = xyes)
  
-@@ -386,8 +387,8 @@
+@@ -429,9 +430,9 @@
    yes
  #endif
  ], tdfx=yes, 
 -  tdfx=no  
--  AC_MSG_WARN(*** 3DFX Voodoo/Banshee gfxdriver will not be built.))
 +  [tdfx=no  
-+  AC_MSG_WARN([*** 3DFX Voodoo/Banshee gfxdriver will not be built.])])
+   AC_MSG_WARN([
+-*** 3DFX Voodoo/Banshee gfxdriver will not be built.]))
++*** 3DFX Voodoo/Banshee gfxdriver will not be built.])])
  
  AM_CONDITIONAL(GFX_TDFX, test x$tdfx = xyes)
  
-@@ -399,8 +400,8 @@
+@@ -443,9 +444,9 @@
    yes
  #endif
  ], nvidia=yes, 
 -  nvidia=no  
--  AC_MSG_WARN(*** nVidia RIVA TNT gfxdriver will not be built.))
 +  [nvidia=no  
-+  AC_MSG_WARN([*** nVidia RIVA TNT gfxdriver will not be built.])])
+   AC_MSG_WARN([
+-*** nVidia RIVA TNT gfxdriver will not be built.]))
++*** nVidia RIVA TNT gfxdriver will not be built.])])
  
  AM_CONDITIONAL(GFX_NVIDIA, test x$nvidia = xyes)
  
-@@ -410,22 +411,22 @@
+@@ -457,9 +458,9 @@
+   yes
+ #endif
+ ], savage=yes,
+-  savage=no   
++  [savage=no   
+   AC_MSG_WARN([
+-*** Savage gfxdriver will not be built.]))
++*** Savage gfxdriver will not be built.])])
+ 
+ AM_CONDITIONAL(GFX_SAVAGE, test x$savage = xyes)
+ 
+@@ -469,25 +470,25 @@
  
  
  dnl Test for H3600 Touchscreen support
 -AC_CHECK_HEADER( [linux/h3600_ts.h], h3600_ts=yes, h3600_ts=no  
--  AC_MSG_WARN(*** H3600 Touchscreen driver will not be built.))
 +AC_CHECK_HEADER( [linux/h3600_ts.h], h3600_ts=yes, [h3600_ts=no  
-+  AC_MSG_WARN([*** H3600 Touchscreen driver will not be built.])])
+   AC_MSG_WARN([
+-*** H3600 Touchscreen driver will not be built.]))
++*** H3600 Touchscreen driver will not be built.])])
  
  AM_CONDITIONAL(H3600_TS, test x$h3600_ts = xyes)
  
  
  dnl Test for SonyPI Jogdial support
 -AC_CHECK_HEADER( [linux/sonypi.h], sonypi=yes, sonypi=no  
--  AC_MSG_WARN(*** SonyPI Jogdial driver will not be built.))
 +AC_CHECK_HEADER( [linux/sonypi.h], sonypi=yes, [sonypi=no  
-+  AC_MSG_WARN([*** SonyPI Jogdial driver will not be built.])])
+   AC_MSG_WARN([
+-*** SonyPI Jogdial driver will not be built.]))
++*** SonyPI Jogdial driver will not be built.])])
  
  AM_CONDITIONAL(SONYPI, test x$sonypi = xyes)
  
  
  dnl Test for DBox2 Remote support
 -AC_CHECK_HEADER( [dbox/fp.h], dbox2remote=yes, dbox2remote=no
--  AC_MSG_WARN(*** DBox2 Remote driver will not be built.))
 +AC_CHECK_HEADER( [dbox/fp.h], dbox2remote=yes, [dbox2remote=no
-+  AC_MSG_WARN([*** DBox2 Remote driver will not be built.])])
+   AC_MSG_WARN([
+-*** DBox2 Remote driver will not be built.]))
++*** DBox2 Remote driver will not be built.])])
  
  AM_CONDITIONAL(DBOX2REMOTE, test x$dbox2remote = xyes)
+ 
+@@ -496,11 +496,11 @@
+ DFB_CFLAGS="$DFB_CFLAGS $DFB_INTERNAL_CFLAGS"
+ DFB_CXXFLAGS="$DFB_CFLAGS"
+ 
+-if test x$cflags_set != xset ; then
++if test "x$cflags_set" != "xset" ; then
+   DFB_CFLAGS="$DFB_CFLAGS $CFLAGS"
+ fi
+ 
+-if test x$cxxflags_set != xset ; then
++if test "x$cxxflags_set" != "xset" ; then
+   DFB_CXXFLAGS="$DFB_CXXFLAGS $CXXFLAGS"
+ fi
  
