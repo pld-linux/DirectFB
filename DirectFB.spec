@@ -3,10 +3,11 @@ Summary(pl):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
 Version:	0.9.0
 Release:	1
-Copyright:	GPL
-Group:		X11	
+License:	GPL
+Group:		X11
+Group(de):	X11
 Group(pl):	X11
-Source:		http://directfb.org/download/%{name}-%{version}.tar.gz
+Source0:	http://directfb.org/download/%{name}-%{version}.tar.gz
 URL:		htt://directfs.org/
 BuildRequires:	libpng >= 1.0.10
 Buildrequires:	zlib >= 1.1.3
@@ -15,14 +16,13 @@ BuildRequires:	freetype >= 2.0.2
 #Requires:	
 Buildroot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define	_prefix	/usr
-
 %description
 
 %description -l pl
 
 %package devel
 Group:		X11
+Group(de):	X11
 Group(pl):	X11
 Summary:	DirectFB - development package.
 Summary(pl):	DirectFB - pliki naglowkowe.
@@ -35,6 +35,7 @@ Pliki naglowkowe dla DirectFB.
 
 %package doc
 Group:		X11
+Group(de):	X11
 Group(pl):	X11
 Summary:	DirectFB - documentation.
 Summary(pl):	DirectFB - dokumantacja.
@@ -58,7 +59,8 @@ Dokumentacja dla systemu DirectFB
 	--disable-fast-install \
 	--disable-debug \
 	--enable-mmx 
-%{__make} RPM_OPT_FLAGS="$RPM_OPT_FLAGS"
+
+%{__make} RPM_OPT_FLAGS="%{rpmcflags}"
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -71,22 +73,27 @@ rm -rf $RPM_BUILD_ROOT
 rm -rf $RPM_BUILD_ROOT
 
 %files
-%defattr(755,root,root,755)
+%defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/df_*
 %attr(755,root,root) %{_bindir}/directfb-config
-%attr(644,root,root) %{_libdir}/directfb/*/*.so
-%attr(644,root,root) %{_libdir}/pkgconfig/directfb.pc
-%attr(644,root,root) %{_libdir}/*.so
+%dir %{_libdir}/directfb
+%dir %{_libdir}/directfb/*
+%attr(755,root,root) %{_libdir}/directfb/*/*.so
+%attr(755,root,root) %{_libdir}/*.so
+%{_pkgconfigdir}/directfb.pc
+%dir %{_datadir}/directfb
 %dir %{_datadir}/directfb/fonts
-%attr(644,root,root) %{_datadir}/directfb/cursor.dat
+%{_datadir}/directfb/cursor.dat
 
 %files devel
-%attr(644,root,root) %{_includedir}/directfb.h
-%attr(644,root,root) %{_libdir}/directfb/*/*.a
-%attr(644,root,root) %{_libdir}/directfb/*/*.la
-%attr(644,root,root) %{_libdir}/*.la
-%attr(644,root,root) %{_libdir}/*.a
+%defattr(644,root,root,755)
+%{_includedir}/directfb.h
+%{_libdir}/directfb/*/*.a
+%{_libdir}/directfb/*/*.la
+%{_libdir}/*.la
+%{_libdir}/*.a
 
 %files doc
+%defattr(644,root,root,755)
 %doc docs/html/*
-%dir %{_datadir}/directfb/examples/
+%dir %{_datadir}/directfb/examples
