@@ -1,11 +1,14 @@
-Summary:	DirectFB - Hardware graphics accelration.
+Summary:	DirectFB - Hardware graphics accelration
 Summary(pl):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
 Version:	0.9.4
 Release:	1
 License:	GPL
-Group:		System/Graphics
-Group(pl):	System/Grafika
+Group:		Libraries
+Group(de):	Libraries
+Group(es):	Bibliotecas
+Group(fr):	Librairies
+Group(pl):	Biblioteki
 Source0:	http://www.directfb.org/download/%{name}/%{name}-%{version}.tar.gz
 URL:		htt://www.directfb.org/
 BuildRequires:	libpng-devel >= 1.0.10
@@ -19,10 +22,13 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %description -l pl
 
 %package devel
-Group:		System/Development
-Group(pl):	System/Programowanie
 Summary:	DirectFB - development package.
 Summary(pl):	DirectFB - pliki naglowkowe.
+Group:		Development/Libraries
+Group(de):	Entwicklung/Libraries
+Group(fr):	Development/Librairies
+Group(pl):	Programowanie/Biblioteki
+Requires:	%{name} = %{version}
 
 %description devel
 DirectFB header files.
@@ -31,10 +37,12 @@ DirectFB header files.
 Pliki naglowkowe dla DirectFB.
 
 %package doc
-Group:		System/Documentation
-Group(pl):	System/Dokumantacja
 Summary:	DirectFB - documentation.
 Summary(pl):	DirectFB - dokumantacja.
+Group:		Development/Libraries
+Group(de):	Entwicklung/Libraries
+Group(fr):	Development/Librairies
+Group(pl):	Programowanie/Biblioteki
 
 %description doc
 DirectFB documentation and examples
@@ -54,7 +62,7 @@ automake -a -c
 	--enable-shared \
 	--disable-fast-install \
 	--disable-debug \
-    --disable-avifile \
+	--disable-avifile \
 	--enable-mmx 
 
 %{__make} RPM_OPT_FLAGS="%{rpmcflags}"
