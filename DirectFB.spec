@@ -1,8 +1,10 @@
+# _without_flash	- don't build FLASH support
+# _without_mpg		- don't build support for MPG/MPEG3
 Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
 Version:	0.9.13
-Release:	1
+Release:	2
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://www.directfb.org/download/%{name}/%{name}-%{version}.tar.gz
@@ -11,11 +13,11 @@ Patch0:		%{name}-am.patch
 URL:		http://www.directfb.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
-BuildRequires:	flash-devel >= 0.4.10-5
+%{!?_without_flash:BuildRequires:	flash-devel >= 0.4.10-5}
 BuildRequires:	freetype-devel >= 2.0.2
 BuildRequires:	gettext-devel
 BuildRequires:	libjpeg-devel >= 6b
-BuildRequires:	libmpeg3-devel
+%{!?_without_mpg:BuildRequires:	libmpeg3-devel}
 BuildRequires:	libpng-devel >= 1.2.0
 BuildRequires:	libtool
 BuildRequires:	zlib-devel >= 1.1.3
@@ -110,6 +112,8 @@ LDFLAGS="%{rpmldflags} -L/usr/X11R6/lib"
 	--enable-static \
 	--disable-fast-install \
 	--disable-debug \
+	%{?_without_flash:--disable-flash} \
+	%{?_without_mpg:--disable-libmpeg3} \
 	--disable-avifile \
 %ifarch i586 i686 athlon
 	--enable-mmx=on
@@ -170,10 +174,14 @@ rm -rf $RPM_BUILD_ROOT
 %doc docs/html/*
 %{_examplesdir}/%{name}-%{version}
 
+%if %{!?_without_mpg:1}%{?_without_mpg:0}
 %files video-libmpeg3
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/directfb-%{version}/interfaces/IDirectFBVideoProvider/libidirectfbvideoprovider_libmpeg3.??
+%endif
 
+%if %{!?_without_flash:1}%{?_without_flash:0}
 %files video-swf
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/directfb-%{version}/interfaces/IDirectFBVideoProvider/libidirectfbvideoprovider_swf.??
+%endif
