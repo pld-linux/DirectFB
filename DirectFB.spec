@@ -1,12 +1,12 @@
 #
 # Conditional build:
-# _without_mpg		- don't build support for MPG/MPEG3
+%bcond_without	mpg	# don't build support for MPG/MPEG3
 #
 Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
 Version:	0.9.20
-Release:	1
+Release:	2
 Epoch:		1
 License:	LGPL v2+
 Group:		Libraries
@@ -25,7 +25,7 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	freetype-devel >= 2.0.2
 BuildRequires:	libjpeg-devel >= 6b
-%{!?_without_mpg:BuildRequires:	libmpeg3-devel}
+%{?with_mpg:BuildRequires:	libmpeg3-devel}
 BuildRequires:	libpng-devel >= 1.0
 BuildRequires:	libtool
 BuildRequires:	zlib-devel >= 1.1.3
@@ -55,7 +55,7 @@ Pliki nag³ówkowe dla DirectFB.
 Summary:	DirectFB static libraries
 Summary(pl):	Statyczne biblioteki DirectFB
 Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}
+Requires:	%{name}-devel = %{epoch}:%{version}
 
 %description static
 DirectFB static libraries.
@@ -78,7 +78,7 @@ Dokumentacja dla systemu DirectFB wraz z wprowadzeniem.
 Summary:	SDL core system for DirectFB
 Summary(pl):	System SDL dla DirectFB
 Group:		Libraries
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{epoch}:%{version}
 
 %description core-sdl
 This package contains SDL core system module for DirectFB.
@@ -90,7 +90,7 @@ Ten pakiet zawiera modu³ systemu SDL dla DirectFB.
 Summary:	FreeType2 font provider for DirectFB
 Summary(pl):	DirectFB - wtyczka dostarczaj±ca fonty poprzez FreeType2
 Group:		Libraries
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{epoch}:%{version}
 
 %description font-ft2
 This package contains FreeType2 font provider for DirectFB.
@@ -103,7 +103,7 @@ bibliotekê FreeType2.
 Summary:	JPEG image provider for DirectFB
 Summary(pl):	DirectFB - wtyczka dostarczaj±ca grafikê JPEG
 Group:		Libraries
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{epoch}:%{version}
 
 %description image-jpeg
 This package contains JPEG image provider for DirectFB.
@@ -115,7 +115,7 @@ Ten pakiet zawiera wtyczkê dla DirectFB dostarczaj±c± grafikê JPEG.
 Summary:	PNG image provider for DirectFB
 Summary(pl):	DirectFB - wtyczka dostarczaj±ca grafikê PNG
 Group:		Libraries
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{epoch}:%{version}
 
 %description image-png
 This package contains PNG image provider for DirectFB.
@@ -127,7 +127,7 @@ Ten pakiet zawiera wtyczkê dla DirectFB dostarczaj±c± grafikê PNG.
 Summary:	MPEG video provider for DirectFB
 Summary(pl):	DirectFB - wtyczka dostarczaj±ca obraz MPEG
 Group:		Libraries
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{epoch}:%{version}
 
 %description video-libmpeg3
 This package contains MPEG (MPEG-1 and MPEG-2) video provider for
@@ -156,7 +156,7 @@ CPPFLAGS="-I/usr/include/libmpeg3"
 	--enable-static \
 	--enable-fast-install \
 	--disable-debug \
-	%{?_without_mpg:--disable-libmpeg3} \
+	%{!?with_mpg:--disable-libmpeg3} \
 	--enable-sdl \
 %ifarch i586 i686 athlon
 	--enable-mmx \
@@ -251,7 +251,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_png.so
 
-%if 0%{!?_without_mpg:1}
+%if %{with mpg}
 %files video-libmpeg3
 %defattr(644,root,root,755)
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBVideoProvider/libidirectfbvideoprovider_libmpeg3.so
