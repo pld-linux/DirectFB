@@ -228,7 +228,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_png.so
 %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_png.la
 
-%if 0%{with mpg}
+%if %{with mpg}
 %files video-libmpeg3
 %defattr(644,root,root,755)
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBVideoProvider/libidirectfbvideoprovider_libmpeg3.so
