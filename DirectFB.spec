@@ -16,6 +16,9 @@ Source1:	http://www.directfb.org/download/DirectFB/DFBTutorials-0.5.0.tar.gz
 # Source1-md5:	13e443a64bddd68835b574045d9025e9
 Patch0:		%{name}-am.patch
 Patch1:		%{name}-pmake.patch
+# workaround for havily broken i2c 2.8.[01] <linux/i2c*.h> headers
+# should be removed ASAP after fixing these headers!
+Patch2:		%{name}-broken-i2c-workaround.patch
 URL:		http://www.directfb.org/
 BuildRequires:	SDL-devel
 BuildRequires:	autoconf
@@ -138,6 +141,7 @@ Ten pakiet zawiera wtyczkê dla DirectFB dostarczajac± obraz MPEG
 %setup -q -a1
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 %{__libtoolize}
