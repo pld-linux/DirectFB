@@ -51,7 +51,7 @@ Dokumentacja dla systemu DirectFB wraz z przyk³adami.
 
 %build
 rm -f missing
-libtoolize --copy --force
+%{__libtoolize}
 gettextize --copy --force
 aclocal
 %{__autoconf}
