@@ -6,14 +6,15 @@
 Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
-Version:	0.9.13
-Release:	3
+Version:	0.9.14
+Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://www.directfb.org/download/%{name}/%{name}-%{version}.tar.gz
 Source1:	http://www.directfb.org/download/DirectFB/DFBTutorials-0.5.0.tar.gz
 Patch0:		%{name}-am.patch
 URL:		http://www.directfb.org/
+#BuildRequires:	SDL-devel
 BuildRequires:	autoconf
 BuildRequires:	automake
 %{!?_without_flash:BuildRequires:	flash-devel >= 0.4.10-5}
@@ -146,6 +147,8 @@ rm -f missing
 # paths for libmpeg3 and libflash
 CPPFLAGS="-I/usr/include/libmpeg3 -I/usr/X11R6/include"
 LDFLAGS="%{rpmldflags} -L/usr/X11R6/lib"
+# SDL core disabled (used directly, not through plugin - too many deps)
+# MMX and SSE are detected at runtime, so it's safe to enable
 %configure \
 	--disable-maintainer-mode \
 	--enable-shared \
@@ -155,10 +158,13 @@ LDFLAGS="%{rpmldflags} -L/usr/X11R6/lib"
 	%{?_without_flash:--disable-flash} \
 	%{?_without_mpg:--disable-libmpeg3} \
 	--disable-avifile \
+	--disable-sdl \
 %ifarch i586 i686 athlon
-	--enable-mmx=on
+	--enable-mmx \
 %endif
-# MMX is detected at runtime, so it's safe
+%ifarch i686 athlon
+	--enable-sse
+%endif
 
 %{__make}
 
@@ -188,6 +194,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBFont/libidirectfbfont_default.??
 %dir %{dfbdir}/interfaces/IDirectFBImageProvider
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_gif.??
+%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_mpeg2.??
 %dir %{dfbdir}/interfaces/IDirectFBVideoProvider
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBVideoProvider/libidirectfbvideoprovider_v4l.??
 %{_datadir}/directfb-%{version}
