@@ -5,12 +5,12 @@
 Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
-Version:	0.9.17
+Version:	0.9.18
 Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://www.directfb.org/download/%{name}/%{name}-%{version}.tar.gz
-# Source0-md5:	d373fa1d604ab5ea4e8fdcb875876cfd
+# Source0-md5:	c90296dcf7fea2865baef5351e7003c5
 Source1:	http://www.directfb.org/download/DirectFB/DFBTutorials-0.5.0.tar.gz
 # Source1-md5:	13e443a64bddd68835b574045d9025e9
 Patch0:		%{name}-am.patch
@@ -169,6 +169,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
+# dbfdump and dfbg require multi-application core - useless now
+%attr(755,root,root) %{_bindir}/dfbinfo
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
 %dir %{dfbdir}
 %dir %{dfbdir}/gfxdrivers
