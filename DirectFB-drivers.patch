@@ -1,0 +1,40 @@
+* <linux/sisfb.h> and <linux/wm97xx.h> are no more, so update detection.
+--- DirectFB-0.9.23/configure.in.orig	2005-10-23 09:12:13.613858000 +0200
++++ DirectFB-0.9.23/configure.in	2005-10-23 10:29:45.026736576 +0200
+@@ -1027,7 +1027,14 @@
+ 
+ if test "$checkfor_sis315" = "yes"; then
+ dnl Test for sis315 frame buffer support in the kernel
+-  AC_CHECK_HEADER( [linux/sisfb.h], sis315=yes, sis315=no
++  AC_EGREP_CPP(yes, [
++#include <linux/fb.h>
++#ifdef FB_ACCEL_SIS_GLAMOUR_2
++  yes
++#endif
++  ],
++  sis315=yes,
++  sis315=no   
+     AC_MSG_WARN([
+ *** SiS 315 gfxdriver will not be built.]))
+ fi
+@@ -1280,8 +1287,7 @@
+ enable_wm97xx_ts=no
+ if test "$checkfor_wm97xx" = "yes"; then
+   dnl Test for WM97xx Touchscreen support
+-  AC_CHECK_HEADER([linux/wm97xx.h], enable_wm97xx_ts=yes, enable_wm97xx_ts=no 
+-    AC_MSG_WARN([*** WM97XX Touchscreen driver will not be built.]))
++  enable_wm97xx_ts=yes
+ fi
+  
+  dnl *** end of if $testlinux ***
+--- DirectFB-0.9.23/inputdrivers/wm97xx_ts/wm97xx_ts.c.orig	2005-01-10 21:35:35.000000000 +0100
++++ DirectFB-0.9.23/inputdrivers/wm97xx_ts/wm97xx_ts.c	2005-10-23 10:28:47.421493904 +0200
+@@ -46,8 +46,6 @@
+ #include <fcntl.h>
+ #include <sys/ioctl.h>
+ 
+-#include <linux/wm97xx.h>
+-
+ #include <directfb.h>
+ 
+ #include <core/coredefs.h>
