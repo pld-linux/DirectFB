@@ -1,3 +1,7 @@
+#
+# Conditional build:
+%bcond_with	multi		# build Multi-application core
+#
 Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
@@ -27,6 +31,7 @@ BuildRequires:	libjpeg-devel >= 6b
 BuildRequires:	libpng-devel >= 1.0
 BuildRequires:	libvncserver-devel
 BuildRequires:	libtool
+%{?with_multi:BuildRequires:	linux-fusion-devel}
 BuildRequires:	sed >= 4.0
 BuildRequires:	sysfsutils-devel >= 1.3.0-3
 BuildRequires:	zlib-devel >= 1.1.3
@@ -207,6 +212,7 @@ UWAGA: do dzia³ania potrzebuje ustawienia "mut-device" w directfbrc.
 	--enable-elo-input \
 	--enable-fast-install \
 	--enable-linux-input \
+	%{?with_multi:--enable-multi} \
 	--enable-mutouch \
 	--enable-sdl \
 	--enable-shared \
@@ -236,9 +242,6 @@ install -d $RPM_BUILD_ROOT{%{_examplesdir}/%{name}-%{version},%{_sysconfdir}}
 
 cp -rf DFBTutorials* $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
-# dbfdump and dfbg require multi-application core - useless now
-rm -f $RPM_BUILD_ROOT{%{_bindir}/{dfbdump,dfbg},%{_mandir}/man1/dfbg.1}
-
 touch %{_sysconfdir}/directfbrc
 
 %clean
@@ -250,6 +253,8 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc AUTHORS ChangeLog NEWS README TODO
+%attr(755,root,root) %{_bindir}/dfbdump
+%attr(755,root,root) %{_bindir}/dfbg
 %attr(755,root,root) %{_bindir}/dfbinfo
 %attr(755,root,root) %{_bindir}/dfblayer
 %attr(755,root,root) %{_bindir}/dfbproxy
@@ -308,6 +313,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{dfbdir}/wm/*.so
 %{_datadir}/directfb-%{version}
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/directfbrc
+%{_mandir}/man1/dfbg.1*
 %{_mandir}/man5/*
 
 %files devel
