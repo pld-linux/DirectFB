@@ -1,13 +1,13 @@
 Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
-Version:	0.9.22
+Version:	0.9.23
 Release:	1
 Epoch:		1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://www.directfb.org/download/DirectFB/%{name}-%{version}.tar.gz
-# Source0-md5:	f52e23f4bb56db0d284d2a78ebc4a586
+# Source0-md5:	f52ee63851fe56ee494bcf09ef559bf3
 Source1:	http://www.directfb.org/download/DirectFB-extra/DFBTutorials-0.5.0.tar.gz
 # Source1-md5:	13e443a64bddd68835b574045d9025e9
 Patch0:		%{name}-am.patch
@@ -16,16 +16,19 @@ Patch2:		%{name}-fix.patch
 # missing files taken from DirectFB CVS
 Patch3:		%{name}-missing-files.patch
 Patch4:		%{name}-sh.patch
+Patch5:		%{name}-drivers.patch
 URL:		http://www.directfb.org/
 BuildRequires:	SDL-devel
+BuildRequires:	XFree86-devel
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
 BuildRequires:	freetype-devel >= 2.0.2
 BuildRequires:	libjpeg-devel >= 6b
 BuildRequires:	libpng-devel >= 1.0
+BuildRequires:	libvncserver-devel
 BuildRequires:	libtool
 BuildRequires:	sed >= 4.0
-BuildRequires:	sysfsutils-devel
+BuildRequires:	sysfsutils-devel >= 1.3.0-3
 BuildRequires:	zlib-devel >= 1.1.3
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -84,6 +87,30 @@ This package contains SDL core system module for DirectFB.
 
 %description core-sdl -l pl
 Ten pakiet zawiera modu³ systemu SDL dla DirectFB.
+
+%package core-vnc
+Summary:	VNC core system for DirectFB
+Summary(pl):	System VNC dla DirectFB
+Group:		Libraries
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+
+%description core-vnc
+This package contains VNC core system module for DirectFB.
+
+%description core-vnc -l pl
+Ten pakiet zawiera modu³ systemu VNC dla DirectFB.
+
+%package core-x11
+Summary:	X11 core system for DirectFB
+Summary(pl):	System X11 dla DirectFB
+Group:		Libraries
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+
+%description core-x11
+This package contains X11 core system module for DirectFB.
+
+%description core-x11 -l pl
+Ten pakiet zawiera modu³ systemu X11 dla DirectFB.
 
 %package font-ft2
 Summary:	FreeType2 font provider for DirectFB
@@ -152,17 +179,12 @@ Requires:	%{name} = %{epoch}:%{version}-%{release}
 %description input-mutouch
 MuTouch touchscreen input driver for DirectFB.
 
-NOTE: currently it uses hardcoded /dev/ttyS0 port, so don't install it
-unless you don't have MuTouch device connected to this port. It can
-mess with other devices connected to this port (mouse, modem etc.).
+NOTE: it needs "mut-device" setting in directfbrc in order to work.
 
 %description input-mutouch -l pl
 Sterownik wej¶ciowy do touchscreenów MuTouch dla DirectFB.
 
-UWAGA: aktualnie u¿ywa zakodowanego na sta³e portu /dev/ttyS0, wiêc nie
-nale¿y go instalowaæ, je¶li urz±dzenie MuTouch nie jest pod³±czone do
-tego portu. Sterownik mo¿e utrudniæ wspó³pracê z innymi urz±dzeniami
-pod³±czonymi do /dev/ttyS0 (jak mysz, modem itp.).
+UWAGA: do dzia³ania potrzebuje ustawienia "mut-device" w directfbrc.
 
 %prep
 %setup -q -a1
@@ -171,9 +193,7 @@ pod³±czonymi do /dev/ttyS0 (jak mysz, modem itp.).
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-
-sed -i -e 's@sysfs/libsysfs.h@libsysfs.h@' \
-	configure.in gfxdrivers/{nvidia/nvidia.c,matrox/matrox_maven.c}
+%patch5 -p1
 
 %build
 %{__libtoolize}
@@ -194,6 +214,7 @@ sed -i -e 's@sysfs/libsysfs.h@libsysfs.h@' \
 	--enable-unique \
 	--enable-video4linux2 \
 	--enable-voodoo \
+	--enable-x11 \
 	--enable-zlib \
 %ifarch %{ix86}
 %ifnarch i386 i486
@@ -208,7 +229,7 @@ sed -i -e 's@sysfs/libsysfs.h@libsysfs.h@' \
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
+install -d $RPM_BUILD_ROOT{%{_examplesdir}/%{name}-%{version},%{_sysconfdir}}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -217,6 +238,8 @@ cp -rf DFBTutorials* $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
 # dbfdump and dfbg require multi-application core - useless now
 rm -f $RPM_BUILD_ROOT{%{_bindir}/{dfbdump,dfbg},%{_mandir}/man1/dfbg.1}
+
+touch %{_sysconfdir}/directfbrc
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -284,6 +307,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{dfbdir}/wm
 %attr(755,root,root) %{dfbdir}/wm/*.so
 %{_datadir}/directfb-%{version}
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/directfbrc
 %{_mandir}/man5/*
 
 %files devel
@@ -323,6 +347,17 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_sdlinput.so
 %attr(755,root,root) %{dfbdir}/systems/libdirectfb_sdl.so
+
+%files core-vnc
+%defattr(644,root,root,755)
+%attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_vncinput.so
+%attr(755,root,root) %{dfbdir}/systems/libdirectfb_vnc.so
+
+%files core-x11
+%defattr(644,root,root,755)
+%doc systems/x11/README
+%attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_x11input.so
+%attr(755,root,root) %{dfbdir}/systems/libdirectfb_x11.so
 
 %files font-ft2
 %defattr(644,root,root,755)
