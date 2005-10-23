@@ -40,6 +40,11 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		dfbdir	%{_libdir}/directfb-%{version}
 
+%ifarch %{ix86}
+# gcc running out of registers with -O0 in generic_mmx.h
+%define		debugcflags	-O1 -g
+%endif
+
 %description
 DirectFB hardware graphics acceleration - libraries.
 
