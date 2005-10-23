@@ -35,6 +35,7 @@ BuildRequires:	libtool
 BuildRequires:	sed >= 4.0
 BuildRequires:	sysfsutils-devel >= 1.3.0-3
 BuildRequires:	zlib-devel >= 1.1.3
+%{?with_multi:Provides:	DirectFB(multi)}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		dfbdir	%{_libdir}/directfb-%{version}
