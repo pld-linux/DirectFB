@@ -1,10 +1,10 @@
---- DirectFB-0.9.21/directfb-config.in.orig	2004-10-09 02:04:06.000000000 +0200
-+++ DirectFB-0.9.21/directfb-config.in	2005-01-15 01:15:18.168979368 +0100
+--- DirectFB-0.9.23/directfb-config.in.orig	2004-10-09 02:04:06.000000000 +0200
++++ DirectFB-0.9.23/directfb-config.in	2005-01-15 01:15:18.168979368 +0100
 @@ -224,7 +224,7 @@
  fi
  
  
--function print_voodoo()
+-function print_voodoo ()
 +print_voodoo()
  {
  	echo $moduledir/interfaces/$1/lib$2_dispatcher.o $moduledir/interfaces/$1/lib$2_requestor.o
