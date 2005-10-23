@@ -1,6 +1,6 @@
 #
 # Conditional build:
-%bcond_with	multi		# build Multi-application core
+%bcond_with	multi		# build Multi-application core (requires working /dev/fusion*)
 #
 Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl):	DirectFB - Wspomaganie grafiki
@@ -21,6 +21,7 @@ Patch2:		%{name}-fix.patch
 Patch3:		%{name}-missing-files.patch
 Patch4:		%{name}-sh.patch
 Patch5:		%{name}-drivers.patch
+Patch6:		%{name}-segv.patch
 URL:		http://www.directfb.org/
 BuildRequires:	SDL-devel
 BuildRequires:	XFree86-devel
@@ -205,6 +206,7 @@ UWAGA: do dzia³ania potrzebuje ustawienia "mut-device" w directfbrc.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 
 %build
 %{__libtoolize}
