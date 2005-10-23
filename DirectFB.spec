@@ -243,7 +243,7 @@ install -d $RPM_BUILD_ROOT{%{_examplesdir}/%{name}-%{version},%{_sysconfdir}}
 
 cp -rf DFBTutorials* $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
-touch %{_sysconfdir}/directfbrc
+touch $RPM_BUILD_ROOT%{_sysconfdir}/directfbrc
 
 %clean
 rm -rf $RPM_BUILD_ROOT
