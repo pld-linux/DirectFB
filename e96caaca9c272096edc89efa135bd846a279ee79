@@ -1,0 +1,3 @@
+- release 2,
+- small clean in %files,
+- added %post, %postun.
