@@ -26,8 +26,8 @@ BuildRequires:	automake
 BuildRequires:	freetype-devel >= 2.0.2
 BuildRequires:	libjpeg-devel >= 6b
 BuildRequires:	libpng-devel >= 1.0
-BuildRequires:	libvncserver-devel
 BuildRequires:	libtool
+BuildRequires:	libvncserver-devel
 %{?with_multi:BuildRequires:	linux-fusion-devel}
 BuildRequires:	sed >= 4.0
 BuildRequires:	sysfsutils-devel >= 1.3.0-3
@@ -53,6 +53,7 @@ Summary:	DirectFB - development package
 Summary(pl):	DirectFB - pliki nag³ówkowe
 Group:		Development/Libraries
 Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires:	pkgconfig
 Requires:	zlib-devel >= 1.1.3
 
 %description devel
@@ -173,9 +174,9 @@ with other devices connected to this port (mouse, modem etc.).
 %description input-elo -l pl
 Sterownik wej¶ciowy do touchscreenów ELO dla DirectFB.
 
-UWAGA: aktualnie u¿ywa zakodowanego na sta³e portu /dev/ttyS0, wiêc nie
-nale¿y go instalowaæ, je¶li urz±dzenie ELO nie jest pod³±czone do tego
-portu. Sterownik mo¿e utrudniæ wspó³pracê z innymi urz±dzeniami
+UWAGA: aktualnie u¿ywa zakodowanego na sta³e portu /dev/ttyS0, wiêc
+nie nale¿y go instalowaæ, je¶li urz±dzenie ELO nie jest pod³±czone do
+tego portu. Sterownik mo¿e utrudniæ wspó³pracê z innymi urz±dzeniami
 pod³±czonymi do /dev/ttyS0 (jak mysz, modem itp.).
 
 %package input-mutouch
