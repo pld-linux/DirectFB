@@ -53,7 +53,6 @@ Summary:	DirectFB - development package
 Summary(pl):	DirectFB - pliki nag³ówkowe
 Group:		Development/Libraries
 Requires:	%{name} = %{epoch}:%{version}-%{release}
-Requires:	pkgconfig
 Requires:	zlib-devel >= 1.1.3
 
 %description devel
