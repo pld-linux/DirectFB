@@ -34,6 +34,7 @@ Patch1:		%{name}-pmake.patch
 Patch2:		%{name}-fix.patch
 Patch3:		%{name}-sh.patch
 Patch4:		%{name}-gcc4.patch
+Patch5:		%{name}-llh-ppc.patch
 URL:		http://www.directfb.org/
 BuildRequires:	SDL-devel
 BuildRequires:	XFree86-devel
@@ -219,6 +220,7 @@ UWAGA: do dzia³ania potrzebuje ustawienia "mut-device" w directfbrc.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 %build
 %{__libtoolize}
