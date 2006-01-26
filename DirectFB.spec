@@ -1,4 +1,19 @@
 #
+# TODO:
+#	- fix x86-64 int32<->ptr64 casts.
+#
+#	tree.c:88: warning: cast from pointer to integer of different size
+#	tree.c:102: warning: cast from pointer to integer of different size
+#	fonts.c:144: warning: cast to pointer from integer of different size
+#	fonts.c:211: warning: cast to pointer from integer of different size
+#	gfxcard.c:1451: warning: cast to pointer from integer of different size
+#	fbdev.c:459: warning: cast from pointer to integer of different size
+#	fbdev.c:578: warning: cast from pointer to integer of different size
+#	fbdev.c:708: warning: cast from pointer to integer of different size
+#	idirectfbfont_ft2.c:130: warning: cast from pointer to integer of different size
+#	idirectfbfont_ft2.c:292: warning: cast from pointer to integer of different size
+#	idirectfbfont_ft2.c:653: warning: cast to pointer from integer of different size
+#
 # Conditional build:
 %bcond_with	multi		# build Multi-application core (requires working /dev/fusion*)
 #
@@ -18,6 +33,7 @@ Patch0:		%{name}-am.patch
 Patch1:		%{name}-pmake.patch
 Patch2:		%{name}-fix.patch
 Patch3:		%{name}-sh.patch
+Patch4:		%{name}-gcc4.patch
 URL:		http://www.directfb.org/
 BuildRequires:	SDL-devel
 BuildRequires:	XFree86-devel
@@ -36,6 +52,8 @@ BuildRequires:	zlib-devel >= 1.1.3
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		dfbdir	%{_libdir}/directfb-%{version}
+
+%define		specflags	-fno-strict-aliasing
 
 %ifarch %{ix86}
 # gcc running out of registers with -O0 in generic_mmx.h
@@ -200,6 +218,7 @@ UWAGA: do dzia³ania potrzebuje ustawienia "mut-device" w directfbrc.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 %build
 %{__libtoolize}
@@ -223,7 +242,7 @@ UWAGA: do dzia³ania potrzebuje ustawienia "mut-device" w directfbrc.
 	--enable-voodoo \
 	--enable-x11 \
 	--enable-zlib \
-%ifarch %{ix86}
+%ifarch %{ix86} %{x8664}
 %ifnarch i386 i486
 	--enable-mmx \
 %endif
@@ -232,7 +251,8 @@ UWAGA: do dzia³ania potrzebuje ustawienia "mut-device" w directfbrc.
 %endif
 %endif
 
-%{__make}
+%{__make} \
+	X11_LIBS=%{_prefix}/X11R6/%{_lib}
 
 %install
 rm -rf $RPM_BUILD_ROOT
