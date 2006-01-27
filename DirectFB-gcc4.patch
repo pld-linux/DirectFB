@@ -17,3 +17,14 @@
  
  #else
  
+--- DirectFB-0.9.24/include/directfb.h.orig	2005-10-24 18:29:11.000000000 +0200
++++ DirectFB-0.9.24/include/directfb.h	2006-01-27 21:55:51.645587750 +0100
+@@ -846,7 +846,7 @@
+                                            any character advance of fixed or
+                                            proportional fonts */
+      DFDESC_FRACT_HEIGHT = 0x00000020,  /* fractional height is set */
+-     DFDESC_FRACT_WIDTH  = 0x00000040,  /* fractional width is set */
++     DFDESC_FRACT_WIDTH  = 0x00000040   /* fractional width is set */
+ } DFBFontDescriptionFlags;
+ 
+ /*
