@@ -21,7 +21,7 @@ Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
 Version:	0.9.24
-Release:	1
+Release:	1.1
 Epoch:		1
 License:	LGPL v2+
 Group:		Libraries
