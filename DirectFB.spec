@@ -234,7 +234,8 @@ UWAGA: do dzia³ania potrzebuje ustawienia "mut-device" w directfbrc.
 %endif
 %endif
 
-%{__make}
+%{__make} \
+	X11_LIBS=%{_prefix}/X11R6/%{_lib}
 
 %install
 rm -rf $RPM_BUILD_ROOT
