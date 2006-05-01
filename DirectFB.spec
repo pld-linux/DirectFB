@@ -95,7 +95,7 @@ Statyczne biblioteki DirectFB.
 %package doc
 Summary:	DirectFB - documentation
 Summary(pl):	DirectFB - dokumentacja
-Group:		Development/Libraries
+Group:		Documentation
 
 %description doc
 DirectFB documentation and tutorials.
