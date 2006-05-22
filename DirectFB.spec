@@ -20,13 +20,13 @@
 Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
-Version:	0.9.24
-Release:	1.1
+Version:	0.9.25.1
+Release:	1
 Epoch:		1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://www.directfb.org/downloads/Core/%{name}-%{version}.tar.gz
-# Source0-md5:	1f4b56b20d4e6f5c6ceb15c1c4fd2ecd
+# Source0-md5:	b6d4ecf9cd3787bd2728af9110ed53cf
 Source1:	http://www.directfb.org/downloads/Extras/DFBTutorials-0.5.0.tar.gz
 # Source1-md5:	13e443a64bddd68835b574045d9025e9
 Patch0:		%{name}-am.patch
@@ -37,7 +37,6 @@ Patch4:		%{name}-gcc4.patch
 Patch5:		%{name}-llh-ppc.patch
 URL:		http://www.directfb.org/
 BuildRequires:	SDL-devel
-BuildRequires:	XFree86-devel
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
 BuildRequires:	freetype-devel >= 2.0.2
@@ -45,14 +44,16 @@ BuildRequires:	libjpeg-devel >= 6b
 BuildRequires:	libpng-devel >= 1.0
 BuildRequires:	libtool
 BuildRequires:	libvncserver-devel
-%{?with_multi:BuildRequires:	linux-fusion-devel}
+%{?with_multi:BuildRequires:	linux-fusion-devel >= 3.0}
 BuildRequires:	sed >= 4.0
 BuildRequires:	sysfsutils-devel >= 1.3.0-3
+BuildRequires:	xorg-lib-libXext-devel
 BuildRequires:	zlib-devel >= 1.1.3
 %{?with_multi:Provides:	DirectFB(multi)}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		dfbdir	%{_libdir}/directfb-%{version}
+#define		dfbdir	%{_libdir}/directfb-%{version}
+%define		dfbdir	%{_libdir}/directfb-0.9.25
 
 %define		specflags	-fno-strict-aliasing
 
@@ -186,8 +187,8 @@ Requires:	%{name} = %{epoch}:%{version}-%{release}
 ELO touchscreen input driver for DirectFB.
 
 NOTE: currently it uses hardcoded /dev/ttyS0 port, so don't install it
-unless you don't have ELO device connected to this port. It can mess
-with other devices connected to this port (mouse, modem etc.).
+unless you have ELO device connected to this port. It can mess with
+other devices connected to this port (mouse, modem etc.).
 
 %description input-elo -l pl
 Sterownik wej¶ciowy do touchscreenów ELO dla DirectFB.
@@ -231,11 +232,8 @@ UWAGA: do dzia³ania potrzebuje ustawienia "mut-device" w directfbrc.
 %configure \
 	%{!?debug:--disable-debug} \
 	--disable-maintainer-mode \
-	--enable-elo-input \
 	--enable-fast-install \
-	--enable-linux-input \
 	%{?with_multi:--enable-multi} \
-	--enable-mutouch \
 	--enable-sdl \
 	--enable-shared \
 	--enable-static \
@@ -249,12 +247,14 @@ UWAGA: do dzia³ania potrzebuje ustawienia "mut-device" w directfbrc.
 	--enable-mmx \
 %endif
 %ifnarch i386 i486 i586
-	--enable-sse
+	--enable-sse \
 %endif
 %endif
+	--with-inputdrivers=elo-input,joystick,keyboard,linuxinput,lirc,mutouch,penmount,ps2mouse,serialmouse,sonypijogdial,wm97xx
 
 %{__make} \
-	X11_LIBS=%{_prefix}/X11R6/%{_lib}
+	X11_CFLAGS= \
+	X11_LIBS="-lX11 -lXext"
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -279,7 +279,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/dfbdump
 %attr(755,root,root) %{_bindir}/dfbg
 %attr(755,root,root) %{_bindir}/dfbinfo
+%attr(755,root,root) %{_bindir}/dfbinput
 %attr(755,root,root) %{_bindir}/dfblayer
+%attr(755,root,root) %{_bindir}/dfbpenmount
 %attr(755,root,root) %{_bindir}/dfbproxy
 %attr(755,root,root) %{_bindir}/dfbscreen
 %attr(755,root,root) %{_bindir}/dfbsummon
@@ -334,7 +336,8 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{dfbdir}/systems/libdirectfb_fbdev.so
 %dir %{dfbdir}/wm
 %attr(755,root,root) %{dfbdir}/wm/*.so
-%{_datadir}/directfb-%{version}
+#%{_datadir}/directfb-%{version}
+%{_datadir}/directfb-0.9.25
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/directfbrc
 %{_mandir}/man1/dfbg.1*
 %{_mandir}/man5/*
