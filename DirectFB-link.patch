@@ -5,7 +5,7 @@
  
  uwmdump_LDADD = \
 -	libuniquewm.la					\
-+	$(top_builddir)/wm/unique/libuniquewm.la	\
++	./libuniquewm.la	\
  	$(top_builddir)/lib/direct/libdirect.la		\
  	$(top_builddir)/lib/fusion/libfusion.la		\
  	$(top_builddir)/src/libdirectfb.la
@@ -14,7 +14,7 @@
  
  test_color_LDADD = \
 -	libuniquewm.la					\
-+	$(top_builddir)/wm/unique/libuniquewm.la	\
++	./libuniquewm.la	\
  	$(top_builddir)/lib/direct/libdirect.la		\
  	$(top_builddir)/lib/fusion/libfusion.la		\
  	$(top_builddir)/src/libdirectfb.la
@@ -23,7 +23,7 @@
  
  test_foo_LDADD = \
 -	libuniquewm.la					\
-+	$(top_builddir)/wm/unique/libuniquewm.la	\
++	./libuniquewm.la	\
  	$(top_builddir)/lib/direct/libdirect.la		\
  	$(top_builddir)/lib/fusion/libfusion.la		\
  	$(top_builddir)/src/libdirectfb.la
@@ -32,7 +32,7 @@
  
  stret_test_LDADD = \
 -	libuniquewm.la					\
-+	$(top_builddir)/wm/unique/libuniquewm.la	\
++	./libuniquewm.la	\
  	$(top_builddir)/lib/fusion/libfusion.la		\
  	$(top_builddir)/lib/direct/libdirect.la		\
  	$(top_builddir)/src/libdirectfb.la
@@ -41,7 +41,7 @@
  	$(top_builddir)/lib/direct/libdirect.la \
  	$(top_builddir)/lib/fusion/libfusion.la \
 -	libuniquewm.la
-+	$(top_builddir)/wm/unique/libuniquewm.la
++	./libuniquewm.la
  
  libdirectfbwm_unique_la_LDFLAGS = \
  	-avoid-version	\
