@@ -1,5 +1,6 @@
 #
 # TODO:
+# - update to 1.0.0rc2
 #	- fix x86-64 int32<->ptr64 casts.
 #
 #	tree.c:88: warning: cast from pointer to integer of different size
