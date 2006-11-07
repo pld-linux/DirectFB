@@ -35,6 +35,7 @@ Patch2:		%{name}-fix.patch
 Patch3:		%{name}-sh.patch
 Patch4:		%{name}-gcc4.patch
 Patch5:		%{name}-llh-ppc.patch
+Patch6:		%{name}-link.patch
 URL:		http://www.directfb.org/
 BuildRequires:	SDL-devel
 BuildRequires:	autoconf >= 2.52
@@ -222,6 +223,7 @@ UWAGA: do dzia³ania potrzebuje ustawienia "mut-device" w directfbrc.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 
 %build
 %{__libtoolize}
