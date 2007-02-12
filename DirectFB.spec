@@ -19,7 +19,7 @@
 %bcond_with	multi		# build Multi-application core (requires working /dev/fusion*)
 #
 Summary:	DirectFB - Hardware graphics acceleration
-Summary(pl):	DirectFB - Wspomaganie grafiki
+Summary(pl.UTF-8):   DirectFB - Wspomaganie grafiki
 Name:		DirectFB
 Version:	0.9.25.1
 Release:	2
@@ -67,12 +67,12 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %description
 DirectFB hardware graphics acceleration - libraries.
 
-%description -l pl
+%description -l pl.UTF-8
 Wspomaganie grafiki DirectFB - biblioteki.
 
 %package devel
 Summary:	DirectFB - development package
-Summary(pl):	DirectFB - pliki nag³ówkowe
+Summary(pl.UTF-8):   DirectFB - pliki nagÅ‚Ã³wkowe
 Group:		Development/Libraries
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	zlib-devel >= 1.1.3
@@ -80,108 +80,108 @@ Requires:	zlib-devel >= 1.1.3
 %description devel
 DirectFB header files.
 
-%description devel -l pl
-Pliki nag³ówkowe dla DirectFB.
+%description devel -l pl.UTF-8
+Pliki nagÅ‚Ã³wkowe dla DirectFB.
 
 %package static
 Summary:	DirectFB static libraries
-Summary(pl):	Statyczne biblioteki DirectFB
+Summary(pl.UTF-8):   Statyczne biblioteki DirectFB
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{epoch}:%{version}-%{release}
 
 %description static
 DirectFB static libraries.
 
-%description static -l pl
+%description static -l pl.UTF-8
 Statyczne biblioteki DirectFB.
 
 %package doc
 Summary:	DirectFB - documentation
-Summary(pl):	DirectFB - dokumentacja
+Summary(pl.UTF-8):   DirectFB - dokumentacja
 Group:		Documentation
 
 %description doc
 DirectFB documentation and tutorials.
 
-%description doc -l pl
+%description doc -l pl.UTF-8
 Dokumentacja dla systemu DirectFB wraz z wprowadzeniem.
 
 %package core-sdl
 Summary:	SDL core system for DirectFB
-Summary(pl):	System SDL dla DirectFB
+Summary(pl.UTF-8):   System SDL dla DirectFB
 Group:		Libraries
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 
 %description core-sdl
 This package contains SDL core system module for DirectFB.
 
-%description core-sdl -l pl
-Ten pakiet zawiera modu³ systemu SDL dla DirectFB.
+%description core-sdl -l pl.UTF-8
+Ten pakiet zawiera moduÅ‚ systemu SDL dla DirectFB.
 
 %package core-vnc
 Summary:	VNC core system for DirectFB
-Summary(pl):	System VNC dla DirectFB
+Summary(pl.UTF-8):   System VNC dla DirectFB
 Group:		Libraries
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 
 %description core-vnc
 This package contains VNC core system module for DirectFB.
 
-%description core-vnc -l pl
-Ten pakiet zawiera modu³ systemu VNC dla DirectFB.
+%description core-vnc -l pl.UTF-8
+Ten pakiet zawiera moduÅ‚ systemu VNC dla DirectFB.
 
 %package core-x11
 Summary:	X11 core system for DirectFB
-Summary(pl):	System X11 dla DirectFB
+Summary(pl.UTF-8):   System X11 dla DirectFB
 Group:		Libraries
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 
 %description core-x11
 This package contains X11 core system module for DirectFB.
 
-%description core-x11 -l pl
-Ten pakiet zawiera modu³ systemu X11 dla DirectFB.
+%description core-x11 -l pl.UTF-8
+Ten pakiet zawiera moduÅ‚ systemu X11 dla DirectFB.
 
 %package font-ft2
 Summary:	FreeType2 font provider for DirectFB
-Summary(pl):	DirectFB - wtyczka dostarczaj±ca fonty poprzez FreeType2
+Summary(pl.UTF-8):   DirectFB - wtyczka dostarczajÄ…ca fonty poprzez FreeType2
 Group:		Libraries
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 
 %description font-ft2
 This package contains FreeType2 font provider for DirectFB.
 
-%description font-ft2 -l pl
-Ten pakiet zawiera wtyczkê dla DirectFB dostarczaj±c± fonty poprzez
-bibliotekê FreeType2.
+%description font-ft2 -l pl.UTF-8
+Ten pakiet zawiera wtyczkÄ™ dla DirectFB dostarczajÄ…cÄ… fonty poprzez
+bibliotekÄ™ FreeType2.
 
 %package image-jpeg
 Summary:	JPEG image provider for DirectFB
-Summary(pl):	DirectFB - wtyczka dostarczaj±ca grafikê JPEG
+Summary(pl.UTF-8):   DirectFB - wtyczka dostarczajÄ…ca grafikÄ™ JPEG
 Group:		Libraries
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 
 %description image-jpeg
 This package contains JPEG image provider for DirectFB.
 
-%description image-jpeg -l pl
-Ten pakiet zawiera wtyczkê dla DirectFB dostarczaj±c± grafikê JPEG.
+%description image-jpeg -l pl.UTF-8
+Ten pakiet zawiera wtyczkÄ™ dla DirectFB dostarczajÄ…cÄ… grafikÄ™ JPEG.
 
 %package image-png
 Summary:	PNG image provider for DirectFB
-Summary(pl):	DirectFB - wtyczka dostarczaj±ca grafikê PNG
+Summary(pl.UTF-8):   DirectFB - wtyczka dostarczajÄ…ca grafikÄ™ PNG
 Group:		Libraries
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 
 %description image-png
 This package contains PNG image provider for DirectFB.
 
-%description image-png -l pl
-Ten pakiet zawiera wtyczkê dla DirectFB dostarczaj±c± grafikê PNG.
+%description image-png -l pl.UTF-8
+Ten pakiet zawiera wtyczkÄ™ dla DirectFB dostarczajÄ…cÄ… grafikÄ™ PNG.
 
 %package input-elo
 Summary:	ELO touchscreen input driver for DirectFB
-Summary(pl):	Sterownik wej¶ciowy do touchscreenów ELO dla DirectFB
+Summary(pl.UTF-8):   Sterownik wejÅ›ciowy do touchscreenÃ³w ELO dla DirectFB
 Group:		Libraries
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 
@@ -192,17 +192,17 @@ NOTE: currently it uses hardcoded /dev/ttyS0 port, so don't install it
 unless you have ELO device connected to this port. It can mess with
 other devices connected to this port (mouse, modem etc.).
 
-%description input-elo -l pl
-Sterownik wej¶ciowy do touchscreenów ELO dla DirectFB.
+%description input-elo -l pl.UTF-8
+Sterownik wejÅ›ciowy do touchscreenÃ³w ELO dla DirectFB.
 
-UWAGA: aktualnie u¿ywa zakodowanego na sta³e portu /dev/ttyS0, wiêc
-nie nale¿y go instalowaæ, je¶li urz±dzenie ELO nie jest pod³±czone do
-tego portu. Sterownik mo¿e utrudniæ wspó³pracê z innymi urz±dzeniami
-pod³±czonymi do /dev/ttyS0 (jak mysz, modem itp.).
+UWAGA: aktualnie uÅ¼ywa zakodowanego na staÅ‚e portu /dev/ttyS0, wiÄ™c
+nie naleÅ¼y go instalowaÄ‡, jeÅ›li urzÄ…dzenie ELO nie jest podÅ‚Ä…czone do
+tego portu. Sterownik moÅ¼e utrudniÄ‡ wspÃ³Å‚pracÄ™ z innymi urzÄ…dzeniami
+podÅ‚Ä…czonymi do /dev/ttyS0 (jak mysz, modem itp.).
 
 %package input-mutouch
 Summary:	MuTouch touchscreen input driver for DirectFB
-Summary(pl):	Sterownik wej¶ciowy do touchscreenów MuTouch dla DirectFB
+Summary(pl.UTF-8):   Sterownik wejÅ›ciowy do touchscreenÃ³w MuTouch dla DirectFB
 Group:		Libraries
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 
@@ -211,10 +211,10 @@ MuTouch touchscreen input driver for DirectFB.
 
 NOTE: it needs "mut-device" setting in directfbrc in order to work.
 
-%description input-mutouch -l pl
-Sterownik wej¶ciowy do touchscreenów MuTouch dla DirectFB.
+%description input-mutouch -l pl.UTF-8
+Sterownik wejÅ›ciowy do touchscreenÃ³w MuTouch dla DirectFB.
 
-UWAGA: do dzia³ania potrzebuje ustawienia "mut-device" w directfbrc.
+UWAGA: do dziaÅ‚ania potrzebuje ustawienia "mut-device" w directfbrc.
 
 %prep
 %setup -q -a1
