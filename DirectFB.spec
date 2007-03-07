@@ -21,7 +21,7 @@ Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
 Version:	1.0.0
-Release:	0.1
+Release:	0.2
 Epoch:		1
 License:	LGPL v2+
 Group:		Libraries
@@ -32,9 +32,8 @@ Source1:	http://www.directfb.org/downloads/Extras/DFBTutorials-0.5.0.tar.gz
 Patch0:		%{name}-am.patch
 Patch1:		%{name}-pmake.patch
 Patch2:		%{name}-fix.patch
-Patch3:		%{name}-sh.patch
-Patch4:		%{name}-gcc4.patch
-Patch5:		%{name}-llh-ppc.patch
+Patch3:		%{name}-gcc4.patch
+Patch4:		%{name}-llh-ppc.patch
 URL:		http://www.directfb.org/
 BuildRequires:	SDL-devel
 BuildRequires:	XFree86-devel
@@ -52,7 +51,7 @@ BuildRequires:	zlib-devel >= 1.1.3
 %{?with_multi:Provides:	DirectFB(multi)}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		dfbdir	%{_libdir}/directfb-%{version}
+%define		dfbdir	%{_libdir}/directfb-1.0-0
 
 %define		specflags	-fno-strict-aliasing
 
@@ -197,6 +196,48 @@ nie nale¿y go instalowaæ, je¶li urz±dzenie ELO nie jest pod³±czone do
 tego portu. Sterownik mo¿e utrudniæ wspó³pracê z innymi urz±dzeniami
 pod³±czonymi do /dev/ttyS0 (jak mysz, modem itp.).
 
+%package input-dynapro
+Summary:	Dynapro touchscreen input driver for DirectFB
+Summary(pl):	Sterownik wej¶ciowy do touchscreenów Dynapro dla DirectFB
+Group:		Libraries
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+
+%description input-dynapro
+Dynapro touchscreen input driver for DirectFB.
+
+NOTE: currently it uses hardcoded /dev/ttyS0 port, so don't install it
+unless you don't have Dynapro device connected to this port. It can mess
+with other devices connected to this port (mouse, modem etc.).
+
+%description input-dynapro -l pl
+Sterownik wej¶ciowy do touchscreenów Dynapro dla DirectFB.
+
+UWAGA: aktualnie u¿ywa zakodowanego na sta³e portu /dev/ttyS0, wiêc
+nie nale¿y go instalowaæ, je¶li urz±dzenie Dynapro nie jest pod³±czone do
+tego portu. Sterownik mo¿e utrudniæ wspó³pracê z innymi urz±dzeniami
+pod³±czonymi do /dev/ttyS0 (jak mysz, modem itp.).
+
+%package input-gunze
+Summary:	Gunze touchscreen input driver for DirectFB
+Summary(pl):	Sterownik wej¶ciowy do touchscreenów Gunze dla DirectFB
+Group:		Libraries
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+
+%description input-gunze
+Gunze touchscreen input driver for DirectFB.
+
+NOTE: currently it uses hardcoded /dev/ttyS0 port, so don't install it
+unless you don't have Gunze device connected to this port. It can mess
+with other devices connected to this port (mouse, modem etc.).
+
+%description input-gunze -l pl
+Sterownik wej¶ciowy do touchscreenów Gunze dla DirectFB.
+
+UWAGA: aktualnie u¿ywa zakodowanego na sta³e portu /dev/ttyS0, wiêc
+nie nale¿y go instalowaæ, je¶li urz±dzenie Gunze nie jest pod³±czone do
+tego portu. Sterownik mo¿e utrudniæ wspó³pracê z innymi urz±dzeniami
+pod³±czonymi do /dev/ttyS0 (jak mysz, modem itp.).
+
 %package input-mutouch
 Summary:	MuTouch touchscreen input driver for DirectFB
 Summary(pl):	Sterownik wej¶ciowy do touchscreenów MuTouch dla DirectFB
@@ -218,9 +259,8 @@ UWAGA: do dzia³ania potrzebuje ustawienia "mut-device" w directfbrc.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-#%patch3 -p1
-#%patch4 -p1
-%patch5 -p1
+%patch3 -p1
+%patch4 -p1
 
 %build
 %{__libtoolize}
@@ -229,9 +269,9 @@ UWAGA: do dzia³ania potrzebuje ustawienia "mut-device" w directfbrc.
 %{__automake}
 # MMX and SSE are detected at runtime, so it's safe to enable
 %configure \
+	--with-inputdrivers=dynapro,elo-input,gunze,joystick,keyboard,linuxinput,lirc,mutouch,penmount,ps2mouse,serialmouse,sonypijogdial,ucb1x00,wm97xx \
 	%{!?debug:--disable-debug} \
 	--disable-maintainer-mode \
-	--enable-elo-input \
 	--enable-fast-install \
 	--enable-linux-input \
 	%{?with_multi:--enable-multi} \
@@ -279,10 +319,14 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/dfbdump
 %attr(755,root,root) %{_bindir}/dfbg
 %attr(755,root,root) %{_bindir}/dfbinfo
+%attr(755,root,root) %{_bindir}/dfbinput
 %attr(755,root,root) %{_bindir}/dfblayer
+%attr(755,root,root) %{_bindir}/dfbpenmount
 %attr(755,root,root) %{_bindir}/dfbproxy
 %attr(755,root,root) %{_bindir}/dfbscreen
 %attr(755,root,root) %{_bindir}/dfbsummon
+%attr(755,root,root) %{_bindir}/mkdfiff
+%attr(755,root,root) %{_bindir}/mkdgiff
 %attr(755,root,root) %{_bindir}/uwmdump
 %attr(755,root,root) %{_libdir}/libdirect-*.so.*.*.*
 %attr(755,root,root) %{_libdir}/libdirectfb-*.so.*.*.*
@@ -403,6 +447,14 @@ rm -rf $RPM_BUILD_ROOT
 %files input-elo
 %defattr(644,root,root,755)
 %attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_elo.so
+
+%files input-dynapro
+%defattr(644,root,root,755)
+%attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_dynapro.so
+
+%files input-gunze
+%defattr(644,root,root,755)
+%attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_gunze.so
 
 %files input-mutouch
 %defattr(644,root,root,755)
