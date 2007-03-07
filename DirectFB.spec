@@ -20,13 +20,13 @@
 Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
-Version:	0.9.24
-Release:	2
+Version:	1.0.0
+Release:	0.1
 Epoch:		1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://www.directfb.org/downloads/Core/%{name}-%{version}.tar.gz
-# Source0-md5:	1f4b56b20d4e6f5c6ceb15c1c4fd2ecd
+# Source0-md5:	ad746c49dc89ba6f99df71b17bbb1dc8
 Source1:	http://www.directfb.org/downloads/Extras/DFBTutorials-0.5.0.tar.gz
 # Source1-md5:	13e443a64bddd68835b574045d9025e9
 Patch0:		%{name}-am.patch
@@ -218,8 +218,8 @@ UWAGA: do dzia³ania potrzebuje ustawienia "mut-device" w directfbrc.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
-%patch4 -p1
+#%patch3 -p1
+#%patch4 -p1
 %patch5 -p1
 
 %build
