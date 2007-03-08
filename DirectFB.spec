@@ -21,7 +21,7 @@ Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
 Version:	1.0.0
-Release:	0.2
+Release:	0.3
 Epoch:		1
 License:	LGPL v2+
 Group:		Libraries
@@ -254,6 +254,30 @@ Sterownik wej¶ciowy do touchscreenów MuTouch dla DirectFB.
 
 UWAGA: do dzia³ania potrzebuje ustawienia "mut-device" w directfbrc.
 
+%package input-ucb1x00
+Summary:	UCB1x00 touchscreen input driver for DirectFB
+Summary(pl):	Sterownik wej¶ciowy do touchscreenów UCB1x00 dla DirectFB
+Group:		Libraries
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+
+%description input-ucb1x00
+UCB1x00 touchscreen input driver for DirectFB.
+
+%description input-ucb1x00 -l pl
+Sterownik wej¶ciowy do touchscreenów UCB1x00 dla DirectFB.
+
+%package input-wm97xx
+Summary:	WM97xx touchscreen input driver for DirectFB
+Summary(pl):	Sterownik wej¶ciowy do touchscreenów WM97xx dla DirectFB
+Group:		Libraries
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+
+%description input-wm97xx
+WM97xx touchscreen input driver for DirectFB.
+
+%description input-wm97xx -l pl
+Sterownik wej¶ciowy do touchscreenów WM97xx dla DirectFB.
+
 %prep
 %setup -q -a1
 %patch0 -p1
@@ -341,6 +365,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_keyboard.so
 %attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_linux_input.so
 %attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_lirc.so
+%attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_penmount.so
 %attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_ps2mouse.so
 %attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_serialmouse.so
 %attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_sonypi.so
@@ -355,9 +380,11 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBEventBuffer/lib*.so
 %dir %{dfbdir}/interfaces/IDirectFBFont
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBFont/libidirectfbfont_default.so
+%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBFont/libidirectfbfont_dgiff.so
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBFont/libidirectfbfont_dispatcher.so
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBFont/libidirectfbfont_requestor.so
 %dir %{dfbdir}/interfaces/IDirectFBImageProvider
+%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_dfiff.so
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_dispatcher.so
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_gif.so
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_mpeg2.so
@@ -371,6 +398,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{dfbdir}/interfaces/IDirectFBSurface
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBSurface/lib*.so
 %dir %{dfbdir}/interfaces/IDirectFBVideoProvider
+%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBVideoProvider/libidirectfbvideoprovider_gif.so
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBVideoProvider/libidirectfbvideoprovider_v4l.so
 %dir %{dfbdir}/interfaces/IDirectFBWindow
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBWindow/lib*.so
@@ -405,11 +433,11 @@ rm -rf $RPM_BUILD_ROOT
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/lib*.a
-%{dfbdir}/gfxdrivers/*.*[ao]
-%{dfbdir}/inputdrivers/*.*[ao]
-%{dfbdir}/interfaces/*/*.*[ao]
-%{dfbdir}/systems/*.*[ao]
-%{dfbdir}/wm/*.*[ao]
+%{dfbdir}/gfxdrivers/*.[alo]*
+%{dfbdir}/inputdrivers/*.[alo]*
+%{dfbdir}/interfaces/*/*.[alo]*
+%{dfbdir}/systems/*.[alo]*
+%{dfbdir}/wm/*.[alo]*
 
 %files doc
 %defattr(644,root,root,755)
@@ -459,3 +487,11 @@ rm -rf $RPM_BUILD_ROOT
 %files input-mutouch
 %defattr(644,root,root,755)
 %attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_mutouch.so
+
+%files input-ucb1x00
+%defattr(644,root,root,755)
+%attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_ucb1x00_ts.so
+
+%files input-wm97xx
+%defattr(644,root,root,755)
+%attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_wm97xx_ts.so
