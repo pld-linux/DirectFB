@@ -206,16 +206,16 @@ Requires:	%{name} = %{epoch}:%{version}-%{release}
 Dynapro touchscreen input driver for DirectFB.
 
 NOTE: currently it uses hardcoded /dev/ttyS0 port, so don't install it
-unless you don't have Dynapro device connected to this port. It can mess
-with other devices connected to this port (mouse, modem etc.).
+unless you don't have Dynapro device connected to this port. It can
+mess with other devices connected to this port (mouse, modem etc.).
 
 %description input-dynapro -l pl
 Sterownik wej¶ciowy do touchscreenów Dynapro dla DirectFB.
 
 UWAGA: aktualnie u¿ywa zakodowanego na sta³e portu /dev/ttyS0, wiêc
-nie nale¿y go instalowaæ, je¶li urz±dzenie Dynapro nie jest pod³±czone do
-tego portu. Sterownik mo¿e utrudniæ wspó³pracê z innymi urz±dzeniami
-pod³±czonymi do /dev/ttyS0 (jak mysz, modem itp.).
+nie nale¿y go instalowaæ, je¶li urz±dzenie Dynapro nie jest pod³±czone
+do tego portu. Sterownik mo¿e utrudniæ wspó³pracê z innymi
+urz±dzeniami pod³±czonymi do /dev/ttyS0 (jak mysz, modem itp.).
 
 %package input-gunze
 Summary:	Gunze touchscreen input driver for DirectFB
@@ -234,9 +234,9 @@ with other devices connected to this port (mouse, modem etc.).
 Sterownik wej¶ciowy do touchscreenów Gunze dla DirectFB.
 
 UWAGA: aktualnie u¿ywa zakodowanego na sta³e portu /dev/ttyS0, wiêc
-nie nale¿y go instalowaæ, je¶li urz±dzenie Gunze nie jest pod³±czone do
-tego portu. Sterownik mo¿e utrudniæ wspó³pracê z innymi urz±dzeniami
-pod³±czonymi do /dev/ttyS0 (jak mysz, modem itp.).
+nie nale¿y go instalowaæ, je¶li urz±dzenie Gunze nie jest pod³±czone
+do tego portu. Sterownik mo¿e utrudniæ wspó³pracê z innymi
+urz±dzeniami pod³±czonymi do /dev/ttyS0 (jak mysz, modem itp.).
 
 %package input-mutouch
 Summary:	MuTouch touchscreen input driver for DirectFB
