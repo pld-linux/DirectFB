@@ -30,3 +30,13 @@
  #include <linux/i2c-dev.h>
  
  #include <directfb.h>
+--- DirectFB-1.0.0.orig/include/dfb_types.h	2007-03-03 21:36:07.000000000 +0100
++++ DirectFB-1.0.0/include/dfb_types.h	2007-03-09 11:43:58.000000000 +0100
+@@ -32,6 +32,7 @@
+ 
+ #ifdef USE_KOS
+ 
++#include <asm/types.h>
+ #include <sys/types.h>
+ 
+ typedef uint8 u8;
