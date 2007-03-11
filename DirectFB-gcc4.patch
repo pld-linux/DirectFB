@@ -1,24 +1,15 @@
---- DirectFB-0.9.24/include/dfb_types.h.orig	2005-07-26 22:58:50.000000000 +0200
-+++ DirectFB-0.9.24/include/dfb_types.h	2006-01-26 21:09:57.021772000 +0100
-@@ -5,15 +5,7 @@
+diff -ur DirectFB-1.0.0.orig/include/directfb.h DirectFB-1.0.0/include/directfb.h
+--- DirectFB-1.0.0.orig/include/directfb.h	2007-03-09 11:43:31.000000000 +0100
++++ DirectFB-1.0.0/include/directfb.h	2007-03-09 14:22:40.000000000 +0100
+@@ -674,7 +674,7 @@
+      DSBLIT_SRC_PREMULTCOLOR   = 0x00000200, /* modulates the source color with the color alpha */
+      DSBLIT_XOR                = 0x00000400, /* bitwise xor the destination pixels with the
+                                                 source pixels after premultiplication */
+-     DSBLIT_INDEX_TRANSLATION  = 0x00000800, /* do fast indexed to indexed translation,
++     DSBLIT_INDEX_TRANSLATION  = 0x00000800  /* do fast indexed to indexed translation,
+                                                 this flag is mutual exclusive with all others */
+ } DFBSurfaceBlittingFlags;
  
- #ifndef USE_KOS
- 
--#define __u8  u_int8_t
--#define __u16 u_int16_t
--#define __u32 u_int32_t
--#define __u64 u_int64_t
--
--#define __s8  int8_t
--#define __s16 int16_t
--#define __s32 int32_t
--#define __s64 int64_t
-+#include <asm/types.h>
- 
- #else
- 
---- DirectFB-0.9.24/include/directfb.h.orig	2005-10-24 18:29:11.000000000 +0200
-+++ DirectFB-0.9.24/include/directfb.h	2006-01-27 21:55:51.645587750 +0100
 @@ -846,7 +846,7 @@
                                             any character advance of fixed or
                                             proportional fonts */
@@ -26,5 +17,32 @@
 -     DFDESC_FRACT_WIDTH  = 0x00000040,  /* fractional width is set */
 +     DFDESC_FRACT_WIDTH  = 0x00000040   /* fractional width is set */
  } DFBFontDescriptionFlags;
+ 
+ /*
+@@ -1006,7 +1006,7 @@
+      DSPF_RGB18     = DFB_SURFACE_PIXELFORMAT( 24, 18, 0, 0, 0, 3, 0, 0, 0, 0, 0 ),
+ 
+      /*  2 bit   LUT (1 byte/ 4 pixel, 2 bit color and alpha lookup from palette) */
+-     DSPF_LUT2      = DFB_SURFACE_PIXELFORMAT( 25,  2, 0, 1, 2, 0, 3, 0, 0, 1, 0 ),
++     DSPF_LUT2      = DFB_SURFACE_PIXELFORMAT( 25,  2, 0, 1, 2, 0, 3, 0, 0, 1, 0 )
+ 
+ } DFBSurfacePixelFormat;
+ 
+@@ -1295,7 +1295,7 @@
+      DVCAPS_HUE         = 0x00000040,  /* supports Hue adjustment          */
+      DVCAPS_SATURATION  = 0x00000080,  /* supports Saturation adjustment   */
+      DVCAPS_INTERACTIVE = 0x00000100,  /* supports SendEvent               */
+-     DVCAPS_VOLUME      = 0x00000200,  /* supports Volume adjustment       */
++     DVCAPS_VOLUME      = 0x00000200   /* supports Volume adjustment       */
+ } DFBVideoProviderCapabilities;
+ 
+ /*
+@@ -2878,7 +2878,7 @@
+      DSPD_SRC_ATOP       =  9, /* fs: da      fd: 1.0-sa */
+      DSPD_DST_ATOP       = 10, /* fs: 1.0-da  fd: sa     */
+      DSPD_ADD            = 11, /* fs: 1.0     fd: 1.0    */
+-     DSPD_XOR            = 12, /* fs: 1.0-da  fd: 1.0-sa */
++     DSPD_XOR            = 12  /* fs: 1.0-da  fd: 1.0-sa */
+ } DFBSurfacePorterDuffRule;
  
  /*
