@@ -1,6 +1,5 @@
 #
 # TODO:
-# - update to 1.0.0rc2
 #	- fix x86-64 int32<->ptr64 casts.
 #
 #	tree.c:88: warning: cast from pointer to integer of different size
@@ -21,22 +20,21 @@
 Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl.UTF-8):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
-Version:	0.9.25.1
-Release:	2
+Version:	1.0.0
+Release:	1
 Epoch:		1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://www.directfb.org/downloads/Core/%{name}-%{version}.tar.gz
-# Source0-md5:	b6d4ecf9cd3787bd2728af9110ed53cf
+# Source0-md5:	ad746c49dc89ba6f99df71b17bbb1dc8
 Source1:	http://www.directfb.org/downloads/Extras/DFBTutorials-0.5.0.tar.gz
 # Source1-md5:	13e443a64bddd68835b574045d9025e9
 Patch0:		%{name}-am.patch
 Patch1:		%{name}-pmake.patch
 Patch2:		%{name}-fix.patch
-Patch3:		%{name}-sh.patch
-Patch4:		%{name}-gcc4.patch
-Patch5:		%{name}-llh-ppc.patch
-Patch6:		%{name}-link.patch
+Patch3:		%{name}-gcc4.patch
+Patch4:		%{name}-llh-ppc.patch
+Patch5:		%{name}-link.patch
 URL:		http://www.directfb.org/
 BuildRequires:	SDL-devel
 BuildRequires:	autoconf >= 2.52
@@ -54,8 +52,7 @@ BuildRequires:	zlib-devel >= 1.1.3
 %{?with_multi:Provides:	DirectFB(multi)}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-#define		dfbdir	%{_libdir}/directfb-%{version}
-%define		dfbdir	%{_libdir}/directfb-0.9.25
+%define		dfbdir	%{_libdir}/directfb-1.0-0
 
 %define		specflags	-fno-strict-aliasing
 
@@ -179,6 +176,27 @@ This package contains PNG image provider for DirectFB.
 %description image-png -l pl.UTF-8
 Ten pakiet zawiera wtyczkę dla DirectFB dostarczającą grafikę PNG.
 
+%package input-dynapro
+Summary:       Dynapro touchscreen input driver for DirectFB
+Summary(pl):   Sterownik wejściowy do touchscreenów Dynapro dla DirectFB
+Group:         Libraries
+Requires:      %{name} = %{epoch}:%{version}-%{release}
+
+%description input-dynapro
+Dynapro touchscreen input driver for DirectFB.
+
+NOTE: currently it uses hardcoded /dev/ttyS0 port, so don't install it
+unless you don't have Dynapro device connected to this port. It can
+mess with other devices connected to this port (mouse, modem etc.).
+
+%description input-dynapro -l pl
+Sterownik wejściowy do touchscreenów Dynapro dla DirectFB.
+
+UWAGA: aktualnie używa zakodowanego na stałe portu /dev/ttyS0, więc
+nie należy go instalować, jeśli urządzenie Dynapro nie jest podłączone
+do tego portu. Sterownik może utrudnić współpracę z innymi
+urządzeniami podłączonymi do /dev/ttyS0 (jak mysz, modem itp.).
+
 %package input-elo
 Summary:	ELO touchscreen input driver for DirectFB
 Summary(pl.UTF-8):	Sterownik wejściowy do touchscreenów ELO dla DirectFB
@@ -200,6 +218,27 @@ nie należy go instalować, jeśli urządzenie ELO nie jest podłączone do
 tego portu. Sterownik może utrudnić współpracę z innymi urządzeniami
 podłączonymi do /dev/ttyS0 (jak mysz, modem itp.).
 
+%package input-gunze
+Summary:       Gunze touchscreen input driver for DirectFB
+Summary(pl):   Sterownik wejściowy do touchscreenów Gunze dla DirectFB
+Group:         Libraries
+Requires:      %{name} = %{epoch}:%{version}-%{release}
+
+%description input-gunze
+Gunze touchscreen input driver for DirectFB.
+
+NOTE: currently it uses hardcoded /dev/ttyS0 port, so don't install it
+unless you don't have Gunze device connected to this port. It can mess
+with other devices connected to this port (mouse, modem etc.).
+
+%description input-gunze -l pl
+Sterownik wejściowy do touchscreenów Gunze dla DirectFB.
+
+UWAGA: aktualnie używa zakodowanego na stałe portu /dev/ttyS0, więc
+nie należy go instalować, jeśli urządzenie Gunze nie jest podłączone
+do tego portu. Sterownik może utrudnić współpracę z innymi
+urządzeniami podłączonymi do /dev/ttyS0 (jak mysz, modem itp.).
+
 %package input-mutouch
 Summary:	MuTouch touchscreen input driver for DirectFB
 Summary(pl.UTF-8):	Sterownik wejściowy do touchscreenów MuTouch dla DirectFB
@@ -216,6 +255,30 @@ Sterownik wejściowy do touchscreenów MuTouch dla DirectFB.
 
 UWAGA: do działania potrzebuje ustawienia "mut-device" w directfbrc.
 
+%package input-ucb1x00
+Summary:       UCB1x00 touchscreen input driver for DirectFB
+Summary(pl):   Sterownik wejściowy do touchscreenów UCB1x00 dla DirectFB
+Group:         Libraries
+Requires:      %{name} = %{epoch}:%{version}-%{release}
+
+%description input-ucb1x00
+UCB1x00 touchscreen input driver for DirectFB.
+
+%description input-ucb1x00 -l pl
+Sterownik wejściowy do touchscreenów UCB1x00 dla DirectFB.
+
+%package input-wm97xx
+Summary:       WM97xx touchscreen input driver for DirectFB
+Summary(pl):   Sterownik wejściowy do touchscreenów WM97xx dla DirectFB
+Group:         Libraries
+Requires:      %{name} = %{epoch}:%{version}-%{release}
+
+%description input-wm97xx
+WM97xx touchscreen input driver for DirectFB.
+
+%description input-wm97xx -l pl
+Sterownik wejściowy do touchscreenów WM97xx dla DirectFB.
+
 %prep
 %setup -q -a1
 %patch0 -p1
@@ -224,7 +287,6 @@ UWAGA: do działania potrzebuje ustawienia "mut-device" w directfbrc.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
-%patch6 -p1
 
 %build
 %{__libtoolize}
@@ -253,7 +315,7 @@ UWAGA: do działania potrzebuje ustawienia "mut-device" w directfbrc.
 	--enable-sse \
 %endif
 %endif
-	--with-inputdrivers=elo-input,joystick,keyboard,linuxinput,lirc,mutouch,penmount,ps2mouse,serialmouse,sonypijogdial,wm97xx
+	--with-inputdrivers=dynapro,elo-input,gunze,joystick,keyboard,linuxinput,lirc,mutouch,penmount,ps2mouse,serialmouse,sonypijogdial,ucb1x00,wm97xx
 
 %{__make} \
 	X11_CFLAGS= \
@@ -288,6 +350,8 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/dfbproxy
 %attr(755,root,root) %{_bindir}/dfbscreen
 %attr(755,root,root) %{_bindir}/dfbsummon
+%attr(755,root,root) %{_bindir}/mkdfiff
+%attr(755,root,root) %{_bindir}/mkdgiff
 %attr(755,root,root) %{_bindir}/uwmdump
 %attr(755,root,root) %{_libdir}/libdirect-*.so.*.*.*
 %attr(755,root,root) %{_libdir}/libdirectfb-*.so.*.*.*
@@ -302,6 +366,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_keyboard.so
 %attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_linux_input.so
 %attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_lirc.so
+%attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_penmount.so
 %attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_ps2mouse.so
 %attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_serialmouse.so
 %attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_sonypi.so
@@ -316,9 +381,11 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBEventBuffer/lib*.so
 %dir %{dfbdir}/interfaces/IDirectFBFont
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBFont/libidirectfbfont_default.so
+%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBFont/libidirectfbfont_dgiff.so
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBFont/libidirectfbfont_dispatcher.so
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBFont/libidirectfbfont_requestor.so
 %dir %{dfbdir}/interfaces/IDirectFBImageProvider
+%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_dfiff.so
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_dispatcher.so
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_gif.so
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_mpeg2.so
@@ -332,6 +399,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{dfbdir}/interfaces/IDirectFBSurface
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBSurface/lib*.so
 %dir %{dfbdir}/interfaces/IDirectFBVideoProvider
+%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBVideoProvider/libidirectfbvideoprovider_gif.so
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBVideoProvider/libidirectfbvideoprovider_v4l.so
 %dir %{dfbdir}/interfaces/IDirectFBWindow
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBWindow/lib*.so
@@ -339,8 +407,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{dfbdir}/systems/libdirectfb_fbdev.so
 %dir %{dfbdir}/wm
 %attr(755,root,root) %{dfbdir}/wm/*.so
-#%{_datadir}/directfb-%{version}
-%{_datadir}/directfb-0.9.25
+%{_datadir}/directfb-%{version}
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/directfbrc
 %{_mandir}/man1/dfbg.1*
 %{_mandir}/man5/*
@@ -406,10 +473,26 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_png.so
 
+%files input-dynapro
+%defattr(644,root,root,755)
+%attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_dynapro.so
+
 %files input-elo
 %defattr(644,root,root,755)
 %attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_elo.so
 
+%files input-gunze
+%defattr(644,root,root,755)
+%attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_gunze.so
+
 %files input-mutouch
 %defattr(644,root,root,755)
 %attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_mutouch.so
+
+%files input-ucb1x00
+%defattr(644,root,root,755)
+%attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_ucb1x00_ts.so
+
+%files input-wm97xx
+%defattr(644,root,root,755)
+%attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_wm97xx_ts.so
