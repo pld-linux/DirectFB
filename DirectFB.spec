@@ -367,11 +367,11 @@ rm -rf $RPM_BUILD_ROOT
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/lib*.a
-%{dfbdir}/gfxdrivers/*.*[ao]
-%{dfbdir}/inputdrivers/*.*[ao]
-%{dfbdir}/interfaces/*/*.*[ao]
-%{dfbdir}/systems/*.*[ao]
-%{dfbdir}/wm/*.*[ao]
+%{dfbdir}/gfxdrivers/*.[alo]*
+%{dfbdir}/inputdrivers/*.[alo]*
+%{dfbdir}/interfaces/*/*.[alo]*
+%{dfbdir}/systems/*.[alo]*
+%{dfbdir}/wm/*.[alo]*
 
 %files doc
 %defattr(644,root,root,755)
