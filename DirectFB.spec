@@ -177,10 +177,10 @@ This package contains PNG image provider for DirectFB.
 Ten pakiet zawiera wtyczkę dla DirectFB dostarczającą grafikę PNG.
 
 %package input-dynapro
-Summary:       Dynapro touchscreen input driver for DirectFB
-Summary(pl.UTF-8):   Sterownik wejściowy do touchscreenów Dynapro dla DirectFB
-Group:         Libraries
-Requires:      %{name} = %{epoch}:%{version}-%{release}
+Summary:	Dynapro touchscreen input driver for DirectFB
+Summary(pl.UTF-8):	Sterownik wejściowy do touchscreenów Dynapro dla DirectFB
+Group:		Libraries
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 
 %description input-dynapro
 Dynapro touchscreen input driver for DirectFB.
@@ -219,10 +219,10 @@ tego portu. Sterownik może utrudnić współpracę z innymi urządzeniami
 podłączonymi do /dev/ttyS0 (jak mysz, modem itp.).
 
 %package input-gunze
-Summary:       Gunze touchscreen input driver for DirectFB
-Summary(pl.UTF-8):   Sterownik wejściowy do touchscreenów Gunze dla DirectFB
-Group:         Libraries
-Requires:      %{name} = %{epoch}:%{version}-%{release}
+Summary:	Gunze touchscreen input driver for DirectFB
+Summary(pl.UTF-8):	Sterownik wejściowy do touchscreenów Gunze dla DirectFB
+Group:		Libraries
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 
 %description input-gunze
 Gunze touchscreen input driver for DirectFB.
@@ -256,10 +256,10 @@ Sterownik wejściowy do touchscreenów MuTouch dla DirectFB.
 UWAGA: do działania potrzebuje ustawienia "mut-device" w directfbrc.
 
 %package input-ucb1x00
-Summary:       UCB1x00 touchscreen input driver for DirectFB
-Summary(pl.UTF-8):   Sterownik wejściowy do touchscreenów UCB1x00 dla DirectFB
-Group:         Libraries
-Requires:      %{name} = %{epoch}:%{version}-%{release}
+Summary:	UCB1x00 touchscreen input driver for DirectFB
+Summary(pl.UTF-8):	Sterownik wejściowy do touchscreenów UCB1x00 dla DirectFB
+Group:		Libraries
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 
 %description input-ucb1x00
 UCB1x00 touchscreen input driver for DirectFB.
@@ -268,10 +268,10 @@ UCB1x00 touchscreen input driver for DirectFB.
 Sterownik wejściowy do touchscreenów UCB1x00 dla DirectFB.
 
 %package input-wm97xx
-Summary:       WM97xx touchscreen input driver for DirectFB
-Summary(pl.UTF-8):   Sterownik wejściowy do touchscreenów WM97xx dla DirectFB
-Group:         Libraries
-Requires:      %{name} = %{epoch}:%{version}-%{release}
+Summary:	WM97xx touchscreen input driver for DirectFB
+Summary(pl.UTF-8):	Sterownik wejściowy do touchscreenów WM97xx dla DirectFB
+Group:		Libraries
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 
 %description input-wm97xx
 WM97xx touchscreen input driver for DirectFB.
