@@ -1,19 +1,4 @@
 #
-# TODO:
-#	- fix x86-64 int32<->ptr64 casts.
-#
-#	tree.c:88: warning: cast from pointer to integer of different size
-#	tree.c:102: warning: cast from pointer to integer of different size
-#	fonts.c:144: warning: cast to pointer from integer of different size
-#	fonts.c:211: warning: cast to pointer from integer of different size
-#	gfxcard.c:1451: warning: cast to pointer from integer of different size
-#	fbdev.c:459: warning: cast from pointer to integer of different size
-#	fbdev.c:578: warning: cast from pointer to integer of different size
-#	fbdev.c:708: warning: cast from pointer to integer of different size
-#	idirectfbfont_ft2.c:130: warning: cast from pointer to integer of different size
-#	idirectfbfont_ft2.c:292: warning: cast from pointer to integer of different size
-#	idirectfbfont_ft2.c:653: warning: cast to pointer from integer of different size
-#
 # Conditional build:
 %bcond_with	multi		# build Multi-application core (requires working /dev/fusion*)
 #
