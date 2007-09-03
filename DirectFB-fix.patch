@@ -20,16 +20,6 @@
  
  
  include $(top_srcdir)/rules/libobject.make
---- DirectFB-1.0.0.orig/gfxdrivers/matrox/matrox_maven.c	2007-01-27 23:22:14.000000000 +0100
-+++ DirectFB-1.0.0/gfxdrivers/matrox/matrox_maven.c	2007-03-07 12:45:56.000000000 +0100
-@@ -37,7 +37,6 @@
- #include <sysfs/libsysfs.h>
- #endif
- 
--#include <linux/i2c.h>
- #include <linux/i2c-dev.h>
- 
- #include <directfb.h>
 --- DirectFB-1.0.0.orig/include/dfb_types.h	2007-03-03 21:36:07.000000000 +0100
 +++ DirectFB-1.0.0/include/dfb_types.h	2007-03-09 12:20:59.000000000 +0100
 @@ -29,6 +29,7 @@
