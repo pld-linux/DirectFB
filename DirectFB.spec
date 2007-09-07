@@ -1,6 +1,7 @@
 #
 # Conditional build:
 %bcond_with	multi		# build Multi-application core (requires working /dev/fusion*)
+%bcond_without	static_libs	# don't build static libraries
 #
 Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl.UTF-8):	DirectFB - Wspomaganie grafiki
@@ -300,7 +301,8 @@ Sterownik wejściowy do touchscreenów WM97xx dla DirectFB.
 	--enable-sse \
 %endif
 %endif
-	--with-inputdrivers=dynapro,elo-input,gunze,joystick,keyboard,linuxinput,lirc,mutouch,penmount,ps2mouse,serialmouse,sonypijogdial,ucb1x00,wm97xx
+	--with-inputdrivers=dynapro,elo-input,gunze,joystick,keyboard,linuxinput,lirc,mutouch,penmount,ps2mouse,serialmouse,sonypijogdial,ucb1x00,wm97xx \
+	%{!?with_static_libs:--disable-static}
 
 %{__make} \
 	X11_CFLAGS= \
@@ -416,6 +418,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_pkgconfigdir}/*.pc
 %{_mandir}/man1/directfb-csource.1*
 
+%if %{with static_libs}
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/lib*.a
@@ -424,6 +427,7 @@ rm -rf $RPM_BUILD_ROOT
 %{dfbdir}/interfaces/*/*.[alo]*
 %{dfbdir}/systems/*.[alo]*
 %{dfbdir}/wm/*.[alo]*
+%endif
 
 %files doc
 %defattr(644,root,root,755)
