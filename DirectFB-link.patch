@@ -1,47 +1,12 @@
---- DirectFB-0.9.25.1/wm/unique/Makefile.am~	2006-05-03 10:22:38.000000000 +0300
-+++ DirectFB-0.9.25.1/wm/unique/Makefile.am	2006-11-07 09:27:04.794005664 +0200
-@@ -19,7 +19,7 @@
- uwmdump_SOURCES = uwmdump.c
+--- DirectFB-1.2.3/gfxdrivers/sh7722/Makefile.am.orig	2008-08-08 16:10:55.000000000 +0200
++++ DirectFB-1.2.3/gfxdrivers/sh7722/Makefile.am	2008-09-03 18:43:14.512984794 +0200
+@@ -23,6 +23,9 @@
+ 	sh7722_jpeglib.c	\
+ 	sh7722_jpeglib.h
  
- uwmdump_LDADD = \
--	libuniquewm.la					\
-+	./libuniquewm.la	\
- 	$(top_builddir)/lib/direct/libdirect.la		\
- 	$(top_builddir)/lib/fusion/libfusion.la		\
- 	$(top_builddir)/src/libdirectfb.la
-@@ -28,7 +28,7 @@
- test_color_SOURCES = test_color.c
- 
- test_color_LDADD = \
--	libuniquewm.la					\
-+	./libuniquewm.la	\
- 	$(top_builddir)/lib/direct/libdirect.la		\
- 	$(top_builddir)/lib/fusion/libfusion.la		\
- 	$(top_builddir)/src/libdirectfb.la
-@@ -37,7 +37,7 @@
- test_foo_SOURCES = test_foo.c
- 
- test_foo_LDADD = \
--	libuniquewm.la					\
-+	./libuniquewm.la	\
- 	$(top_builddir)/lib/direct/libdirect.la		\
- 	$(top_builddir)/lib/fusion/libfusion.la		\
- 	$(top_builddir)/src/libdirectfb.la
-@@ -46,7 +46,7 @@
- stret_test_SOURCES = stret_test.c
- 
- stret_test_LDADD = \
--	libuniquewm.la					\
-+	./libuniquewm.la	\
- 	$(top_builddir)/lib/fusion/libfusion.la		\
- 	$(top_builddir)/lib/direct/libdirect.la		\
- 	$(top_builddir)/src/libdirectfb.la
-@@ -69,7 +69,7 @@
- libdirectfbwm_unique_la_LIBADD = \
- 	$(top_builddir)/lib/direct/libdirect.la \
- 	$(top_builddir)/lib/fusion/libfusion.la \
--	libuniquewm.la
-+	./libuniquewm.la
- 
- libdirectfbwm_unique_la_LDFLAGS = \
- 	-avoid-version	\
++libsh7722_jpeg_la_LIBADD = \
++	$(top_builddir)/src/libdirectfb.la
++
+ libsh7722_jpeg_la_LDFLAGS = \
+ 	-export-dynamic		\
+ 	-avoid-version

@@ -1,16 +1,6 @@
-diff -ur DirectFB-1.0.0.orig/include/directfb.h DirectFB-1.0.0/include/directfb.h
---- DirectFB-1.0.0.orig/include/directfb.h	2007-03-09 11:43:31.000000000 +0100
-+++ DirectFB-1.0.0/include/directfb.h	2007-03-09 14:22:40.000000000 +0100
-@@ -674,7 +674,7 @@
-      DSBLIT_SRC_PREMULTCOLOR   = 0x00000200, /* modulates the source color with the color alpha */
-      DSBLIT_XOR                = 0x00000400, /* bitwise xor the destination pixels with the
-                                                 source pixels after premultiplication */
--     DSBLIT_INDEX_TRANSLATION  = 0x00000800, /* do fast indexed to indexed translation,
-+     DSBLIT_INDEX_TRANSLATION  = 0x00000800  /* do fast indexed to indexed translation,
-                                                 this flag is mutual exclusive with all others */
- } DFBSurfaceBlittingFlags;
- 
-@@ -846,7 +846,7 @@
+--- DirectFB-1.2.3/include/directfb.h.orig	2008-08-19 11:25:16.000000000 +0200
++++ DirectFB-1.2.3/include/directfb.h	2008-09-03 17:34:21.868983118 +0200
+@@ -970,7 +970,7 @@
                                             any character advance of fixed or
                                             proportional fonts */
       DFDESC_FRACT_HEIGHT = 0x00000020,  /* fractional height is set */
@@ -19,16 +9,7 @@ diff -ur DirectFB-1.0.0.orig/include/directfb.h DirectFB-1.0.0/include/directfb.
  } DFBFontDescriptionFlags;
  
  /*
-@@ -1295,7 +1295,7 @@
-      DVCAPS_HUE         = 0x00000040,  /* supports Hue adjustment          */
-      DVCAPS_SATURATION  = 0x00000080,  /* supports Saturation adjustment   */
-      DVCAPS_INTERACTIVE = 0x00000100,  /* supports SendEvent               */
--     DVCAPS_VOLUME      = 0x00000200,  /* supports Volume adjustment       */
-+     DVCAPS_VOLUME      = 0x00000200   /* supports Volume adjustment       */
- } DFBVideoProviderCapabilities;
- 
- /*
-@@ -2878,7 +2878,7 @@
+@@ -3108,7 +3108,7 @@
       DSPD_SRC_ATOP       =  9, /* fs: da      fd: 1.0-sa */
       DSPD_DST_ATOP       = 10, /* fs: 1.0-da  fd: sa     */
       DSPD_ADD            = 11, /* fs: 1.0     fd: 1.0    */
