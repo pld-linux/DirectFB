@@ -6,13 +6,13 @@
 Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl.UTF-8):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
-Version:	1.0.1
+Version:	1.2.3
 Release:	1
 Epoch:		1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://www.directfb.org/downloads/Core/%{name}-%{version}.tar.gz
-# Source0-md5:	539e4b304d08bb0a2080c7b3f321d96f
+# Source0-md5:	caea8bcfc9c1d391e56d85e437005a5d
 Source1:	http://www.directfb.org/downloads/Extras/DFBTutorials-0.5.0.tar.gz
 # Source1-md5:	13e443a64bddd68835b574045d9025e9
 Patch0:		%{name}-am.patch
@@ -30,15 +30,17 @@ BuildRequires:	libjpeg-devel >= 6b
 BuildRequires:	libpng-devel >= 1.0
 BuildRequires:	libtool
 BuildRequires:	libvncserver-devel
-%{?with_multi:BuildRequires:	linux-fusion-devel >= 3.0}
+%{?with_multi:BuildRequires:	linux-fusion-devel >= 8.0}
+%{?with_multi:BuildRequires:	linux-fusion-devel < 9}
 BuildRequires:	sed >= 4.0
 BuildRequires:	sysfsutils-devel >= 1.3.0-3
+BuildRequires:	tslib-devel >= 0.0.2
 BuildRequires:	xorg-lib-libXext-devel
 BuildRequires:	zlib-devel >= 1.1.3
 %{?with_multi:Provides:	DirectFB(multi)}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		dfbdir	%{_libdir}/directfb-1.0-0
+%define		dfbdir	%{_libdir}/directfb-1.2-0
 
 %define		specflags	-fno-strict-aliasing
 
@@ -241,6 +243,18 @@ Sterownik wejściowy do touchscreenów MuTouch dla DirectFB.
 
 UWAGA: do działania potrzebuje ustawienia "mut-device" w directfbrc.
 
+%package input-tslib
+Summary:	tslib-based touchscreen input driver for DirectFB
+Summary(pl.UTF-8):	Oparty na tslib sterownik wejściowy do touchscreenów dla DirectFB
+Group:		Libraries
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+
+%description input-tslib
+tslib-based touchscreen input driver for DirectFB
+
+%description input-tslib -l pl.UTF-8
+Oparty na tslib sterownik wejściowy do touchscreenów dla DirectFB.
+
 %package input-ucb1x00
 Summary:	UCB1x00 touchscreen input driver for DirectFB
 Summary(pl.UTF-8):	Sterownik wejściowy do touchscreenów UCB1x00 dla DirectFB
@@ -276,8 +290,9 @@ Sterownik wejściowy do touchscreenów WM97xx dla DirectFB.
 
 %build
 %{__libtoolize}
-%{__aclocal}
+%{__aclocal} -I m4
 %{__autoconf}
+%{__autoheader}
 %{__automake}
 # MMX and SSE are detected at runtime, so it's safe to enable
 %configure \
@@ -301,7 +316,7 @@ Sterownik wejściowy do touchscreenów WM97xx dla DirectFB.
 	--enable-sse \
 %endif
 %endif
-	--with-inputdrivers=dynapro,elo-input,gunze,joystick,keyboard,linuxinput,lirc,mutouch,penmount,ps2mouse,serialmouse,sonypijogdial,ucb1x00,wm97xx \
+	--with-inputdrivers=dbox2remote,dreamboxremote,dynapro,elo-input,gunze,joystick,keyboard,linuxinput,lirc,mutouch,penmount,ps2mouse,serialmouse,sonypijogdial,tslib,ucb1x00,wm97xx \
 	%{!?with_static_libs:--disable-static}
 
 %{__make} \
@@ -319,6 +334,9 @@ cp -rf DFBTutorials* $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
 touch $RPM_BUILD_ROOT%{_sysconfdir}/directfbrc
 
+# no API exported
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/libsh7722_jpeg.la
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -329,22 +347,31 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc AUTHORS ChangeLog NEWS README TODO
 %attr(755,root,root) %{_bindir}/dfbdump
+%attr(755,root,root) %{_bindir}/dfbfx
 %attr(755,root,root) %{_bindir}/dfbg
 %attr(755,root,root) %{_bindir}/dfbinfo
 %attr(755,root,root) %{_bindir}/dfbinput
+%attr(755,root,root) %{_bindir}/dfbinspector
 %attr(755,root,root) %{_bindir}/dfblayer
+%attr(755,root,root) %{_bindir}/dfbmaster
 %attr(755,root,root) %{_bindir}/dfbpenmount
 %attr(755,root,root) %{_bindir}/dfbproxy
 %attr(755,root,root) %{_bindir}/dfbscreen
-%attr(755,root,root) %{_bindir}/dfbsummon
 %attr(755,root,root) %{_bindir}/mkdfiff
 %attr(755,root,root) %{_bindir}/mkdgiff
+%attr(755,root,root) %{_bindir}/sh7722_jpegtool
 %attr(755,root,root) %{_bindir}/uwmdump
-%attr(755,root,root) %{_libdir}/libdirect-*.so.*.*.*
-%attr(755,root,root) %{_libdir}/libdirectfb-*.so.*.*.*
-%attr(755,root,root) %{_libdir}/libfusion-*.so.*.*.*
-%attr(755,root,root) %{_libdir}/libuniquewm-*.so.*.*.*
-%attr(755,root,root) %{_libdir}/libvoodoo-*.so.*.*.*
+%attr(755,root,root) %{_libdir}/libdirect-1.2.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libdirect-1.2.so.0
+%attr(755,root,root) %{_libdir}/libdirectfb-1.2.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libdirectfb-1.2.so.0
+%attr(755,root,root) %{_libdir}/libfusion-1.2.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libfusion-1.2.so.0
+%attr(755,root,root) %{_libdir}/libuniquewm-1.2.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libuniquewm-1.2.so.0
+%attr(755,root,root) %{_libdir}/libvoodoo-1.2.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libvoodoo-1.2.so.0
+%attr(755,root,root) %{_libdir}/libsh7722_jpeg.so
 %dir %{dfbdir}
 %dir %{dfbdir}/gfxdrivers
 %attr(755,root,root) %{dfbdir}/gfxdrivers/*.so
@@ -375,7 +402,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_dfiff.so
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_dispatcher.so
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_gif.so
-%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_mpeg2.so
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_requestor.so
 %dir %{dfbdir}/interfaces/IDirectFBInputDevice
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBInputDevice/lib*.so
@@ -387,17 +413,17 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBSurface/lib*.so
 %dir %{dfbdir}/interfaces/IDirectFBVideoProvider
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBVideoProvider/libidirectfbvideoprovider_gif.so
-%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBVideoProvider/libidirectfbvideoprovider_v4l.so
 %dir %{dfbdir}/interfaces/IDirectFBWindow
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBWindow/lib*.so
 %dir %{dfbdir}/systems
+%attr(755,root,root) %{dfbdir}/systems/libdirectfb_devmem.so
 %attr(755,root,root) %{dfbdir}/systems/libdirectfb_fbdev.so
 %dir %{dfbdir}/wm
 %attr(755,root,root) %{dfbdir}/wm/*.so
 %{_datadir}/directfb-%{version}
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/directfbrc
 %{_mandir}/man1/dfbg.1*
-%{_mandir}/man5/*
+%{_mandir}/man5/directfbrc.5*
 
 %files devel
 %defattr(644,root,root,755)
@@ -415,7 +441,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libvoodoo.la
 %{_includedir}/directfb
 %{_includedir}/directfb-internal
-%{_pkgconfigdir}/*.pc
+%{_pkgconfigdir}/direct.pc
+%{_pkgconfigdir}/directfb-internal.pc
+%{_pkgconfigdir}/directfb.pc
+%{_pkgconfigdir}/fusion.pc
+%{_pkgconfigdir}/voodoo.pc
 %{_mandir}/man1/directfb-csource.1*
 
 %if %{with static_libs}
@@ -447,7 +477,6 @@ rm -rf $RPM_BUILD_ROOT
 %files core-x11
 %defattr(644,root,root,755)
 %doc systems/x11/README
-%attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_x11input.so
 %attr(755,root,root) %{dfbdir}/systems/libdirectfb_x11.so
 
 %files font-ft2
@@ -477,6 +506,10 @@ rm -rf $RPM_BUILD_ROOT
 %files input-mutouch
 %defattr(644,root,root,755)
 %attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_mutouch.so
+
+%files input-tslib
+%defattr(644,root,root,755)
+%attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_tslib.so
 
 %files input-ucb1x00
 %defattr(644,root,root,755)
