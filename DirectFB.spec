@@ -6,13 +6,13 @@
 Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl.UTF-8):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
-Version:	1.3.0
+Version:	1.2.6
 Release:	1
 Epoch:		1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://www.directfb.org/downloads/Core/%{name}-%{version}.tar.gz
-# Source0-md5:	000a047651f06b0e4a8747697cd1ad4d
+# Source0-md5:	411c3318966e7834bf505b4388deaf52
 Source1:	http://www.directfb.org/downloads/Extras/DFBTutorials-0.5.0.tar.gz
 # Source1-md5:	13e443a64bddd68835b574045d9025e9
 Patch0:		%{name}-am.patch
@@ -40,7 +40,7 @@ BuildRequires:	zlib-devel >= 1.1.3
 %{?with_multi:Provides:	DirectFB(multi)}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		dfbdir	%{_libdir}/directfb-1.3-0
+%define		dfbdir	%{_libdir}/directfb-1.2-0
 
 %define		specflags	-fno-strict-aliasing
 
@@ -357,16 +357,16 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/mkdfiff
 %attr(755,root,root) %{_bindir}/mkdgiff
 %attr(755,root,root) %{_bindir}/uwmdump
-%attr(755,root,root) %{_libdir}/libdirect-1.3.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libdirect-1.3.so.0
-%attr(755,root,root) %{_libdir}/libdirectfb-1.3.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libdirectfb-1.3.so.0
-%attr(755,root,root) %{_libdir}/libfusion-1.3.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libfusion-1.3.so.0
-%attr(755,root,root) %{_libdir}/libuniquewm-1.3.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libuniquewm-1.3.so.0
-%attr(755,root,root) %{_libdir}/libvoodoo-1.3.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libvoodoo-1.3.so.0
+%attr(755,root,root) %{_libdir}/libdirect-1.2.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libdirect-1.2.so.0
+%attr(755,root,root) %{_libdir}/libdirectfb-1.2.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libdirectfb-1.2.so.0
+%attr(755,root,root) %{_libdir}/libfusion-1.2.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libfusion-1.2.so.0
+%attr(755,root,root) %{_libdir}/libuniquewm-1.2.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libuniquewm-1.2.so.0
+%attr(755,root,root) %{_libdir}/libvoodoo-1.2.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libvoodoo-1.2.so.0
 %dir %{dfbdir}
 %dir %{dfbdir}/gfxdrivers
 %attr(755,root,root) %{dfbdir}/gfxdrivers/*.so
