@@ -1,5 +1,5 @@
---- DirectFB-1.2.3/gfxdrivers/sh7722/Makefile.am.orig	2008-08-08 16:10:55.000000000 +0200
-+++ DirectFB-1.2.3/gfxdrivers/sh7722/Makefile.am	2008-09-03 18:43:14.512984794 +0200
+--- DirectFB-1.2.3/gfxdrivers/sh772x/Makefile.am.orig	2008-08-08 16:10:55.000000000 +0200
++++ DirectFB-1.2.3/gfxdrivers/sh772x/Makefile.am	2008-09-03 18:43:14.512984794 +0200
 @@ -23,6 +23,9 @@
  	sh7722_jpeglib.c	\
  	sh7722_jpeglib.h
