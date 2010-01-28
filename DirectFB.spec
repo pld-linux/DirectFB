@@ -7,7 +7,7 @@ Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl.UTF-8):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
 Version:	1.2.7
-Release:	3
+Release:	4
 Epoch:		1
 License:	LGPL v2+
 Group:		Libraries
@@ -21,13 +21,14 @@ Patch2:		%{name}-fix.patch
 Patch3:		%{name}-gcc4.patch
 Patch4:		%{name}-llh-ppc.patch
 Patch5:		%{name}-link.patch
+Patch6:		%{name}-libpng.patch
 URL:		http://www.directfb.org/
 BuildRequires:	SDL-devel
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
 BuildRequires:	freetype-devel >= 2.0.2
 BuildRequires:	libjpeg-devel >= 6b
-BuildRequires:	libpng-devel >= 1.0
+BuildRequires:	libpng-devel >= 2:1.4.0
 BuildRequires:	libtool
 BuildRequires:	libvncserver-devel
 %{?with_multi:BuildRequires:	linux-fusion-devel >= 8.0}
@@ -287,6 +288,7 @@ Sterownik wejściowy do touchscreenów WM97xx dla DirectFB.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 
 %build
 %{__libtoolize}
