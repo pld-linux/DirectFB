@@ -7,7 +7,7 @@ Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl.UTF-8):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
 Version:	1.2.7
-Release:	4
+Release:	5
 Epoch:		1
 License:	LGPL v2+
 Group:		Libraries
@@ -321,7 +321,7 @@ Sterownik wejściowy do touchscreenów WM97xx dla DirectFB.
 	--with-inputdrivers=dbox2remote,dreamboxremote,dynapro,elo-input,gunze,joystick,keyboard,linuxinput,lirc,mutouch,penmount,ps2mouse,serialmouse,sonypijogdial,tslib,ucb1x00,wm97xx \
 	%{!?with_static_libs:--disable-static}
 
-%{__make} \
+%{__make} -j1 \
 	X11_CFLAGS= \
 	X11_LIBS="-lX11 -lXext"
 
@@ -329,7 +329,7 @@ Sterownik wejściowy do touchscreenów WM97xx dla DirectFB.
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_examplesdir}/%{name}-%{version},%{_sysconfdir}}
 
-%{__make} install \
+%{__make} -j1 install \
 	DESTDIR=$RPM_BUILD_ROOT
 
 cp -rf DFBTutorials* $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
