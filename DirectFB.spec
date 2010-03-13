@@ -33,6 +33,7 @@ BuildRequires:	libtool
 BuildRequires:	libvncserver-devel
 %{?with_multi:BuildRequires:	linux-fusion-devel >= 8.0}
 %{?with_multi:BuildRequires:	linux-fusion-devel < 9}
+BuildRequires:	pkgconfig
 BuildRequires:	sed >= 4.0
 BuildRequires:	sysfsutils-devel >= 1.3.0-3
 BuildRequires:	tslib-devel >= 0.0.2
