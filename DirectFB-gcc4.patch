@@ -1,20 +1,20 @@
---- DirectFB-1.2.3/include/directfb.h.orig	2008-08-19 11:25:16.000000000 +0200
-+++ DirectFB-1.2.3/include/directfb.h	2008-09-03 17:34:21.868983118 +0200
-@@ -970,7 +970,7 @@
-                                            any character advance of fixed or
-                                            proportional fonts */
-      DFDESC_FRACT_HEIGHT = 0x00000020,  /* fractional height is set */
--     DFDESC_FRACT_WIDTH  = 0x00000040,  /* fractional width is set */
-+     DFDESC_FRACT_WIDTH  = 0x00000040   /* fractional width is set */
+--- DirectFB-1.4.11/include/directfb.h.orig	2010-11-15 22:13:05.000000000 +0100
++++ DirectFB-1.4.11/include/directfb.h	2010-11-17 21:15:55.575104966 +0100
+@@ -1045,7 +1045,7 @@
+      DFDESC_FRACT_WIDTH       = 0x00000040,  /* fractional width is set */
+      DFDESC_OUTLINE_WIDTH     = 0x00000080,  /* outline width is set */
+      DFDESC_OUTLINE_OPACITY   = 0x00000100,  /* outline opacity is set */
+-     DFDESC_ROTATION          = 0x00000200,  /* rotation is set */
++     DFDESC_ROTATION          = 0x00000200   /* rotation is set */
  } DFBFontDescriptionFlags;
  
  /*
-@@ -3108,7 +3108,7 @@
-      DSPD_SRC_ATOP       =  9, /* fs: da      fd: 1.0-sa */
+@@ -3314,7 +3314,7 @@
       DSPD_DST_ATOP       = 10, /* fs: 1.0-da  fd: sa     */
       DSPD_ADD            = 11, /* fs: 1.0     fd: 1.0    */
--     DSPD_XOR            = 12, /* fs: 1.0-da  fd: 1.0-sa */
-+     DSPD_XOR            = 12  /* fs: 1.0-da  fd: 1.0-sa */
+      DSPD_XOR            = 12, /* fs: 1.0-da  fd: 1.0-sa */
+-     DSPD_DST            = 13, /* fs: 0.0     fd: 1.0    */
++     DSPD_DST            = 13  /* fs: 0.0     fd: 1.0    */
  } DFBSurfacePorterDuffRule;
  
  /*

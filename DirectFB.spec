@@ -6,13 +6,13 @@
 Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl.UTF-8):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
-Version:	1.2.7
-Release:	5
+Version:	1.4.11
+Release:	1
 Epoch:		1
 License:	LGPL v2+
 Group:		Libraries
-Source0:	http://www.directfb.org/downloads/Core/%{name}-%{version}.tar.gz
-# Source0-md5:	59ca16f600e96c8c104a485ff7c322c6
+Source0:	http://www.directfb.org/downloads/Core/DirectFB-1.4/%{name}-%{version}.tar.gz
+# Source0-md5:	94735ccec21120794adcce93a61445d2
 Source1:	http://www.directfb.org/downloads/Extras/DFBTutorials-0.5.0.tar.gz
 # Source1-md5:	13e443a64bddd68835b574045d9025e9
 Patch0:		%{name}-am.patch
@@ -20,9 +20,9 @@ Patch1:		%{name}-pmake.patch
 Patch2:		%{name}-fix.patch
 Patch3:		%{name}-gcc4.patch
 Patch4:		%{name}-llh-ppc.patch
-Patch5:		%{name}-link.patch
-Patch6:		%{name}-libpng.patch
 URL:		http://www.directfb.org/
+BuildRequires:	OpenGL-devel
+BuildRequires:	OpenGL-GLX-devel
 BuildRequires:	SDL-devel
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
@@ -39,10 +39,11 @@ BuildRequires:	sysfsutils-devel >= 1.3.0-3
 BuildRequires:	tslib-devel >= 0.0.2
 BuildRequires:	xorg-lib-libXext-devel
 BuildRequires:	zlib-devel >= 1.1.3
+#BuildRequires:	pkgconfig(linotype) -- font provider???
 %{?with_multi:Provides:	DirectFB(multi)}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		dfbdir	%{_libdir}/directfb-1.2-0
+%define		dfbdir	%{_libdir}/directfb-1.4-5
 
 %define		specflags	-fno-strict-aliasing
 
@@ -288,8 +289,6 @@ Sterownik wejściowy do touchscreenów WM97xx dla DirectFB.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-%patch5 -p1
-%patch6 -p1
 
 %build
 %{__libtoolize}
@@ -319,7 +318,8 @@ Sterownik wejściowy do touchscreenów WM97xx dla DirectFB.
 	--enable-sse \
 %endif
 %endif
-	--with-inputdrivers=dbox2remote,dreamboxremote,dynapro,elo-input,gunze,joystick,keyboard,linuxinput,lirc,mutouch,penmount,ps2mouse,serialmouse,sonypijogdial,tslib,ucb1x00,wm97xx \
+	--with-inputdrivers=dbox2remote,dreamboxremote,dynapro,elo-input,gunze,joystick,keyboard,linuxinput,lirc,mutouch,penmount,ps2mouse,serialmouse,sonypijogdial,tslib,ucb1x00,wm97xx,zytronic \
+	--with-smooth-scaling \
 	%{!?with_static_libs:--disable-static}
 
 %{__make} -j1 \
@@ -359,17 +359,20 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/dfbscreen
 %attr(755,root,root) %{_bindir}/mkdfiff
 %attr(755,root,root) %{_bindir}/mkdgiff
+%attr(755,root,root) %{_bindir}/mkdgifft
+%attr(755,root,root) %{_bindir}/pxa3xx_dump
 %attr(755,root,root) %{_bindir}/uwmdump
-%attr(755,root,root) %{_libdir}/libdirect-1.2.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libdirect-1.2.so.0
-%attr(755,root,root) %{_libdir}/libdirectfb-1.2.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libdirectfb-1.2.so.0
-%attr(755,root,root) %{_libdir}/libfusion-1.2.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libfusion-1.2.so.0
-%attr(755,root,root) %{_libdir}/libuniquewm-1.2.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libuniquewm-1.2.so.0
-%attr(755,root,root) %{_libdir}/libvoodoo-1.2.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libvoodoo-1.2.so.0
+%attr(755,root,root) %{_bindir}/voodooplay
+%attr(755,root,root) %{_libdir}/libdirect-1.4.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libdirect-1.4.so.5
+%attr(755,root,root) %{_libdir}/libdirectfb-1.4.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libdirectfb-1.4.so.5
+%attr(755,root,root) %{_libdir}/libfusion-1.4.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libfusion-1.4.so.5
+%attr(755,root,root) %{_libdir}/libuniquewm-1.4.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libuniquewm-1.4.so.5
+%attr(755,root,root) %{_libdir}/libvoodoo-1.4.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libvoodoo-1.4.so.5
 %dir %{dfbdir}
 %dir %{dfbdir}/gfxdrivers
 %attr(755,root,root) %{dfbdir}/gfxdrivers/*.so
@@ -382,6 +385,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_ps2mouse.so
 %attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_serialmouse.so
 %attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_sonypi.so
+%attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_zytronic.so
 %dir %{dfbdir}/interfaces
 %dir %{dfbdir}/interfaces/IDirectFB
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFB/lib*.so
@@ -392,7 +396,6 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{dfbdir}/interfaces/IDirectFBEventBuffer
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBEventBuffer/lib*.so
 %dir %{dfbdir}/interfaces/IDirectFBFont
-%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBFont/libidirectfbfont_default.so
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBFont/libidirectfbfont_dgiff.so
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBFont/libidirectfbfont_dispatcher.so
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBFont/libidirectfbfont_requestor.so
@@ -416,9 +419,10 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBWindow/lib*.so
 %dir %{dfbdir}/systems
 %attr(755,root,root) %{dfbdir}/systems/libdirectfb_devmem.so
+%attr(755,root,root) %{dfbdir}/systems/libdirectfb_dummy.so
 %attr(755,root,root) %{dfbdir}/systems/libdirectfb_fbdev.so
 %dir %{dfbdir}/wm
-%attr(755,root,root) %{dfbdir}/wm/*.so
+%attr(755,root,root) %{dfbdir}/wm/lib*.so
 %{_datadir}/directfb-%{version}
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/directfbrc
 %{_mandir}/man1/dfbg.1*
