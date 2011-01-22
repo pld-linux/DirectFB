@@ -29,6 +29,7 @@ BuildRequires:	automake
 BuildRequires:	freetype-devel >= 2.0.2
 BuildRequires:	libjpeg-devel >= 6b
 BuildRequires:	libpng-devel >= 2:1.4.0
+BuildRequires:	libstdc++-devel
 BuildRequires:	libtool
 BuildRequires:	libvncserver-devel
 %{?with_multi:BuildRequires:	linux-fusion-devel >= 8.0}
