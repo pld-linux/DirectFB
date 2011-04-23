@@ -1,18 +1,22 @@
 #
 # Conditional build:
 %bcond_with	multi		# build Multi-application core (requires working /dev/fusion*)
+%bcond_with	sh772x		# SH7722/SH7723 (SH-Mobile) graphics driver
 %bcond_without	static_libs	# don't build static libraries
 #
+%ifarch sh4
+%define		with_sh772x	1
+%endif
 Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl.UTF-8):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
-Version:	1.4.11
+Version:	1.4.12
 Release:	1
 Epoch:		1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://www.directfb.org/downloads/Core/DirectFB-1.4/%{name}-%{version}.tar.gz
-# Source0-md5:	94735ccec21120794adcce93a61445d2
+# Source0-md5:	2c779c9a8456790c6c29ad85459b2600
 Source1:	http://www.directfb.org/downloads/Extras/DFBTutorials-0.5.0.tar.gz
 # Source1-md5:	13e443a64bddd68835b574045d9025e9
 Patch0:		%{name}-am.patch
@@ -41,6 +45,11 @@ BuildRequires:	tslib-devel >= 0.0.2
 BuildRequires:	xorg-lib-libXext-devel
 BuildRequires:	zlib-devel >= 1.1.3
 #BuildRequires:	pkgconfig(linotype) -- font provider???
+%if %{with sh772x}
+BuildRequires:	libshbeu-devel >= 1.0.2
+BuildRequires:	libshjpeg-devel >= 1.3.3
+BuildRequires:	libuiomux-devel >= 1.5.0
+%endif
 %{?with_multi:Provides:	DirectFB(multi)}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -143,6 +152,21 @@ This package contains FreeType2 font provider for DirectFB.
 %description font-ft2 -l pl.UTF-8
 Ten pakiet zawiera wtyczkę dla DirectFB dostarczającą fonty poprzez
 bibliotekę FreeType2.
+
+%package gfx-sh772x
+Summary:	SH7722/SH7723 graphics driver for DirectFB
+Summary(pl.UTF-8):	Sterownik graficzny SH7722/7723 dla DirectFB
+Group:		Libraries
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires:	libshbeu >= 1.0.2
+Requires:	libshjpeg >= 1.3.3
+Requires:	libuiomux >= 1.5.0
+
+%description gfx-sh772x
+SH7722/SH7723 graphics (SH-Mobile devices) driver for DirectFB.
+
+%description gfx-sh772x -l pl.UTF-8
+Sterownik graficzny SH7722/7723 (SH-Mobile) dla DirectFB.
 
 %package image-jpeg
 Summary:	JPEG image provider for DirectFB
@@ -291,6 +315,8 @@ Sterownik wejściowy do touchscreenów WM97xx dla DirectFB.
 %patch3 -p1
 %patch4 -p1
 
+%{__sed} -i -e 's/checkfor_cle266=no/checkfor_cle266=yes/' configure.in
+
 %build
 %{__libtoolize}
 %{__aclocal} -I m4
@@ -376,7 +402,26 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %ghost %{_libdir}/libvoodoo-1.4.so.5
 %dir %{dfbdir}
 %dir %{dfbdir}/gfxdrivers
-%attr(755,root,root) %{dfbdir}/gfxdrivers/*.so
+%attr(755,root,root) %{dfbdir}/gfxdrivers/libdirectfb_ati128.so
+%attr(755,root,root) %{dfbdir}/gfxdrivers/libdirectfb_cle266.so
+%attr(755,root,root) %{dfbdir}/gfxdrivers/libdirectfb_cyber5k.so
+%attr(755,root,root) %{dfbdir}/gfxdrivers/libdirectfb_ep9x.so
+%attr(755,root,root) %{dfbdir}/gfxdrivers/libdirectfb_gl.so
+%attr(755,root,root) %{dfbdir}/gfxdrivers/libdirectfb_i810.so
+%attr(755,root,root) %{dfbdir}/gfxdrivers/libdirectfb_i830.so
+%attr(755,root,root) %{dfbdir}/gfxdrivers/libdirectfb_mach64.so
+%attr(755,root,root) %{dfbdir}/gfxdrivers/libdirectfb_matrox.so
+%attr(755,root,root) %{dfbdir}/gfxdrivers/libdirectfb_neomagic.so
+%attr(755,root,root) %{dfbdir}/gfxdrivers/libdirectfb_nsc.so
+%attr(755,root,root) %{dfbdir}/gfxdrivers/libdirectfb_nvidia.so
+%attr(755,root,root) %{dfbdir}/gfxdrivers/libdirectfb_pxa3xx.so
+%attr(755,root,root) %{dfbdir}/gfxdrivers/libdirectfb_radeon.so
+%attr(755,root,root) %{dfbdir}/gfxdrivers/libdirectfb_savage.so
+%attr(755,root,root) %{dfbdir}/gfxdrivers/libdirectfb_sdlgraphics.so
+%attr(755,root,root) %{dfbdir}/gfxdrivers/libdirectfb_sis315.so
+%attr(755,root,root) %{dfbdir}/gfxdrivers/libdirectfb_tdfx.so
+%attr(755,root,root) %{dfbdir}/gfxdrivers/libdirectfb_unichrome.so
+%attr(755,root,root) %{dfbdir}/gfxdrivers/libdirectfb_vmware.so
 %dir %{dfbdir}/inputdrivers
 %attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_joystick.so
 %attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_keyboard.so
@@ -455,7 +500,11 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with static_libs}
 %files static
 %defattr(644,root,root,755)
-%{_libdir}/lib*.a
+%{_libdir}/libdirect.a
+%{_libdir}/libdirectfb.a
+%{_libdir}/libfusion.a
+%{_libdir}/libuniquewm.a
+%{_libdir}/libvoodoo.a
 %{dfbdir}/gfxdrivers/*.[alo]*
 %{dfbdir}/inputdrivers/*.[alo]*
 %{dfbdir}/interfaces/*/*.[alo]*
@@ -486,6 +535,12 @@ rm -rf $RPM_BUILD_ROOT
 %files font-ft2
 %defattr(644,root,root,755)
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBFont/libidirectfbfont_ft2.so
+
+%if %{with sh772x}
+%files gfx-sh772x
+%defattr(644,root,root,755)
+%attr(755,root,root) %{dfbdir}/gfxdrivers/libdirectfb_sh772x.so
+%endif
 
 %files image-jpeg
 %defattr(644,root,root,755)
