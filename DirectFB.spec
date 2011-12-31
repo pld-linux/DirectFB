@@ -10,13 +10,13 @@
 Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl.UTF-8):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
-Version:	1.4.14
-Release:	2
+Version:	1.4.15
+Release:	1
 Epoch:		1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://www.directfb.org/downloads/Core/DirectFB-1.4/%{name}-%{version}.tar.gz
-# Source0-md5:	de0745d25a6ac9e337d4d5572df85471
+# Source0-md5:	9b2b90b81d7ded2a4a5caa22daeb81ef
 Source1:	http://www.directfb.org/downloads/Extras/DFBTutorials-0.5.0.tar.gz
 # Source1-md5:	13e443a64bddd68835b574045d9025e9
 Patch0:		%{name}-am.patch
@@ -24,6 +24,7 @@ Patch1:		%{name}-pmake.patch
 Patch2:		%{name}-fix.patch
 Patch3:		%{name}-gcc4.patch
 Patch4:		%{name}-llh-ppc.patch
+Patch5:		%{name}-libpng.patch
 URL:		http://www.directfb.org/
 BuildRequires:	OpenGL-devel
 BuildRequires:	OpenGL-GLX-devel
@@ -53,7 +54,7 @@ BuildRequires:	libuiomux-devel >= 1.5.0
 %{?with_multi:Provides:	DirectFB(multi)}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		dfbdir	%{_libdir}/directfb-1.4-5
+%define		dfbdir	%{_libdir}/directfb-1.4-6
 
 %define		specflags	-fno-strict-aliasing
 
@@ -314,6 +315,7 @@ Sterownik wejściowy do touchscreenów WM97xx dla DirectFB.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 %{__sed} -i -e 's/checkfor_cle266=no/checkfor_cle266=yes/' configure.in
 
@@ -384,7 +386,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/dfbpenmount
 %attr(755,root,root) %{_bindir}/dfbproxy
 %attr(755,root,root) %{_bindir}/dfbscreen
-%attr(755,root,root) %{_bindir}/fluxcomp
 %attr(755,root,root) %{_bindir}/mkdfiff
 %attr(755,root,root) %{_bindir}/mkdgiff
 %attr(755,root,root) %{_bindir}/mkdgifft
@@ -392,15 +393,15 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/uwmdump
 %attr(755,root,root) %{_bindir}/voodooplay
 %attr(755,root,root) %{_libdir}/libdirect-1.4.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libdirect-1.4.so.5
+%attr(755,root,root) %ghost %{_libdir}/libdirect-1.4.so.6
 %attr(755,root,root) %{_libdir}/libdirectfb-1.4.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libdirectfb-1.4.so.5
+%attr(755,root,root) %ghost %{_libdir}/libdirectfb-1.4.so.6
 %attr(755,root,root) %{_libdir}/libfusion-1.4.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libfusion-1.4.so.5
+%attr(755,root,root) %ghost %{_libdir}/libfusion-1.4.so.6
 %attr(755,root,root) %{_libdir}/libuniquewm-1.4.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libuniquewm-1.4.so.5
+%attr(755,root,root) %ghost %{_libdir}/libuniquewm-1.4.so.6
 %attr(755,root,root) %{_libdir}/libvoodoo-1.4.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libvoodoo-1.4.so.5
+%attr(755,root,root) %ghost %{_libdir}/libvoodoo-1.4.so.6
 %dir %{dfbdir}
 %dir %{dfbdir}/gfxdrivers
 %attr(755,root,root) %{dfbdir}/gfxdrivers/libdirectfb_ati128.so
@@ -434,6 +435,8 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_sonypi.so
 %attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_zytronic.so
 %dir %{dfbdir}/interfaces
+%dir %{dfbdir}/interfaces/ICoreResourceManager
+%attr(755,root,root) %{dfbdir}/interfaces/ICoreResourceManager/libicoreresourcemanager_test.so
 %dir %{dfbdir}/interfaces/IDirectFB
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFB/lib*.so
 %dir %{dfbdir}/interfaces/IDirectFBDataBuffer
@@ -525,7 +528,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %files core-vnc
 %defattr(644,root,root,755)
-%attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_vncinput.so
 %attr(755,root,root) %{dfbdir}/systems/libdirectfb_vnc.so
 
 %files core-x11

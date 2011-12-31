@@ -1,11 +1,9 @@
---- DirectFB-0.9.24/lib/direct/ppcasm_memcpy_cachable.S.orig	2004-05-05 17:54:30.000000000 +0000
-+++ DirectFB-0.9.24/lib/direct/ppcasm_memcpy_cachable.S	2006-01-26 21:56:40.000000000 +0000
-@@ -11,18 +11,8 @@
+--- DirectFB-1.4.15/lib/direct/ppcasm_memcpy_cachable.S.orig	2011-09-29 11:51:21.000000000 +0200
++++ DirectFB-1.4.15/lib/direct/ppcasm_memcpy_cachable.S	2011-12-30 19:46:23.464488297 +0100
+@@ -34,16 +34,8 @@
  
  #define __ASSEMBLY__
  
--#include <linux/config.h>
--
 -#if defined(CONFIG_8xx) || defined(CONFIG_403GCX)
 -#define L1_CACHE_LINE_SIZE       16
 -#define LG_L1_CACHE_LINE_SIZE     4 
@@ -19,7 +17,7 @@
  
  #include "ppc_asm.h"
  
-@@ -119,9 +109,7 @@
+@@ -140,9 +132,7 @@
  	mtctr	r0
  	beq	63f
  53:

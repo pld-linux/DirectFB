@@ -1,0 +1,211 @@
+--- DirectFB-1.4.15/tools/directfb-csource.c.orig	2011-09-29 11:51:21.000000000 +0200
++++ DirectFB-1.4.15/tools/directfb-csource.c	2011-12-31 11:45:40.123082173 +0100
+@@ -338,7 +338,7 @@
+      if (!png_ptr)
+           goto cleanup;
+ 
+-     if (setjmp (png_ptr->jmpbuf)) {
++     if (setjmp (png_jmpbuf(png_ptr))) {
+           if (desc->preallocated[0].data) {
+                free (desc->preallocated[0].data);
+                desc->preallocated[0].data = NULL;
+@@ -406,16 +406,19 @@
+ 
+      switch (src_format) {
+           case DSPF_LUT8:
+-               if (info_ptr->num_palette) {
++	      {
++	       png_colorp png_palette;
++	       int num_palette;
++               if (png_get_PLTE(png_ptr, info_ptr, &png_palette, &num_palette) && (num_palette > 0)) {
+                     png_byte *alpha;
+                     int       i, num;
+ 
+-                    *palette_size = MIN (info_ptr->num_palette, 256);
++                    *palette_size = MIN (num_palette, 256);
+                     for (i = 0; i < *palette_size; i++) {
+                          palette[i].a = 0xFF;
+-                         palette[i].r = info_ptr->palette[i].red;
+-                         palette[i].g = info_ptr->palette[i].green;
+-                         palette[i].b = info_ptr->palette[i].blue;
++                         palette[i].r = png_palette[i].red;
++                         palette[i].g = png_palette[i].green;
++                         palette[i].b = png_palette[i].blue;
+                     }
+                     if (png_get_valid (png_ptr, info_ptr, PNG_INFO_tRNS)) {
+                          png_get_tRNS (png_ptr, info_ptr, &alpha, &num, NULL);
+@@ -423,6 +426,7 @@
+                               palette[i].a = alpha[i];
+                     }
+                }
++	      }
+                break;
+           case DSPF_RGB32:
+                 png_set_filler (png_ptr, 0xFF,
+--- DirectFB-1.4.15/tools/mkdfiff.c.orig	2011-09-29 11:51:21.000000000 +0200
++++ DirectFB-1.4.15/tools/mkdfiff.c	2011-12-31 11:54:59.336434230 +0100
+@@ -97,7 +97,7 @@
+      if (!png_ptr)
+           goto cleanup;
+ 
+-     if (setjmp (png_ptr->jmpbuf)) {
++     if (setjmp (png_jmpbuf(png_ptr))) {
+           if (desc->preallocated[0].data) {
+                free (desc->preallocated[0].data);
+                desc->preallocated[0].data = NULL;
+--- DirectFB-1.4.15/tools/mkdgifft.cpp.orig	2011-09-29 11:51:21.000000000 +0200
++++ DirectFB-1.4.15/tools/mkdgifft.cpp	2011-12-31 12:04:10.586452688 +0100
+@@ -595,7 +595,7 @@
+      if (!png_ptr)
+           goto cleanup;
+ 
+-     if (setjmp (png_ptr->jmpbuf)) {
++     if (setjmp (png_jmpbuf(png_ptr))) {
+           if (desc->preallocated[0].data) {
+                free (desc->preallocated[0].data);
+                desc->preallocated[0].data = NULL;
+--- DirectFB-1.4.15/interfaces/IDirectFBImageProvider/idirectfbimageprovider_png.c.orig	2011-09-29 11:51:21.000000000 +0200
++++ DirectFB-1.4.15/interfaces/IDirectFBImageProvider/idirectfbimageprovider_png.c	2011-12-31 13:45:31.339989628 +0100
+@@ -209,7 +209,7 @@
+      if (!data->png_ptr)
+           goto error;
+ 
+-     if (setjmp( data->png_ptr->jmpbuf )) {
++     if (setjmp( png_jmpbuf(data->png_ptr) )) {
+           D_ERROR( "ImageProvider/PNG: Error reading header!\n" );
+           goto error;
+      }
+@@ -294,7 +294,7 @@
+           rect = dst_data->area.wanted;
+      }
+ 
+-     if (setjmp( data->png_ptr->jmpbuf )) {
++     if (setjmp( png_jmpbuf(data->png_ptr) )) {
+           D_ERROR( "ImageProvider/PNG: Error during decoding!\n" );
+ 
+           if (data->stage < STAGE_IMAGE)
+@@ -337,7 +337,7 @@
+ 
+           switch (data->color_type) {
+                case PNG_COLOR_TYPE_PALETTE:
+-                    if (dst_surface->config.format == DSPF_LUT8 && data->info_ptr->bit_depth == 8) {
++                    if (dst_surface->config.format == DSPF_LUT8 && png_get_bit_depth(data->png_ptr, data->info_ptr) == 8) {
+                          /*
+                           * Special indexed PNG to LUT8 loading.
+                           */
+@@ -390,7 +390,7 @@
+                     }
+                     else {
+                          if (data->color_type == PNG_COLOR_TYPE_GRAY) {
+-                              int num = 1 << data->info_ptr->bit_depth;
++                              int num = 1 << png_get_bit_depth(data->png_ptr, data->info_ptr);
+ 
+                               for (x=0; x<num; x++) {
+                                    int value = x * 255 / (num - 1);
+@@ -399,7 +399,7 @@
+                               }
+                          }
+ 
+-                         switch (data->info_ptr->bit_depth) {
++                         switch (png_get_bit_depth(data->png_ptr, data->info_ptr)) {
+                               case 8:
+                                    for (y=0; y<data->height; y++) {
+                                         u8  *S = data->image + data->pitch * y;
+@@ -454,7 +454,7 @@
+ 
+                               default:
+                                    D_ERROR( "ImageProvider/PNG: Unsupported indexed bit depth %d!\n",
+-                                            data->info_ptr->bit_depth );
++                                            png_get_bit_depth(data->png_ptr, data->info_ptr) );
+                          }
+ 
+                          dfb_scale_linear_32( image_argb, data->width, data->height,
+@@ -616,12 +616,16 @@
+           /* generate color key based on palette... */
+           if (data->color_type == PNG_COLOR_TYPE_PALETTE) {
+                u32        key;
+-               png_colorp palette    = data->info_ptr->palette;
+-               png_bytep  trans      = data->info_ptr->trans_alpha;
+-               int        num_colors = MIN( MAXCOLORMAPSIZE,
+-                                            data->info_ptr->num_palette );
+-               u8         cmap[3][num_colors];
+-
++               png_colorp palette;
++               png_bytep  trans;
++	       png_color_16p trans_color;
++	       int        num_palette, num_colors, num_trans;
++
++	       png_get_PLTE(data->png_ptr, data->info_ptr, &palette, &num_palette);
++	       png_get_tRNS(data->png_ptr, data->info_ptr, &trans, &num_trans, &trans_color);
++	       num_colors = MIN (MAXCOLORMAPSIZE, num_palette);
++	       {
++	       u8         cmap[3][num_colors];
+                for (i=0; i<num_colors; i++) {
+                     cmap[0][i] = palette[i].red;
+                     cmap[1][i] = palette[i].green;
+@@ -629,8 +633,9 @@
+                }
+ 
+                key = FindColorKey( num_colors, &cmap[0][0] );
++	       }
+ 
+-               for (i=0; i<data->info_ptr->num_trans; i++) {
++               for (i=0; i<num_trans; i++) {
+                     if (!trans[i]) {
+                          palette[i].red   = (key & 0xff0000) >> 16;
+                          palette[i].green = (key & 0x00ff00) >>  8;
+@@ -642,7 +647,10 @@
+           }
+           else if (data->color_type == PNG_COLOR_TYPE_GRAY) {
+                /* ...or based on trans gray value */
+-               png_color_16p trans = &data->info_ptr->trans_color;
++	       png_bytep trans_alpha;
++               png_color_16p trans;
++	       int num_trans;
++	       png_get_tRNS(data->png_ptr, data->info_ptr, &trans_alpha, &num_trans, &trans);
+ 
+                switch(data->bpp) {
+                     case 1:
+@@ -675,7 +683,10 @@
+           }
+           else {
+                /* ...or based on trans rgb value */
+-               png_color_16p trans = &data->info_ptr->trans_color;
++	       png_bytep trans_alpha;
++               png_color_16p trans;
++	       int num_trans;
++	       png_get_tRNS(data->png_ptr, data->info_ptr, &trans_alpha, &num_trans, &trans);
+ 
+                switch(data->bpp) {
+                     case 1:
+@@ -710,10 +721,14 @@
+ 
+      switch (data->color_type) {
+           case PNG_COLOR_TYPE_PALETTE: {
+-               png_colorp palette    = data->info_ptr->palette;
+-               png_bytep  trans      = data->info_ptr->trans_alpha;
+-               int        num_trans  = data->info_ptr->num_trans;
+-               int        num_colors = MIN( MAXCOLORMAPSIZE, data->info_ptr->num_palette );
++               png_colorp palette;
++               png_bytep  trans;
++	       png_color_16p trans_color;
++               int        num_trans, num_palette, num_colors;
++
++	       png_get_PLTE(data->png_ptr, data->info_ptr, &palette, &num_palette);
++	       png_get_tRNS(data->png_ptr, data->info_ptr, &trans, &num_trans, &trans_color);
++               num_colors = MIN( MAXCOLORMAPSIZE, num_palette );
+ 
+                for (i=0; i<num_colors; i++) {
+                     data->colors[i].a = (i < num_trans) ? trans[i] : 0xff;
+@@ -847,7 +862,10 @@
+                     }
+                }
+ 
+-               png_color_16p trans = &data->info_ptr->trans_color;
++	       int num_trans;
++	       png_bytep trans_alpha;
++               png_color_16p trans;
++	       png_get_tRNS(data->png_ptr, data->info_ptr, &trans_alpha, &num_trans, &trans);
+                u16 *src16 = (u16*)src + src16_initial_offset;
+                u32 *dst32 = (u32*)dst + dst32_initial_offset;
+ 
