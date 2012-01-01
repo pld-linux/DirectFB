@@ -37,7 +37,7 @@ BuildRequires:	libpng-devel >= 2:1.4.0
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool
 BuildRequires:	libvncserver-devel
-%{?with_multi:BuildRequires:	linux-fusion-devel >= 8.0}
+%{?with_multi:BuildRequires:	linux-fusion-devel >= 8.7}
 %{?with_multi:BuildRequires:	linux-fusion-devel < 9}
 BuildRequires:	pkgconfig
 BuildRequires:	sed >= 4.0
