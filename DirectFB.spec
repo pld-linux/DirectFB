@@ -10,13 +10,13 @@
 Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl.UTF-8):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
-Version:	1.4.15
-Release:	2
+Version:	1.4.16
+Release:	1
 Epoch:		1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://www.directfb.org/downloads/Core/DirectFB-1.4/%{name}-%{version}.tar.gz
-# Source0-md5:	9b2b90b81d7ded2a4a5caa22daeb81ef
+# Source0-md5:	888e9b2e3d33a42c3c105d6551e06555
 Source1:	http://www.directfb.org/downloads/Extras/DFBTutorials-0.5.0.tar.gz
 # Source1-md5:	13e443a64bddd68835b574045d9025e9
 Patch0:		%{name}-am.patch
@@ -24,7 +24,6 @@ Patch1:		%{name}-pmake.patch
 Patch2:		%{name}-fix.patch
 Patch3:		%{name}-gcc4.patch
 Patch4:		%{name}-llh-ppc.patch
-Patch5:		%{name}-libpng.patch
 URL:		http://www.directfb.org/
 BuildRequires:	OpenGL-devel
 BuildRequires:	OpenGL-GLX-devel
@@ -315,7 +314,6 @@ Sterownik wejściowy do touchscreenów WM97xx dla DirectFB.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-%patch5 -p1
 
 %{__sed} -i -e 's/checkfor_cle266=no/checkfor_cle266=yes/' configure.in
 
