@@ -1,7 +1,7 @@
---- DirectFB-0.9.21/configure.in.orig	2004-12-11 17:13:59.000000000 +0100
-+++ DirectFB-0.9.21/configure.in	2005-01-09 22:37:52.168260232 +0100
-@@ -135,13 +135,6 @@
- AC_CHECK_HEADERS(linux/unistd.h asm/page.h)
+--- DirectFB-1.6.0/configure.in.orig	2012-06-14 18:00:08.000000000 +0200
++++ DirectFB-1.6.0/configure.in	2012-06-17 11:44:33.652503513 +0200
+@@ -184,11 +184,6 @@
+ AC_CHECK_HEADERS(linux/compiler.h linux/unistd.h asm/page.h signal.h)
  
  
 -dnl Clear default CFLAGS
@@ -9,8 +9,6 @@
 -  CFLAGS=
 -fi
 -
--CFLAGS="-O3 -ffast-math -pipe $CFLAGS"
--
- DFB_INTERNAL_CFLAGS="-D_GNU_SOURCE $DFB_INTERNAL_CFLAGS"
+ CFLAGS="-ffast-math -pipe $CFLAGS"
  
- AC_ARG_ENABLE(extra-warnings,
+ DFB_INTERNAL_CFLAGS="-D_GNU_SOURCE $DFB_INTERNAL_CFLAGS"

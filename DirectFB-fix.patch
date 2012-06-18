@@ -30,3 +30,13 @@
  
  #ifdef USE_KOS
  
+--- DirectFB-1.6.0/interfaces/IDirectFBImageProvider/Makefile.am.orig	2012-06-14 18:00:08.000000000 +0200
++++ DirectFB-1.6.0/interfaces/IDirectFBImageProvider/Makefile.am	2012-06-17 19:13:20.781373488 +0200
+@@ -115,6 +115,7 @@
+ libidirectfbimageprovider_pnm_la_LDFLAGS = -avoid-version -module
+ 
+ libidirectfbimageprovider_svg_la_SOURCES = idirectfbimageprovider_svg.c
++libidirectfbimageprovider_svg_la_CPPFLAGS = $(SVG_CFLAGS)
+ libidirectfbimageprovider_svg_la_LIBADD = $(libdirect) $(libdirectfb) $(SVG_LIBS) $(ZLIB_LIBS)
+ libidirectfbimageprovider_svg_la_LDFLAGS = -avoid-version -module
+ 

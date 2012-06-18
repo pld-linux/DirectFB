@@ -1,0 +1,12 @@
+--- DirectFB-1.6.0/src/core/surface.c.orig	2012-06-14 18:00:08.000000000 +0200
++++ DirectFB-1.6.0/src/core/surface.c	2012-06-17 12:34:01.569045630 +0200
+@@ -49,6 +49,9 @@
+ #include <gfx/convert.h>
+ #include <gfx/util.h>
+ 
++#ifdef USE_ZLIB
++#include <zlib.h>
++#endif
+ 
+ D_DEBUG_DOMAIN( Core_Surface, "Core/Surface", "DirectFB Core Surface" );
+ 

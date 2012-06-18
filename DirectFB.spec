@@ -1,4 +1,5 @@
 # TODO: --enable-one when ready (there are some missing files currently)
+# --enable-pvr2d ?
 #
 # Conditional build:
 %bcond_with	multi		# build Multi-application core (requires working /dev/fusion*)
@@ -11,13 +12,13 @@
 Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl.UTF-8):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
-Version:	1.4.17
+Version:	1.6.0
 Release:	1
 Epoch:		1
 License:	LGPL v2+
 Group:		Libraries
-Source0:	http://www.directfb.org/downloads/Core/DirectFB-1.4/%{name}-%{version}.tar.gz
-# Source0-md5:	12d6b3e83e2719fa1f387378fab2b441
+Source0:	http://www.directfb.org/downloads/Core/DirectFB-1.6/%{name}-%{version}.tar.gz
+# Source0-md5:	9a0524f9a23627b1eaf421555921b08a
 Source1:	http://www.directfb.org/downloads/Extras/DFBTutorials-0.5.0.tar.gz
 # Source1-md5:	13e443a64bddd68835b574045d9025e9
 Patch0:		%{name}-am.patch
@@ -25,25 +26,38 @@ Patch1:		%{name}-pmake.patch
 Patch2:		%{name}-fix.patch
 Patch3:		%{name}-gcc4.patch
 Patch4:		%{name}-llh-ppc.patch
+Patch5:		%{name}-zlib.patch
+Patch6:		%{name}-update.patch
 URL:		http://www.directfb.org/
+BuildRequires:	Mesa-libEGL-devel
+BuildRequires:	Mesa-libGLES-devel
+BuildRequires:	Mesa-libgbm-devel
 BuildRequires:	OpenGL-devel
 BuildRequires:	OpenGL-GLX-devel
 BuildRequires:	SDL-devel
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
 BuildRequires:	freetype-devel >= 2.0.2
+BuildRequires:	imlib2-devel
+BuildRequires:	jasper-devel
+BuildRequires:	libdrm-devel
 BuildRequires:	libjpeg-devel >= 6b
+BuildRequires:	libmng-devel
 BuildRequires:	libpng-devel >= 2:1.4.0
 BuildRequires:	libstdc++-devel
+BuildRequires:	libsvg-cairo-devel >= 0.1.6
 BuildRequires:	libtool
+BuildRequires:	libvdpau-devel
 BuildRequires:	libvncserver-devel
 %{?with_multi:BuildRequires:	linux-fusion-devel >= 8.7}
 %{?with_multi:BuildRequires:	linux-fusion-devel < 9}
 BuildRequires:	pkgconfig
 BuildRequires:	sed >= 4.0
 BuildRequires:	sysfsutils-devel >= 1.3.0-3
-BuildRequires:	tslib-devel >= 0.0.2
+BuildRequires:	tslib-devel >= 1.0
+BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	xorg-lib-libXext-devel
+BuildRequires:	xorg-proto-xproto-devel
 BuildRequires:	zlib-devel >= 1.1.3
 #BuildRequires:	pkgconfig(linotype) -- font provider???
 %if %{with sh772x}
@@ -52,9 +66,13 @@ BuildRequires:	libshjpeg-devel >= 1.3.3
 BuildRequires:	libuiomux-devel >= 1.5.0
 %endif
 %{?with_multi:Provides:	DirectFB(multi)}
+%ifnarch arm
+# ARM-specific
+Obsoletes:	DirectFB-input-ucb1x00
+%endif
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		dfbdir	%{_libdir}/directfb-1.4-6
+%define		dfbdir	%{_libdir}/directfb-1.6-0
 
 %define		specflags	-fno-strict-aliasing
 
@@ -105,6 +123,18 @@ DirectFB documentation and tutorials.
 %description doc -l pl.UTF-8
 Dokumentacja dla systemu DirectFB wraz z wprowadzeniem.
 
+%package core-mesa
+Summary:	Mesa/GLESv2 core system for DirectFB
+Summary(pl.UTF-8):	System Mesa/GLESv2 dla DirectFB
+Group:		Libraries
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+
+%description core-mesa
+This package contains Mesa/GLESv2 core system module for DirectFB.
+
+%description core-mesa -l pl.UTF-8
+Ten pakiet zawiera moduł systemu Mesa/GLESv2 dla DirectFB.
+
 %package core-sdl
 Summary:	SDL core system for DirectFB
 Summary(pl.UTF-8):	System SDL dla DirectFB
@@ -116,6 +146,18 @@ This package contains SDL core system module for DirectFB.
 
 %description core-sdl -l pl.UTF-8
 Ten pakiet zawiera moduł systemu SDL dla DirectFB.
+
+%package core-vdpau
+Summary:	X11/VDPAU core system for DirectFB
+Summary(pl.UTF-8):	System X11/VDPAU dla DirectFB
+Group:		Libraries
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+
+%description core-vdpau
+This package contains X11/VDPAU core system module for DirectFB.
+
+%description core-vdpau -l pl.UTF-8
+Ten pakiet zawiera moduł systemu X11/VDPAU dla DirectFB.
 
 %package core-vnc
 Summary:	VNC core system for DirectFB
@@ -168,30 +210,6 @@ SH7722/SH7723 graphics (SH-Mobile devices) driver for DirectFB.
 
 %description gfx-sh772x -l pl.UTF-8
 Sterownik graficzny SH7722/7723 (SH-Mobile) dla DirectFB.
-
-%package image-jpeg
-Summary:	JPEG image provider for DirectFB
-Summary(pl.UTF-8):	DirectFB - wtyczka dostarczająca grafikę JPEG
-Group:		Libraries
-Requires:	%{name} = %{epoch}:%{version}-%{release}
-
-%description image-jpeg
-This package contains JPEG image provider for DirectFB.
-
-%description image-jpeg -l pl.UTF-8
-Ten pakiet zawiera wtyczkę dla DirectFB dostarczającą grafikę JPEG.
-
-%package image-png
-Summary:	PNG image provider for DirectFB
-Summary(pl.UTF-8):	DirectFB - wtyczka dostarczająca grafikę PNG
-Group:		Libraries
-Requires:	%{name} = %{epoch}:%{version}-%{release}
-
-%description image-png
-This package contains PNG image provider for DirectFB.
-
-%description image-png -l pl.UTF-8
-Ten pakiet zawiera wtyczkę dla DirectFB dostarczającą grafikę PNG.
 
 %package input-dynapro
 Summary:	Dynapro touchscreen input driver for DirectFB
@@ -277,6 +295,7 @@ Summary:	tslib-based touchscreen input driver for DirectFB
 Summary(pl.UTF-8):	Oparty na tslib sterownik wejściowy do touchscreenów dla DirectFB
 Group:		Libraries
 Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires:	tslib >= 1.0
 
 %description input-tslib
 tslib-based touchscreen input driver for DirectFB
@@ -308,6 +327,84 @@ WM97xx touchscreen input driver for DirectFB.
 %description input-wm97xx -l pl.UTF-8
 Sterownik wejściowy do touchscreenów WM97xx dla DirectFB.
 
+%package image-imlib2
+Summary:	Imlib2 image provider for DirectFB
+Summary(pl.UTF-8):	DirectFB - wtyczka dostarczająca grafikę Imlib2
+Group:		Libraries
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+
+%description image-imlib2
+This package contains Imlib2 image provider for DirectFB.
+
+%description image-imlib2 -l pl.UTF-8
+Ten pakiet zawiera wtyczkę dla DirectFB dostarczającą grafikę Imlib2.
+
+%package image-jpeg
+Summary:	JPEG image provider for DirectFB
+Summary(pl.UTF-8):	DirectFB - wtyczka dostarczająca grafikę JPEG
+Group:		Libraries
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+
+%description image-jpeg
+This package contains JPEG image provider for DirectFB.
+
+%description image-jpeg -l pl.UTF-8
+Ten pakiet zawiera wtyczkę dla DirectFB dostarczającą grafikę JPEG.
+
+%package image-jpeg2000
+Summary:	JPEG2000 image provider for DirectFB
+Summary(pl.UTF-8):	DirectFB - wtyczka dostarczająca grafikę JPEG2000
+Group:		Libraries
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+
+%description image-jpeg2000
+This package contains JPEG2000 image provider for DirectFB (based on
+jasper library).
+
+%description image-jpeg2000 -l pl.UTF-8
+Ten pakiet zawiera wtyczkę dla DirectFB, opartą na bibliotece jasper,
+dostarczającą grafikę JPEG2000.
+
+%package image-png
+Summary:	PNG image provider for DirectFB
+Summary(pl.UTF-8):	DirectFB - wtyczka dostarczająca grafikę PNG
+Group:		Libraries
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires:	libpng >= 2:1.4.0
+
+%description image-png
+This package contains PNG image provider for DirectFB.
+
+%description image-png -l pl.UTF-8
+Ten pakiet zawiera wtyczkę dla DirectFB dostarczającą grafikę PNG.
+
+%package image-svg
+Summary:	SVG image provider for DirectFB
+Summary(pl.UTF-8):	DirectFB - wtyczka dostarczająca grafikę SVG
+Group:		Libraries
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires:	libsvg-cairo >= 0.1.6
+
+%description image-svg
+This package contains SVG image provider for DirectFB, based on Cairo
+library.
+
+%description image-svg -l pl.UTF-8
+Ten pakiet zawiera wtyczkę dla DirectFB, opartą na bibliotece Cairo,
+dostarczającą grafikę SVG.
+
+%package video-mng
+Summary:	MNG video provider for DirectFB
+Summary(pl.UTF-8):	DirectFB - wtyczka dostarczająca animacje MNG
+Group:		Libraries
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+
+%description video-mng
+This package contains MNG video provider for DirectFB.
+
+%description video-mng -l pl.UTF-8
+Ten pakiet zawiera wtyczkę dla DirectFB, dostarczającą animacje MNG.
+
 %prep
 %setup -q -a1
 %patch0 -p1
@@ -315,8 +412,13 @@ Sterownik wejściowy do touchscreenów WM97xx dla DirectFB.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
+%patch6 -p1
 
-%{__sed} -i -e 's/checkfor_cle266=no/checkfor_cle266=yes/' configure.in
+# video drivers
+%{__sed} -i -e 's/checkfor_\(cle266\|cyber5k\|radeon\|savage\|unichrome\|vmware\)=no/checkfor_\1=yes/' configure.in
+# input drivers
+%{__sed} -i -e 's/checkfor_\(dynapro\|elo\|gunze\)=no/checkfor_\1=yes/' configure.in
 
 %build
 %{__libtoolize}
@@ -328,6 +430,7 @@ Sterownik wejściowy do touchscreenów WM97xx dla DirectFB.
 %configure \
 	%{!?debug:--disable-debug} \
 	--disable-maintainer-mode \
+	--disable-silent-rules \
 	--enable-fast-install \
 	%{?with_multi:--enable-multi} \
 	--enable-sdl \
@@ -346,7 +449,6 @@ Sterownik wejściowy do touchscreenów WM97xx dla DirectFB.
 	--enable-sse \
 %endif
 %endif
-	--with-inputdrivers=dbox2remote,dreamboxremote,dynapro,elo-input,gunze,joystick,keyboard,linuxinput,lirc,mutouch,penmount,ps2mouse,serialmouse,sonypijogdial,tslib,ucb1x00,wm97xx,zytronic \
 	--with-smooth-scaling \
 	%{!?with_static_libs:--disable-static}
 
@@ -391,16 +493,18 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/pxa3xx_dump
 %attr(755,root,root) %{_bindir}/uwmdump
 %attr(755,root,root) %{_bindir}/voodooplay
-%attr(755,root,root) %{_libdir}/libdirect-1.4.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libdirect-1.4.so.6
-%attr(755,root,root) %{_libdir}/libdirectfb-1.4.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libdirectfb-1.4.so.6
-%attr(755,root,root) %{_libdir}/libfusion-1.4.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libfusion-1.4.so.6
-%attr(755,root,root) %{_libdir}/libuniquewm-1.4.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libuniquewm-1.4.so.6
-%attr(755,root,root) %{_libdir}/libvoodoo-1.4.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libvoodoo-1.4.so.6
+%attr(755,root,root) %{_bindir}/voodooplay_client
+%attr(755,root,root) %{_bindir}/voodooplay_server
+%attr(755,root,root) %{_libdir}/libdirect-1.6.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libdirect-1.6.so.0
+%attr(755,root,root) %{_libdir}/libdirectfb-1.6.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libdirectfb-1.6.so.0
+%attr(755,root,root) %{_libdir}/libfusion-1.6.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libfusion-1.6.so.0
+%attr(755,root,root) %{_libdir}/libuniquewm-1.6.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libuniquewm-1.6.so.0
+%attr(755,root,root) %{_libdir}/libvoodoo-1.6.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libvoodoo-1.6.so.0
 %dir %{dfbdir}
 %dir %{dfbdir}/gfxdrivers
 %attr(755,root,root) %{dfbdir}/gfxdrivers/libdirectfb_ati128.so
@@ -423,7 +527,12 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{dfbdir}/gfxdrivers/libdirectfb_tdfx.so
 %attr(755,root,root) %{dfbdir}/gfxdrivers/libdirectfb_unichrome.so
 %attr(755,root,root) %{dfbdir}/gfxdrivers/libdirectfb_vmware.so
+%ifarch arm
+%attr(755,root,root) %{dfbdir}/gfxdrivers/libdirectfb_davinci.so
+%attr(755,root,root) %{dfbdir}/gfxdrivers/libdirectfb_omap.so
+%endif
 %dir %{dfbdir}/inputdrivers
+%attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_input_hub.so
 %attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_joystick.so
 %attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_keyboard.so
 %attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_linux_input.so
@@ -449,9 +558,12 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBFont/libidirectfbfont_dispatcher.so
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBFont/libidirectfbfont_requestor.so
 %dir %{dfbdir}/interfaces/IDirectFBImageProvider
+%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_bmp.so
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_dfiff.so
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_dispatcher.so
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_gif.so
+%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_mpeg2.so
+%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_pnm.so
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_requestor.so
 %dir %{dfbdir}/interfaces/IDirectFBInputDevice
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBInputDevice/lib*.so
@@ -466,6 +578,10 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBVideoProvider/libidirectfbvideoprovider_v4l.so
 %dir %{dfbdir}/interfaces/IDirectFBWindow
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBWindow/lib*.so
+%dir %{dfbdir}/interfaces/IDirectFBWindows
+%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBWindows/lib*.so
+%dir %{dfbdir}/interfaces/IWater
+%attr(755,root,root) %{dfbdir}/interfaces/IWater/lib*.so
 %dir %{dfbdir}/systems
 %attr(755,root,root) %{dfbdir}/systems/libdirectfb_devmem.so
 %attr(755,root,root) %{dfbdir}/systems/libdirectfb_dummy.so
@@ -520,10 +636,20 @@ rm -rf $RPM_BUILD_ROOT
 %doc docs/html/*.{html,png}
 %{_examplesdir}/%{name}-%{version}
 
+%files core-mesa
+%defattr(644,root,root,755)
+%attr(755,root,root) %{dfbdir}/gfxdrivers/libdirectfb_gles2.so
+%attr(755,root,root) %{dfbdir}/systems/libdirectfb_mesa_system.so
+
 %files core-sdl
 %defattr(644,root,root,755)
 %attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_sdlinput.so
 %attr(755,root,root) %{dfbdir}/systems/libdirectfb_sdl.so
+
+%files core-vdpau
+%defattr(644,root,root,755)
+%attr(755,root,root) %{dfbdir}/gfxdrivers/libdirectfb_vdpau.so
+%attr(755,root,root) %{dfbdir}/systems/libdirectfb_x11vdpau.so
 
 %files core-vnc
 %defattr(644,root,root,755)
@@ -543,14 +669,6 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{dfbdir}/gfxdrivers/libdirectfb_sh772x.so
 %endif
-
-%files image-jpeg
-%defattr(644,root,root,755)
-%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_jpeg.so
-
-%files image-png
-%defattr(644,root,root,755)
-%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_png.so
 
 %files input-dynapro
 %defattr(644,root,root,755)
@@ -572,10 +690,36 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_tslib.so
 
+%ifarch arm
 %files input-ucb1x00
 %defattr(644,root,root,755)
 %attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_ucb1x00_ts.so
+%endif
 
 %files input-wm97xx
 %defattr(644,root,root,755)
 %attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_wm97xx_ts.so
+
+%files image-imlib2
+%defattr(644,root,root,755)
+%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_imlib2.so
+
+%files image-jpeg
+%defattr(644,root,root,755)
+%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_jpeg.so
+
+%files image-jpeg2000
+%defattr(644,root,root,755)
+%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_jpeg2000.so
+
+%files image-png
+%defattr(644,root,root,755)
+%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_png.so
+
+%files image-svg
+%defattr(644,root,root,755)
+%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_svg.so
+
+%files video-mng
+%defattr(644,root,root,755)
+%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBVideoProvider/libidirectfbvideoprovider_mng.so

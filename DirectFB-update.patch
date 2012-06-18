@@ -1,0 +1,162 @@
+--- DirectFB-1.6.0/wm/unique/uniquewm.c.orig	2012-06-14 18:00:08.000000000 +0200
++++ DirectFB-1.6.0/wm/unique/uniquewm.c	2012-06-17 13:44:30.032201512 +0200
+@@ -38,6 +38,8 @@
+ #include <core/surface.h>
+ #include <core/surface_buffer.h>
+ 
++#include <fusion/fusion.h>
++
+ #include <unique/context.h>
+ #include <unique/decoration.h>
+ #include <unique/internal.h>
+@@ -275,7 +277,7 @@
+      D_MAGIC_ASSERT( wm_shared, WMShared );
+      D_ASSERT( wm_shared->context_pool != NULL );
+ 
+-     return (UniqueContext*) fusion_object_create( wm_shared->context_pool, wm_data->world );
++     return (UniqueContext*) fusion_object_create( wm_shared->context_pool, wm_data->world, fusion_id(wm_data->world) );
+ }
+ 
+ UniqueDecoration *
+@@ -286,7 +288,7 @@
+      D_MAGIC_ASSERT( wm_shared, WMShared );
+      D_ASSERT( wm_shared->decoration_pool != NULL );
+ 
+-     return (UniqueDecoration*) fusion_object_create( wm_shared->decoration_pool, wm_data->world );
++     return (UniqueDecoration*) fusion_object_create( wm_shared->decoration_pool, wm_data->world, fusion_id(wm_data->world) );
+ }
+ 
+ UniqueWindow *
+@@ -297,7 +299,7 @@
+      D_MAGIC_ASSERT( wm_shared, WMShared );
+      D_ASSERT( wm_shared->window_pool != NULL );
+ 
+-     return (UniqueWindow*) fusion_object_create( wm_shared->window_pool, wm_data->world );
++     return (UniqueWindow*) fusion_object_create( wm_shared->window_pool, wm_data->world, fusion_id(wm_data->world) );
+ }
+ 
+ /**************************************************************************************************/
+--- DirectFB-1.6.0/gfxdrivers/cle266/uc_primary.c.orig	2012-06-14 18:00:08.000000000 +0200
++++ DirectFB-1.6.0/gfxdrivers/cle266/uc_primary.c	2012-06-17 21:53:26.644303701 +0200
+@@ -138,7 +138,8 @@
+               CoreLayerRegionConfigFlags  updated,
+               CoreSurface                *surface,
+               CorePalette                *palette,
+-              CoreSurfaceBufferLock      *lock )
++              CoreSurfaceBufferLock      *left_lock,
++	      CoreSurfaceBufferLock      *right_lock)
+ {
+      DFBResult     ret;
+      UcDriverData *ucdrv = (UcDriverData*) driver_data;
+@@ -147,7 +148,7 @@
+      ret = ucOldPrimaryFuncs.SetRegion( layer, ucOldPrimaryDriverData,
+                                         layer_data, region_data,
+                                         config, updated, surface,
+-                                        palette, lock );
++                                        palette, left_lock, right_lock );
+      if (ret)
+           return ret;
+ 
+--- DirectFB-1.6.0/gfxdrivers/cyber5k/cyber5k.c.orig	2012-06-14 18:00:08.000000000 +0200
++++ DirectFB-1.6.0/gfxdrivers/cyber5k/cyber5k.c	2012-06-18 18:24:36.821203665 +0200
+@@ -636,7 +636,8 @@
+               CoreLayerRegionConfigFlags  updated,
+               CoreSurface                *surface,
+               CorePalette                *palette,
+-              CoreSurfaceBufferLock      *lock )
++              CoreSurfaceBufferLock      *left_lock,
++              CoreSurfaceBufferLock      *right_lock )
+ {
+      DFBResult ret;
+ 
+@@ -644,7 +645,7 @@
+      ret = oldPrimaryFuncs.SetRegion( layer, oldPrimaryDriverData,
+                                       layer_data, region_data,
+                                       config, updated, surface,
+-                                      palette, lock );
++                                      palette, left_lock, right_lock );
+      if (ret)
+           return ret;
+ 
+--- DirectFB-1.6.0/gfxdrivers/radeon/radeon_crtc1.c.orig	2012-06-14 18:00:08.000000000 +0200
++++ DirectFB-1.6.0/gfxdrivers/radeon/radeon_crtc1.c	2012-06-18 18:37:26.694504689 +0200
+@@ -147,14 +147,15 @@
+                 CoreLayerRegionConfigFlags  updated,
+                 CoreSurface                *surface,
+                 CorePalette                *palette,
+-                CoreSurfaceBufferLock      *lock )
++                CoreSurfaceBufferLock      *left_lock,
++		CoreSurfaceBufferLock      *right_lock)
+ {
+      
+      if (updated & ~CLRCF_OPTIONS) {
+           return OldPrimaryLayerFuncs.SetRegion( layer,
+                                                  OldPrimaryLayerDriverData,
+                                                  layer_data, region_data,
+-                                                 config, updated, surface, palette, lock );
++                                                 config, updated, surface, palette, left_lock, right_lock );
+      }
+ 
+      return DFB_OK;
+--- DirectFB-1.6.0/gfxdrivers/savage/savage_streams_old.c.orig	2012-06-14 18:00:08.000000000 +0200
++++ DirectFB-1.6.0/gfxdrivers/savage/savage_streams_old.c	2012-06-18 18:53:20.997797971 +0200
+@@ -343,7 +343,8 @@
+                           CoreLayerRegionConfigFlags  updated,
+                           CoreSurface                *surface,
+                           CorePalette                *palette,
+-                          CoreSurfaceBufferLock      *lock )
++                          CoreSurfaceBufferLock      *lock,
++                          CoreSurfaceBufferLock      *right_lock )
+ {
+      SavageDriverData *sdrv = (SavageDriverData*) driver_data;
+      SavageSecondaryLayerData *slay = (SavageSecondaryLayerData*) layer_data;
+@@ -443,7 +444,8 @@
+                            void                  *region_data,
+                            CoreSurface           *surface,
+                            DFBSurfaceFlipFlags    flags,
+-                           CoreSurfaceBufferLock *lock )
++                           CoreSurfaceBufferLock *lock,
++                           CoreSurfaceBufferLock *right_lock )
+ {
+      SavageDriverData *sdrv = (SavageDriverData*) driver_data;
+      SavageSecondaryLayerData *slay = (SavageSecondaryLayerData*) layer_data;
+@@ -749,7 +751,8 @@
+                         CoreLayerRegionConfigFlags  updated,
+                         CoreSurface                *surface,
+                         CorePalette                *palette,
+-                        CoreSurfaceBufferLock      *lock )
++                        CoreSurfaceBufferLock      *lock,
++                        CoreSurfaceBufferLock      *right_lock )
+ {
+      SavageDriverData *sdrv = (SavageDriverData*) driver_data;
+      SavagePrimaryLayerData *play = (SavagePrimaryLayerData*) layer_data;
+@@ -760,7 +763,7 @@
+             DFB_BYTES_PER_PIXEL(config->format) * 8);
+ 
+      ret = savage_pfuncs.SetRegion(layer, driver_data, layer_data, region_data,
+-                                   config, updated, surface, palette, lock);
++                                   config, updated, surface, palette, lock, right_lock);
+      if (ret != DFB_OK)
+           return ret;
+ 
+--- DirectFB-1.6.0/gfxdrivers/unichrome/uc_primary.c.orig	2012-06-14 18:00:08.000000000 +0200
++++ DirectFB-1.6.0/gfxdrivers/unichrome/uc_primary.c	2012-06-18 19:24:44.857718919 +0200
+@@ -135,7 +135,8 @@
+               CoreLayerRegionConfigFlags  updated,
+               CoreSurface                *surface,
+               CorePalette                *palette,
+-              CoreSurfaceBufferLock      *lock )
++              CoreSurfaceBufferLock      *left_lock,
++              CoreSurfaceBufferLock      *right_lock )
+ {
+      DFBResult     ret;
+      UcDriverData *ucdrv = (UcDriverData*) driver_data;
+@@ -144,7 +145,7 @@
+      ret = ucOldPrimaryFuncs.SetRegion( layer, ucOldPrimaryDriverData,
+                                         layer_data, region_data,
+                                         config, updated, surface,
+-                                        palette, lock );
++                                        palette, left_lock, right_lock );
+      if (ret)
+           return ret;
+ 
