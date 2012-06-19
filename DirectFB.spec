@@ -1,5 +1,5 @@
 # TODO: --enable-one when ready (there are some missing files currently)
-# --enable-pvr2d ?
+# --enable-pvr2d likewise [requires PowerVR SDK?]
 #
 # Conditional build:
 %bcond_with	multi		# build Multi-application core (requires working /dev/fusion*)
