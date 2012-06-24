@@ -1,10 +1,10 @@
-# TODO: --enable-one when ready (there are some missing files currently)
-# --enable-pvr2d likewise [requires PowerVR SDK?]
+# TODO: --enable-pvr2d when ready [requires PowerVR SDK?]
 #
 # Conditional build:
 %bcond_with	multi		# build Multi-application core (requires working /dev/fusion*)
 %bcond_with	sh772x		# SH7722/SH7723 (SH-Mobile) graphics driver
 %bcond_without	static_libs	# don't build static libraries
+%bcond_without	one		# Linux One IPC library
 #
 %ifarch sh4
 %define		with_sh772x	1
@@ -28,6 +28,7 @@ Patch3:		%{name}-gcc4.patch
 Patch4:		%{name}-llh-ppc.patch
 Patch5:		%{name}-zlib.patch
 Patch6:		%{name}-update.patch
+Patch7:		%{name}-external-one.patch
 URL:		http://www.directfb.org/
 BuildRequires:	Mesa-libEGL-devel
 BuildRequires:	Mesa-libGLES-devel
@@ -51,6 +52,7 @@ BuildRequires:	libvdpau-devel
 BuildRequires:	libvncserver-devel
 %{?with_multi:BuildRequires:	linux-fusion-devel >= 8.7}
 %{?with_multi:BuildRequires:	linux-fusion-devel < 9}
+%{?with_one:BuildRequires:	linux-one-devel >= %{version}}
 BuildRequires:	pkgconfig
 BuildRequires:	sed >= 4.0
 BuildRequires:	sysfsutils-devel >= 1.3.0-3
@@ -92,6 +94,7 @@ Summary:	DirectFB - development package
 Summary(pl.UTF-8):	DirectFB - pliki nagłówkowe
 Group:		Development/Libraries
 Requires:	%{name} = %{epoch}:%{version}-%{release}
+%{?with_one:Requires:	linux-one-devel >= %{version}}
 Requires:	zlib-devel >= 1.1.3
 
 %description devel
@@ -414,6 +417,7 @@ Ten pakiet zawiera wtyczkę dla DirectFB, dostarczającą animacje MNG.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
 
 # video drivers
 %{__sed} -i -e 's/checkfor_\(cle266\|cyber5k\|radeon\|savage\|unichrome\|vmware\)=no/checkfor_\1=yes/' configure.in
@@ -433,6 +437,7 @@ Ten pakiet zawiera wtyczkę dla DirectFB, dostarczającą animacje MNG.
 	--disable-silent-rules \
 	--enable-fast-install \
 	%{?with_multi:--enable-multi} \
+	%{?with_one:--enable-one} \
 	--enable-sdl \
 	--enable-shared \
 	--enable-static \
@@ -501,6 +506,10 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %ghost %{_libdir}/libdirectfb-1.6.so.0
 %attr(755,root,root) %{_libdir}/libfusion-1.6.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libfusion-1.6.so.0
+%if %{with one}
+%attr(755,root,root) %{_libdir}/libone-1.6.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libone-1.6.so.0
+%endif
 %attr(755,root,root) %{_libdir}/libuniquewm-1.6.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libuniquewm-1.6.so.0
 %attr(755,root,root) %{_libdir}/libvoodoo-1.6.so.*.*.*
@@ -600,11 +609,13 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libdirect.so
 %attr(755,root,root) %{_libdir}/libdirectfb.so
 %attr(755,root,root) %{_libdir}/libfusion.so
+%{?with_one:%attr(755,root,root) %{_libdir}/libone.so}
 %attr(755,root,root) %{_libdir}/libuniquewm.so
 %attr(755,root,root) %{_libdir}/libvoodoo.so
 %{_libdir}/libdirect.la
 %{_libdir}/libdirectfb.la
 %{_libdir}/libfusion.la
+%{?with_one:%{_libdir}/libone.la}
 %{_libdir}/libuniquewm.la
 %{_libdir}/libvoodoo.la
 %{_includedir}/directfb
@@ -613,6 +624,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_pkgconfigdir}/directfb-internal.pc
 %{_pkgconfigdir}/directfb.pc
 %{_pkgconfigdir}/fusion.pc
+%{?with_one:%{_pkgconfigdir}/one.pc}
 %{_pkgconfigdir}/voodoo.pc
 %{_mandir}/man1/directfb-csource.1*
 
@@ -622,6 +634,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libdirect.a
 %{_libdir}/libdirectfb.a
 %{_libdir}/libfusion.a
+%{?with_one:%{_libdir}/libone.a}
 %{_libdir}/libuniquewm.a
 %{_libdir}/libvoodoo.a
 %{dfbdir}/gfxdrivers/*.[alo]*
