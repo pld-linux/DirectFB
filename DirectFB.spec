@@ -12,13 +12,13 @@
 Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl.UTF-8):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
-Version:	1.6.0
+Version:	1.6.1
 Release:	1
 Epoch:		1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://www.directfb.org/downloads/Core/DirectFB-1.6/%{name}-%{version}.tar.gz
-# Source0-md5:	9a0524f9a23627b1eaf421555921b08a
+# Source0-md5:	76d3066e75664aa79204af545f2f3c65
 Source1:	http://www.directfb.org/downloads/Extras/DFBTutorials-0.5.0.tar.gz
 # Source1-md5:	13e443a64bddd68835b574045d9025e9
 Patch0:		%{name}-am.patch
@@ -52,7 +52,7 @@ BuildRequires:	libvdpau-devel
 BuildRequires:	libvncserver-devel
 %{?with_multi:BuildRequires:	linux-fusion-devel >= 8.7}
 %{?with_multi:BuildRequires:	linux-fusion-devel < 9}
-%{?with_one:BuildRequires:	linux-one-devel >= %{version}}
+%{?with_one:BuildRequires:	linux-one-devel >= 1.6.0}
 BuildRequires:	pkgconfig
 BuildRequires:	sed >= 4.0
 BuildRequires:	sysfsutils-devel >= 1.3.0-3
@@ -94,7 +94,7 @@ Summary:	DirectFB - development package
 Summary(pl.UTF-8):	DirectFB - pliki nagłówkowe
 Group:		Development/Libraries
 Requires:	%{name} = %{epoch}:%{version}-%{release}
-%{?with_one:Requires:	linux-one-devel >= %{version}}
+%{?with_one:Requires:	linux-one-devel >= 1.6.0}
 Requires:	zlib-devel >= 1.1.3
 
 %description devel
