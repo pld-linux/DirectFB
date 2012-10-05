@@ -12,13 +12,13 @@
 Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl.UTF-8):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
-Version:	1.6.1
+Version:	1.6.2
 Release:	1
 Epoch:		1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://www.directfb.org/downloads/Core/DirectFB-1.6/%{name}-%{version}.tar.gz
-# Source0-md5:	76d3066e75664aa79204af545f2f3c65
+# Source0-md5:	6bebdbf26f03f7114ae17ab86d4d1d27
 Source1:	http://www.directfb.org/downloads/Extras/DFBTutorials-0.5.0.tar.gz
 # Source1-md5:	13e443a64bddd68835b574045d9025e9
 Patch0:		%{name}-am.patch
