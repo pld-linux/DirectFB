@@ -1,9 +1,0 @@
---- DirectFB-1.6.0/lib/One/Makefile.am.orig	2012-06-14 18:00:08.000000000 +0200
-+++ DirectFB-1.6.0/lib/One/Makefile.am	2012-06-23 22:09:55.949173666 +0200
-@@ -1,6 +1,5 @@
- ## Makefile.am for DirectFB/lib/One
- 
--SUBDIRS = linux-one
- 
- INCLUDES = \
- 	-I$(top_builddir)/include	\

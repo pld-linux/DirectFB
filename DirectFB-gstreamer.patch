@@ -1,0 +1,10 @@
+--- DirectFB-1.6.3/interfaces/IDirectFBVideoProvider/idirectfbvideoprovider_gstreamer.c.orig	2013-01-18 15:57:11.000000000 +0100
++++ DirectFB-1.6.3/interfaces/IDirectFBVideoProvider/idirectfbvideoprovider_gstreamer.c	2013-01-19 15:29:38.621172839 +0100
+@@ -1226,7 +1226,6 @@
+      thiz->GetSurfaceDescription = IDirectFBVideoProvider_GSTREAMER_GetSurfaceDescription;
+      thiz->GetStreamDescription  = IDirectFBVideoProvider_GSTREAMER_GetStreamDescription;
+      thiz->PlayTo                = IDirectFBVideoProvider_GSTREAMER_PlayTo;
+-     thiz->SetDestination        = IDirectFBVideoProvider_GSTREAMER_SetDestination;
+      thiz->Stop                  = IDirectFBVideoProvider_GSTREAMER_Stop;
+      thiz->GetStatus             = IDirectFBVideoProvider_GSTREAMER_GetStatus;
+      thiz->SeekTo                = IDirectFBVideoProvider_GSTREAMER_SeekTo;

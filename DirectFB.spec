@@ -5,6 +5,7 @@
 %bcond_with	sh772x		# SH7722/SH7723 (SH-Mobile) graphics driver
 %bcond_without	static_libs	# don't build static libraries
 %bcond_without	one		# Linux One IPC library
+%bcond_without	gstreamer	# GStreamer video provider
 #
 %ifarch sh4
 %define		with_sh772x	1
@@ -12,24 +13,24 @@
 Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl.UTF-8):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
-Version:	1.6.2
+Version:	1.6.3
 Release:	1
 Epoch:		1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://www.directfb.org/downloads/Core/DirectFB-1.6/%{name}-%{version}.tar.gz
-# Source0-md5:	6bebdbf26f03f7114ae17ab86d4d1d27
+# Source0-md5:	641e8e999c017770da647f9b5b890906
 Source1:	http://www.directfb.org/downloads/Extras/DFBTutorials-0.5.0.tar.gz
 # Source1-md5:	13e443a64bddd68835b574045d9025e9
 Patch0:		%{name}-am.patch
 Patch1:		%{name}-pmake.patch
 Patch2:		%{name}-fix.patch
-Patch3:		%{name}-gcc4.patch
-Patch4:		%{name}-llh-ppc.patch
-Patch5:		%{name}-zlib.patch
-Patch6:		%{name}-update.patch
-Patch7:		%{name}-external-one.patch
+Patch3:		%{name}-llh-ppc.patch
+Patch4:		%{name}-zlib.patch
+Patch5:		%{name}-update.patch
+Patch6:		%{name}-gstreamer.patch
 URL:		http://www.directfb.org/
+%{?with_gstreamer:BuildRequires:	FusionSound-devel >= 1.1.0}
 BuildRequires:	Mesa-libEGL-devel
 BuildRequires:	Mesa-libGLES-devel
 BuildRequires:	Mesa-libgbm-devel
@@ -39,6 +40,7 @@ BuildRequires:	SDL-devel
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
 BuildRequires:	freetype-devel >= 2.0.2
+%{?with_gstreamer:BuildRequires:	gstreamer-plugins-base-devel >= 1.0}
 BuildRequires:	imlib2-devel
 BuildRequires:	jasper-devel
 BuildRequires:	libdrm-devel
@@ -50,8 +52,8 @@ BuildRequires:	libsvg-cairo-devel >= 0.1.6
 BuildRequires:	libtool
 BuildRequires:	libvdpau-devel
 BuildRequires:	libvncserver-devel
-%{?with_multi:BuildRequires:	linux-fusion-devel >= 8.7}
-%{?with_multi:BuildRequires:	linux-fusion-devel < 9}
+%{?with_multi:BuildRequires:	linux-fusion-devel >= 8.11}
+#{?with_multi:BuildRequires:	linux-fusion-devel < 9}
 %{?with_one:BuildRequires:	linux-one-devel >= 1.6.0}
 BuildRequires:	pkgconfig
 BuildRequires:	sed >= 4.0
@@ -396,6 +398,19 @@ library.
 Ten pakiet zawiera wtyczkę dla DirectFB, opartą na bibliotece Cairo,
 dostarczającą grafikę SVG.
 
+%package video-gstreamer
+Summary:	GStreamer video provider for DirectFB
+Summary(pl.UTF-8):	DirectFB - wtyczka dostarczająca obraz z GStreamera
+Group:		Libraries
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+
+%description video-gstreamer
+This package contains GStreamer video provider for DirectFB.
+
+%description video-gstreamer -l pl.UTF-8
+Ten pakiet zawiera wtyczkę dla DirectFB, dostarczającą obraz z
+GStreamera.
+
 %package video-mng
 Summary:	MNG video provider for DirectFB
 Summary(pl.UTF-8):	DirectFB - wtyczka dostarczająca animacje MNG
@@ -417,7 +432,6 @@ Ten pakiet zawiera wtyczkę dla DirectFB, dostarczającą animacje MNG.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
-%patch7 -p1
 
 # video drivers
 %{__sed} -i -e 's/checkfor_\(cle266\|cyber5k\|radeon\|savage\|unichrome\|vmware\)=no/checkfor_\1=yes/' configure.in
@@ -436,6 +450,7 @@ Ten pakiet zawiera wtyczkę dla DirectFB, dostarczającą animacje MNG.
 	--disable-maintainer-mode \
 	--disable-silent-rules \
 	--enable-fast-install \
+	%{?with_gstreamer:--enable-gstreamer} \
 	%{?with_multi:--enable-multi} \
 	%{?with_one:--enable-one} \
 	--enable-sdl \
@@ -482,6 +497,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc AUTHORS ChangeLog NEWS README TODO
 %attr(755,root,root) %{_bindir}/dfbdump
+%attr(755,root,root) %{_bindir}/dfbdumpinput
 %attr(755,root,root) %{_bindir}/dfbfx
 %attr(755,root,root) %{_bindir}/dfbg
 %attr(755,root,root) %{_bindir}/dfbinfo
@@ -732,6 +748,10 @@ rm -rf $RPM_BUILD_ROOT
 %files image-svg
 %defattr(644,root,root,755)
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_svg.so
+   
+%files video-gstreamer
+%defattr(644,root,root,755)
+%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBVideoProvider/libidirectfbvideoprovider_gstreamer.so
 
 %files video-mng
 %defattr(644,root,root,755)
