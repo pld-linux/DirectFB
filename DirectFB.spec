@@ -749,9 +749,11 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_svg.so
    
+%if %{with gstreamer}
 %files video-gstreamer
 %defattr(644,root,root,755)
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBVideoProvider/libidirectfbvideoprovider_gstreamer.so
+%endif
 
 %files video-mng
 %defattr(644,root,root,755)
