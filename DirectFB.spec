@@ -13,13 +13,13 @@
 Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl.UTF-8):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
-Version:	1.6.3
-Release:	2
+Version:	1.7.0
+Release:	1
 Epoch:		1
 License:	LGPL v2+
 Group:		Libraries
-Source0:	http://www.directfb.org/downloads/Core/DirectFB-1.6/%{name}-%{version}.tar.gz
-# Source0-md5:	641e8e999c017770da647f9b5b890906
+Source0:	http://www.directfb.org/downloads/Core/DirectFB-1.7/%{name}-%{version}.tar.gz
+# Source0-md5:	258d3a5fda5d9af16c5cbdca671638e5
 Source1:	http://www.directfb.org/downloads/Extras/DFBTutorials-0.5.0.tar.gz
 # Source1-md5:	13e443a64bddd68835b574045d9025e9
 Patch0:		%{name}-am.patch
@@ -29,6 +29,7 @@ Patch3:		%{name}-llh-ppc.patch
 Patch4:		%{name}-zlib.patch
 Patch5:		%{name}-update.patch
 Patch6:		%{name}-gstreamer.patch
+Patch7:		%{name}-sh.patch
 URL:		http://www.directfb.org/
 %{?with_gstreamer:BuildRequires:	FusionSound-devel >= 1.1.0}
 BuildRequires:	Mesa-libEGL-devel
@@ -49,12 +50,13 @@ BuildRequires:	libmng-devel
 BuildRequires:	libpng-devel >= 2:1.4.0
 BuildRequires:	libstdc++-devel
 BuildRequires:	libsvg-cairo-devel >= 0.1.6
+BuildRequires:	libtiff-devel >= 4
 BuildRequires:	libtool
 BuildRequires:	libvdpau-devel
 BuildRequires:	libvncserver-devel
-%{?with_multi:BuildRequires:	linux-fusion-devel >= 8.11}
-#{?with_multi:BuildRequires:	linux-fusion-devel < 9}
-%{?with_one:BuildRequires:	linux-one-devel >= 1.6.0}
+BuildRequires:	libwebp-devel >= 0.2.1
+%{?with_multi:BuildRequires:	linux-fusion-devel >= 9.0.1}
+%{?with_one:BuildRequires:	linux-one-devel >= 9.0.1}
 BuildRequires:	pkgconfig
 BuildRequires:	sed >= 4.0
 BuildRequires:	sysfsutils-devel >= 1.3.0-3
@@ -76,7 +78,7 @@ Obsoletes:	DirectFB-input-ucb1x00
 %endif
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		dfbdir	%{_libdir}/directfb-1.6-0
+%define		dfbdir	%{_libdir}/directfb-1.7-0
 
 %define		specflags	-fno-strict-aliasing
 
@@ -96,7 +98,7 @@ Summary:	DirectFB - development package
 Summary(pl.UTF-8):	DirectFB - pliki nagłówkowe
 Group:		Development/Libraries
 Requires:	%{name} = %{epoch}:%{version}-%{release}
-%{?with_one:Requires:	linux-one-devel >= 1.6.0}
+%{?with_one:Requires:	linux-one-devel >= 1.7.0}
 Requires:	zlib-devel >= 1.1.3
 
 %description devel
@@ -127,6 +129,18 @@ DirectFB documentation and tutorials.
 
 %description doc -l pl.UTF-8
 Dokumentacja dla systemu DirectFB wraz z wprowadzeniem.
+
+%package core-drmkms
+Summary:	DRM/KMS core system for DirectFB
+Summary(pl.UTF-8):	System DRM/KMS dla DirectFB
+Group:		Libraries
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+
+%description core-drmkms
+This package contains DRM/KMS core system module for DirectFB.
+
+%description core-drmkms -l pl.UTF-8
+Ten pakiet zawiera moduł systemu DRM/KMS dla DirectFB.
 
 %package core-mesa
 Summary:	Mesa/GLESv2 core system for DirectFB
@@ -398,6 +412,32 @@ library.
 Ten pakiet zawiera wtyczkę dla DirectFB, opartą na bibliotece Cairo,
 dostarczającą grafikę SVG.
 
+%package image-tiff
+Summary:	TIFF image provider for DirectFB
+Summary(pl.UTF-8):	DirectFB - wtyczka dostarczająca grafikę TIFF
+Group:		Libraries
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires:	libtiff >= 4
+
+%description image-tiff
+This package contains TIFF image provider for DirectFB.
+
+%description image-tiff -l pl.UTF-8
+Ten pakiet zawiera wtyczkę dla DirectFB dostarczającą grafikę TIFF.
+
+%package image-webp
+Summary:	WebP image provider for DirectFB
+Summary(pl.UTF-8):	DirectFB - wtyczka dostarczająca grafikę WebP
+Group:		Libraries
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires:	libwebp >= 0.2.1
+
+%description image-webp
+This package contains WebP image provider for DirectFB.
+
+%description image-webp -l pl.UTF-8
+Ten pakiet zawiera wtyczkę dla DirectFB dostarczającą grafikę WebP.
+
 %package video-gstreamer
 Summary:	GStreamer video provider for DirectFB
 Summary(pl.UTF-8):	DirectFB - wtyczka dostarczająca obraz z GStreamera
@@ -423,6 +463,47 @@ This package contains MNG video provider for DirectFB.
 %description video-mng -l pl.UTF-8
 Ten pakiet zawiera wtyczkę dla DirectFB, dostarczającą animacje MNG.
 
+%package c++
+Summary:	++DFB - advanced C++ binding for DirectFB
+Summary(pl.UTF-8):	++DFB - zaawansowane wiązania C++ do DirectFB
+Group:		Libraries
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+# (probably) can't Obsolete ++DFB
+Obsoletes:	__DFB
+
+%description c++
+++DFB - advanced C++ binding for DirectFB.
+
+%description c++ -l pl.UTF-8
+++DFB - zaawansowane wiązania C++ do DirectFB.
+
+%package c++-devel
+Summary:	Header files for ++DFB
+Summary(pl.UTF-8):	Pliki nagłówkowe ++DFB
+Group:		Development/Libraries
+Requires:	%{name}-c++ = %{epoch}:%{version}-%{release}
+Requires:	%{name}-devel = %{epoch}:%{version}-%{release}
+Obsoletes:	__DFB-devel
+
+%description c++-devel
+Header files for ++DFB.
+
+%description c++-devel -l pl.UTF-8
+Pliki nagłówkowe ++DFB.
+
+%package c++-static
+Summary:	Static ++DFB library
+Summary(pl.UTF-8):	Statyczna biblioteka ++DFB
+Group:		Development/Libraries
+Requires:	%{name}-c++-devel = %{epoch}:%{version}-%{release}
+Obsoletes:	__DFB-static
+
+%description c++-static
+Static ++DFB library.
+
+%description c++-static -l pl.UTF-8
+Statyczna biblioteka ++DFB.
+
 %prep
 %setup -q -a1
 %patch0 -p1
@@ -432,6 +513,7 @@ Ten pakiet zawiera wtyczkę dla DirectFB, dostarczającą animacje MNG.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
 
 # video drivers
 %{__sed} -i -e 's/checkfor_\(cle266\|cyber5k\|radeon\|savage\|unichrome\|vmware\)=no/checkfor_\1=yes/' configure.in
@@ -451,11 +533,14 @@ Ten pakiet zawiera wtyczkę dla DirectFB, dostarczającą animacje MNG.
 	--disable-silent-rules \
 	--enable-fast-install \
 	%{?with_gstreamer:--enable-gstreamer} \
+	--enable-imlib2 \
+	--enable-mng \
 	%{?with_multi:--enable-multi} \
 	%{?with_one:--enable-one} \
 	--enable-sdl \
 	--enable-shared \
 	--enable-static \
+	--enable-svg \
 	--enable-unique \
 	--enable-video4linux2 \
 	--enable-voodoo \
@@ -516,20 +601,20 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/voodooplay
 %attr(755,root,root) %{_bindir}/voodooplay_client
 %attr(755,root,root) %{_bindir}/voodooplay_server
-%attr(755,root,root) %{_libdir}/libdirect-1.6.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libdirect-1.6.so.0
-%attr(755,root,root) %{_libdir}/libdirectfb-1.6.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libdirectfb-1.6.so.0
-%attr(755,root,root) %{_libdir}/libfusion-1.6.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libfusion-1.6.so.0
+%attr(755,root,root) %{_libdir}/libdirect-1.7.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libdirect-1.7.so.0
+%attr(755,root,root) %{_libdir}/libdirectfb-1.7.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libdirectfb-1.7.so.0
+%attr(755,root,root) %{_libdir}/libfusion-1.7.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libfusion-1.7.so.0
 %if %{with one}
-%attr(755,root,root) %{_libdir}/libone-1.6.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libone-1.6.so.0
+%attr(755,root,root) %{_libdir}/libone-1.7.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libone-1.7.so.0
 %endif
-%attr(755,root,root) %{_libdir}/libuniquewm-1.6.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libuniquewm-1.6.so.0
-%attr(755,root,root) %{_libdir}/libvoodoo-1.6.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libvoodoo-1.6.so.0
+%attr(755,root,root) %{_libdir}/libuniquewm-1.7.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libuniquewm-1.7.so.0
+%attr(755,root,root) %{_libdir}/libvoodoo-1.7.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libvoodoo-1.7.so.0
 %dir %{dfbdir}
 %dir %{dfbdir}/gfxdrivers
 %attr(755,root,root) %{dfbdir}/gfxdrivers/libdirectfb_ati128.so
@@ -634,6 +719,7 @@ rm -rf $RPM_BUILD_ROOT
 %{?with_one:%{_libdir}/libone.la}
 %{_libdir}/libuniquewm.la
 %{_libdir}/libvoodoo.la
+%{_includedir}/One
 %{_includedir}/directfb
 %{_includedir}/directfb-internal
 %{_pkgconfigdir}/direct.pc
@@ -664,6 +750,10 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc docs/html/*.{html,png}
 %{_examplesdir}/%{name}-%{version}
+
+%files core-drmkms
+%defattr(644,root,root,755)
+%attr(755,root,root) %{dfbdir}/systems/libdirectfb_drmkms_system.so
 
 %files core-mesa
 %defattr(644,root,root,755)
@@ -749,6 +839,14 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_svg.so
    
+%files image-tiff
+%defattr(644,root,root,755)
+%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_tiff.so
+
+%files image-webp
+%defattr(644,root,root,755)
+%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_webp.so
+
 %if %{with gstreamer}
 %files video-gstreamer
 %defattr(644,root,root,755)
@@ -758,3 +856,24 @@ rm -rf $RPM_BUILD_ROOT
 %files video-mng
 %defattr(644,root,root,755)
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBVideoProvider/libidirectfbvideoprovider_mng.so
+
+%files c++
+%defattr(644,root,root,755)
+# ++DFB based utilities
+%attr(755,root,root) %{_bindir}/dfbplay
+%attr(755,root,root) %{_bindir}/dfbshow
+%attr(755,root,root) %{_bindir}/dfbswitch
+# library itself
+%attr(755,root,root) %{_libdir}/lib++dfb-1.7.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/lib++dfb-1.7.so.0
+
+%files c++-devel
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/lib++dfb.so
+%{_libdir}/lib++dfb.la
+%{_includedir}/++dfb
+%{_pkgconfigdir}/++dfb.pc
+
+%files c++-static
+%defattr(644,root,root,755)
+%{_libdir}/lib++dfb.a

@@ -1,0 +1,11 @@
+--- DirectFB-1.7.0/configure.in.orig	2013-07-14 10:21:27.480563893 +0200
++++ DirectFB-1.7.0/configure.in	2013-07-14 10:26:23.783884792 +0200
+@@ -2689,7 +2689,7 @@
+ AM_CONDITIONAL(CROSS_COMPILING, test "$cross_compiling" = "yes")
+ 
+ CFLAGS="$CFLAGS $DFB_INTERNAL_CFLAGS"
+-CXXFLAGS="$CXXFLAGS ${CFLAGS//-Werror-implicit-function-declaration/}"
++CXXFLAGS="$CXXFLAGS $CFLAGS"
+ DFB_LDFLAGS="$LDFLAGS $ZLIB_LIBS"
+ 
+ CFLAGS="$CFLAGS $CFLAGS_STD"
