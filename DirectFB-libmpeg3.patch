@@ -1,0 +1,40 @@
+--- DirectFB-extra-1.0.0.orig/interfaces/IDirectFBVideoProvider/idirectfbvideoprovider_libmpeg3.c	2006-11-23 00:42:47.000000000 +0100
++++ DirectFB-extra-1.0.0/interfaces/IDirectFBVideoProvider/idirectfbvideoprovider_libmpeg3.c	2007-03-09 10:40:28.000000000 +0100
+@@ -1051,6 +1051,7 @@
+ {
+      mpeg3_t *q;
+      char    *filename;
++     int     error_code;
+      
+      if (!ctx->filename)
+           return DFB_UNSUPPORTED;
+@@ -1062,8 +1063,9 @@
+           return DFB_UNSUPPORTED;
+      }
+ 
+-     q = mpeg3_open( filename );
+-     if (!q) {
++     q = mpeg3_open( filename, &error_code );
++     if (!q || error_code) {
++          D_ERROR( "Libmpeg3 Provider: Error opening video file!\n" );
+           D_FREE( filename );
+           return DFB_UNSUPPORTED;
+      }
+@@ -1084,7 +1086,7 @@
+ static DFBResult
+ Construct( IDirectFBVideoProvider *thiz, IDirectFBDataBuffer *buffer )
+ {
+-     int i;
++     int i, error_code;
+      IDirectFBDataBuffer_data *buffer_data;
+ 
+      DIRECT_ALLOCATE_INTERFACE_DATA(thiz, IDirectFBVideoProvider_Libmpeg3)
+@@ -1103,7 +1105,7 @@
+ 
+ 
+      /* open mpeg3 file */
+-     data->file          = mpeg3_open( data->filename );
++     data->file          = mpeg3_open( data->filename, &error_code );
+ 
+      /* fetch information about video */
+      data->video.width   = mpeg3_video_width( data->file, 0 );
