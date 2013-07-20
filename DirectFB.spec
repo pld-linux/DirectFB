@@ -1118,7 +1118,8 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{dfbdir}/systems/libdirectfb_dummy.so
 %attr(755,root,root) %{dfbdir}/systems/libdirectfb_fbdev.so
 %dir %{dfbdir}/wm
-%attr(755,root,root) %{dfbdir}/wm/lib*.so
+%attr(755,root,root) %{dfbdir}/wm/libdirectfbwm_default.so
+%attr(755,root,root) %{dfbdir}/wm/libdirectfbwm_unique.so
 %{_datadir}/directfb-%{version}
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/directfbrc
 %{_mandir}/man1/dfbg.1*
@@ -1164,7 +1165,8 @@ rm -rf $RPM_BUILD_ROOT
 %{dfbdir}/inputdrivers/*.[alo]*
 %{dfbdir}/interfaces/*/*.[alo]*
 %{dfbdir}/systems/*.[alo]*
-%{dfbdir}/wm/*.[alo]*
+%{dfbdir}/wm/libdirectfbwm_default.[alo]*
+%{dfbdir}/wm/libdirectfbwm_unique.[alo]*
 %endif
 
 %files doc
@@ -1477,3 +1479,4 @@ rm -rf $RPM_BUILD_ROOT
 %files -n SaWMan-static
 %defattr(644,root,root,755)
 %{_libdir}/libsawman.a
+%{dfbdir}/wm/libdirectfbwm_sawman.[alo]*
