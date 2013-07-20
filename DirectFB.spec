@@ -625,6 +625,7 @@ Group:		Development/Libraries
 URL:		http://www.directfb.org/index.php?path=Projects%2F%2B%2BDFB
 Requires:	%{name}-c++ = %{epoch}:%{version}-%{release}
 Requires:	%{name}-devel = %{epoch}:%{version}-%{release}
+Requires:	libstdc++-devel
 Obsoletes:	__DFB-devel
 
 %description c++-devel
