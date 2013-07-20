@@ -6,7 +6,7 @@
 %bcond_without	one		# Linux One IPC library
 %bcond_without	static_libs	# don't build static libraries
 %bcond_with	sh772x		# SH7722/SH7723 (SH-Mobile) graphics driver
-%bcond_with	avifile		# AviFile video provider
+%bcond_with	avifile		# AviFile video provider [not updated for DirectFB 1.7.0]
 %bcond_without	ffmpeg		# FFmpeg music and video providers
 %bcond_with	flash		# FLASH video provider [not updated for DirectFB 1.7.0]
 %bcond_without	gstreamer	# GStreamer video provider
@@ -466,18 +466,18 @@ This package contains WebP image provider for DirectFB.
 %description image-webp -l pl.UTF-8
 Ten pakiet zawiera wtyczkę dla DirectFB dostarczającą grafikę WebP.
 
-%package video-gstreamer
-Summary:	GStreamer video provider for DirectFB
-Summary(pl.UTF-8):	DirectFB - wtyczka dostarczająca obraz z GStreamera
+%package video-avifile
+Summary:	Avifile video provider for DirectFB
+Summary(pl.UTF-8):	DirectFB - wtyczka dostarczająca obraz Avifile 
 Group:		Libraries
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 
-%description video-gstreamer
-This package contains GStreamer video provider for DirectFB.
+%description video-avifile
+DirectFB video provider using Avifile codecs.
 
-%description video-gstreamer -l pl.UTF-8
-Ten pakiet zawiera wtyczkę dla DirectFB, dostarczającą obraz z
-GStreamera.
+%description video-avifile -l pl.UTF-8
+Ten pakiet zawiera wtyczkę dla DirectFB dostarczajacą obraz przy
+użyciu kodeków Avifile.
 
 %package video-ffmpeg
 Summary:	FFmpeg video provider for DirectFB
@@ -491,6 +491,19 @@ DirectFB video provider using FFmpeg codecs.
 %description video-ffmpeg -l pl.UTF-8
 Ten pakiet zawiera wtyczkę dla DirectFB dostarczajacą obraz przy
 użyciu kodeków FFmpeg.
+
+%package video-gstreamer
+Summary:	GStreamer video provider for DirectFB
+Summary(pl.UTF-8):	DirectFB - wtyczka dostarczająca obraz z GStreamera
+Group:		Libraries
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+
+%description video-gstreamer
+This package contains GStreamer video provider for DirectFB.
+
+%description video-gstreamer -l pl.UTF-8
+Ten pakiet zawiera wtyczkę dla DirectFB, dostarczającą obraz z
+GStreamera.
 
 %package video-libmpeg3
 Summary:	MPEG video provider for DirectFB
@@ -1254,6 +1267,12 @@ rm -rf $RPM_BUILD_ROOT
 %files image-webp
 %defattr(644,root,root,755)
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_webp.so
+
+%if %{with avifile}
+%files video-avifile
+%defattr(644,root,root,755)
+%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBVideoProvider/libidirectfbvideoprovider_avifile.so
+%endif
 
 %if %{with ffmpeg}
 %files video-ffmpeg
