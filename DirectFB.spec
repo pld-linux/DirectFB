@@ -14,7 +14,7 @@
 %bcond_without	quicktime	# QuickTime (openquicktime) video provider
 %bcond_with	swfdec		# swfdec FLASH video provider [not ready for swfdec >= 0.6]
 %bcond_without	xine		# Xine video provider
-%bcond_with	xine_vdpau	# Xine/VDPAU video provider
+%bcond_without	xine_vdpau	# Xine/VDPAU video provider
 #
 %ifarch sh4
 %define		with_sh772x	1
@@ -26,7 +26,7 @@ Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl.UTF-8):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
 Version:	1.7.0
-Release:	2
+Release:	3
 Epoch:		1
 License:	LGPL v2+
 Group:		Libraries
@@ -88,7 +88,7 @@ BuildRequires:	sed >= 4.0
 %{?with_swfdec:BuildRequires:	swfdec-devel < 0.6.0}
 BuildRequires:	sysfsutils-devel >= 1.3.0-3
 BuildRequires:	tslib-devel >= 1.0
-%{?with_xine:BuildRequires:	xine-lib-devel >= 2:1.2.0}
+%{?with_xine:BuildRequires:	xine-lib-devel >= 2:1.2.3}
 %{?with_xine_vdpau:BuildRequires:	/usr/include/xine/video_out_vdpau.h}
 BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	xorg-lib-libXext-devel
