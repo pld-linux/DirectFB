@@ -19,6 +19,9 @@
 %ifarch sh4
 %define		with_sh772x	1
 %endif
+%if %{without xine}
+%undefine	xine_vdpau
+%endif
 Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl.UTF-8):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
@@ -42,6 +45,7 @@ Patch7:		%{name}-sh.patch
 Patch8:		%{name}-missing.patch
 Patch9:		%{name}-ffmpeg.patch
 Patch10:	%{name}-libmpeg3.patch
+Patch11:	%{name}-format.patch
 URL:		http://www.directfb.org/
 BuildRequires:	Mesa-libEGL-devel
 BuildRequires:	Mesa-libGLES-devel
@@ -918,6 +922,7 @@ Statyczna biblioteka sawman.
 %patch8 -p1
 %patch9 -p1
 %patch10 -p1
+%patch11 -p1
 
 # video drivers
 %{__sed} -i -e 's/checkfor_\(cle266\|cyber5k\|radeon\|savage\|unichrome\|vmware\)=no/checkfor_\1=yes/' configure.in
@@ -1321,6 +1326,9 @@ rm -rf $RPM_BUILD_ROOT
 %files video-xine
 %defattr(644,root,root,755)
 %attr(755,root,root) %{dfbdir}/interfaces/IDirectFBVideoProvider/libidirectfbvideoprovider_xine.so
+%if %{with xine_vdpau}
+%attr(755,root,root) %{dfbdir}/interfaces/IDirectFBVideoProvider/libidirectfbvideoprovider_xine_vdpau.so
+%endif
 
 %files -n xine-output-video-dfb
 %defattr(644,root,root,755)

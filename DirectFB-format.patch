@@ -1,0 +1,65 @@
+--- DirectFB-1.7.0/interfaces/IDirectFBVideoProvider/idirectfbvideoprovider_openquicktime.c.orig	2013-07-09 00:23:17.000000000 +0200
++++ DirectFB-1.7.0/interfaces/IDirectFBVideoProvider/idirectfbvideoprovider_openquicktime.c	2013-07-21 08:45:13.711671545 +0200
+@@ -253,7 +253,7 @@
+           desc->caps |= DVSCAPS_VIDEO;
+      
+           snprintf( desc->video.encoding,
+-                    DFB_STREAM_DESC_ENCODING_LENGTH,
++                    DFB_STREAM_DESC_ENCODING_LENGTH, "%s",
+                     quicktime_video_compressor( data->file, 0 ) ? : "" );
+           desc->video.framerate = quicktime_frame_rate( data->file, 0 );
+           desc->video.aspect    = (double) quicktime_video_width( data->file, 0 ) /
+@@ -265,7 +265,7 @@
+           desc->caps |= DVSCAPS_AUDIO;
+ 
+           snprintf( desc->audio.encoding,
+-                    DFB_STREAM_DESC_ENCODING_LENGTH,
++                    DFB_STREAM_DESC_ENCODING_LENGTH, "%s",
+                     quicktime_audio_compressor( data->file, 0 ) ? : "" );
+           desc->audio.samplerate = quicktime_sample_rate( data->file, 0 );
+           desc->audio.channels   = quicktime_track_channels( data->file, 0 );
+--- DirectFB-1.7.0/interfaces/IDirectFBVideoProvider/idirectfbvideoprovider_xine.c.orig	2013-01-12 06:06:23.000000000 +0100
++++ DirectFB-1.7.0/interfaces/IDirectFBVideoProvider/idirectfbvideoprovider_xine.c	2013-07-21 08:48:00.479143131 +0200
+@@ -428,7 +428,7 @@
+           desc->caps |= DVSCAPS_VIDEO;
+      
+           snprintf( desc->video.encoding,
+-                    DFB_STREAM_DESC_ENCODING_LENGTH,
++                    DFB_STREAM_DESC_ENCODING_LENGTH, "%s",
+                     xine_get_meta_info( data->stream, XINE_META_INFO_VIDEOCODEC ) ?:"" );
+           desc->video.framerate = xine_get_stream_info( data->stream, 
+                                                         XINE_STREAM_INFO_FRAME_DURATION );
+@@ -444,7 +444,7 @@
+           desc->caps |= DVSCAPS_AUDIO;
+ 
+           snprintf( desc->audio.encoding,
+-                    DFB_STREAM_DESC_ENCODING_LENGTH,
++                    DFB_STREAM_DESC_ENCODING_LENGTH, "%s",
+                     xine_get_meta_info( data->stream, XINE_META_INFO_AUDIOCODEC ) ?:"" );
+           desc->audio.samplerate = xine_get_stream_info( data->stream,
+                                                          XINE_STREAM_INFO_AUDIO_SAMPLERATE );
+@@ -455,19 +455,19 @@
+      }
+                
+      snprintf( desc->title,
+-               DFB_STREAM_DESC_TITLE_LENGTH,
++               DFB_STREAM_DESC_TITLE_LENGTH, "%s",
+                xine_get_meta_info( data->stream, XINE_META_INFO_TITLE ) ?:"" );
+      snprintf( desc->author,
+-               DFB_STREAM_DESC_AUTHOR_LENGTH,
++               DFB_STREAM_DESC_AUTHOR_LENGTH, "%s",
+                xine_get_meta_info( data->stream, XINE_META_INFO_ARTIST ) ?:"" );
+      snprintf( desc->album,
+-               DFB_STREAM_DESC_ALBUM_LENGTH,
++               DFB_STREAM_DESC_ALBUM_LENGTH, "%s",
+                xine_get_meta_info( data->stream, XINE_META_INFO_ALBUM ) ?:"" );
+      snprintf( desc->genre,
+-               DFB_STREAM_DESC_GENRE_LENGTH,
++               DFB_STREAM_DESC_GENRE_LENGTH, "%s",
+                xine_get_meta_info( data->stream, XINE_META_INFO_GENRE ) ?:"" );
+      snprintf( desc->comment,
+-               DFB_STREAM_DESC_COMMENT_LENGTH,
++               DFB_STREAM_DESC_COMMENT_LENGTH, "%s",
+                xine_get_meta_info( data->stream, XINE_META_INFO_COMMENT ) ?:"" );
+      desc->year = atoi( xine_get_meta_info( data->stream, XINE_META_INFO_YEAR ) ?:"" );
+ 
