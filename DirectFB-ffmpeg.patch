@@ -196,3 +196,73 @@
                 data->audio.st    = NULL;
                 data->audio.ctx   = NULL;
                 data->audio.codec = NULL;
+--- DirectFB-1.7.6/interfaces/IDirectFBVideoProvider/idirectfbvideoprovider_ffmpeg.c.org	2014-10-07 22:09:44.408929059 +0200
++++ DirectFB-1.7.6/interfaces/IDirectFBVideoProvider/idirectfbvideoprovider_ffmpeg.c	2014-10-07 22:13:49.765446586 +0200
+@@ -931,11 +931,19 @@
+           /* Ugly hack to fix a bug (segfault) in url_fclose() */
+           if (!(iformat->flags & AVFMT_NOFILE)) {
+                iformat->flags |= AVFMT_NOFILE;
++#if 0
+                av_close_input_file( data->context );
++#else
++	       avformat_close_input( &data->context);
++#endif
+                iformat->flags ^= AVFMT_NOFILE;
+           }
+           else {
++#if 0
+                av_close_input_file( data->context );
++#else
++	       avformat_close_input( &data->context);
++#endif
+           }
+      }
+ 
+@@ -1815,7 +1823,7 @@
+           return DFB_FAILURE;
+      }
+ 
+-     if (av_find_stream_info( data->context ) < 0) {
++     if (avformat_find_stream_info( data->context, NULL ) < 0) {
+           D_ERROR( "IDirectFBVideoProvider_FFmpeg: "
+                    "couldn't find stream info!\n" );
+           IDirectFBVideoProvider_FFmpeg_Destruct( thiz );
+@@ -1867,8 +1875,12 @@
+           IDirectFBVideoProvider_FFmpeg_Destruct( thiz );
+           return DFB_FAILURE;
+      }
+-     
++    
++#if 0
+      data->video.src_frame = avcodec_alloc_frame();
++#else
++     data->video.src_frame = av_frame_alloc();
++#endif
+      if (!data->video.src_frame) {
+           IDirectFBVideoProvider_FFmpeg_Destruct( thiz );
+           return D_OOM();
+--- DirectFB-1.7.6/interfaces/IFusionSoundMusicProvider/ifusionsoundmusicprovider_ffmpeg.c.org	2014-10-07 22:40:52.350475804 +0200
++++ DirectFB-1.7.6/interfaces/IFusionSoundMusicProvider/ifusionsoundmusicprovider_ffmpeg.c	2014-10-07 22:42:19.896406741 +0200
+@@ -444,11 +444,11 @@
+           /* Ugly hack to fix a bug (segfault) in url_fclose() */
+           if (!(iformat->flags & AVFMT_NOFILE)) {
+                iformat->flags |= AVFMT_NOFILE;
+-               av_close_input_file( data->ctx );
++	       avformat_close_input( &data->ctx );
+                iformat->flags ^= AVFMT_NOFILE;
+           }
+           else {
+-               av_close_input_file( data->ctx );
++	       avformat_close_input( &data->ctx );
+           }
+      }
+ 
+@@ -1311,7 +1311,7 @@
+           return DR_FAILURE;
+      }
+ 
+-     if (av_find_stream_info( data->ctx ) < 0) {
++     if (avformat_find_stream_info( data->ctx, NULL ) < 0) {
+           D_ERROR( "IFusionSoundMusicProvider_FFmpeg: couldn't find stream info!\n" );
+           IFusionSoundMusicProvider_FFmpeg_Destruct( thiz );
+           return DR_FAILURE;
