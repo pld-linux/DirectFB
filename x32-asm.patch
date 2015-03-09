@@ -1,0 +1,29 @@
+--- /home/users/baggins/devel/PLD/rpm/BUILD/DirectFB-1.7.6/lib/dvc/dvc_mmx.h~	2013-12-19 01:16:24.000000000 +0100
++++ /home/users/baggins/devel/PLD/rpm/BUILD/DirectFB-1.7.6/lib/dvc/dvc_mmx.h	2015-03-09 18:30:30.315841777 +0100
+@@ -323,7 +323,7 @@
+           "movd          %2, %%mm4\n\t"
+           "shr          $16, %%eax\n\t"
+           "punpcklwd  %%mm4, %%mm4\n\t"
+-#ifdef ARCH_X86_64
++#if defined(ARCH_X86_64) && !defined(__ILP32__)
+           "movq (%3,%%rax,4), %%mm0\n\t"
+ #else
+           "movq (%3,%%eax,4), %%mm0\n\t"
+@@ -336,7 +336,7 @@
+           "movd          %2, %%mm5\n\t"
+           "shr          $16, %%eax\n\t"
+           "punpcklwd  %%mm5, %%mm5\n\t"
+-#ifdef ARCH_X86_64
++#if defined(ARCH_X86_64) && !defined(__ILP32__)
+           "movq (%3,%%rax,4), %%mm2\n\t"
+ #else
+           "movq (%3,%%eax,4), %%mm2\n\t"
+@@ -369,7 +369,7 @@
+           "movd          %2, %%mm4\n\t"
+           "shr          $16,    %2\n\t"
+           "punpcklwd  %%mm4, %%mm4\n\t"
+-#ifdef ARCH_X86_64
++#if defined(ARCH_X86_64) && !defined(__ILP32__)
+           "movq   (%3,%q2,4), %%mm0\n\t"
+ #else
+           "movq   (%3,%2,4), %%mm0\n\t"
