@@ -597,7 +597,7 @@ Summary:	XINE video provider for DirectFB
 Summary(pl.UTF-8):	DirectFB - wtyczka dostarczająca obraz XINE
 Group:		Libraries
 Requires:	%{name} = %{epoch}:%{version}-%{release}
-%requires_eq	xine-lib
+%{?with_xine:%requires_eq	xine-lib}
 
 %description video-xine
 This package contains video provider for DirectFB which uses XINE
@@ -613,7 +613,7 @@ Summary:	DirectFB video output plugin for XINE
 Summary(pl.UTF-8):	Wtyczka wyjścia obrazu DirectFB dla XINE
 Group:		Libraries
 Requires:	%{name} = %{epoch}:%{version}-%{release}
-%requires_eq	xine-lib
+%{?with_xine:%requires_eq	xine-lib}
 
 %description -n xine-output-video-dfb
 DirectFB video output plugin for XINE.
