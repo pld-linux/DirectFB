@@ -19,7 +19,7 @@
 %define		with_sh772x	1
 %endif
 %if %{without xine}
-%undefine	xine_vdpau
+%undefine	with_xine_vdpau
 %endif
 Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl.UTF-8):	DirectFB - Wspomaganie grafiki
