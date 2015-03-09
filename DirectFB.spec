@@ -982,7 +982,7 @@ Statyczna biblioteka sawman.
 	%{?with_xine_vdpau:--enable-xine-vdpau} \
 	--enable-x11 \
 	--enable-zlib \
-%ifarch %{ix86} %{x8664}
+%ifarch %{ix86} %{x8664} x32
 %ifnarch i386 i486
 	--enable-mmx \
 %endif
