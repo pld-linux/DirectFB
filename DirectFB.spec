@@ -25,7 +25,7 @@ Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl.UTF-8):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
 Version:	1.7.6
-Release:	9
+Release:	10
 Epoch:		1
 License:	LGPL v2+
 Group:		Libraries
@@ -1413,8 +1413,10 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{dfbdir}/interfaces/IComaComponent/libicomacomponent_*.so
 %dir %{dfbdir}/interfaces/IFusionDale
 %attr(755,root,root) %{dfbdir}/interfaces/IFusionDale/libifusiondale_*.so
+%if %{with one}
 %dir %{dfbdir}/interfaces/IFusionDaleMessenger
 %attr(755,root,root) %{dfbdir}/interfaces/IFusionDaleMessenger/libifusiondalemessenger_one.so
+%endif
 
 %files -n FusionDale-devel
 %defattr(644,root,root,755)
