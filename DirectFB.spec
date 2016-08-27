@@ -2,7 +2,7 @@
 #
 # Conditional build:
 %bcond_with	multi		# build Multi-application core (requires working /dev/fusion*)
-%bcond_without	one		# Linux One IPC library
+%bcond_with	one		# Linux One IPC library
 %bcond_without	static_libs	# don't build static libraries
 %bcond_with	sh772x		# SH7722/SH7723 (SH-Mobile) graphics driver
 %bcond_with	avifile		# AviFile video provider [not updated for DirectFB 1.7.0]
@@ -25,7 +25,7 @@ Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl.UTF-8):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
 Version:	1.7.6
-Release:	7
+Release:	8
 Epoch:		1
 License:	LGPL v2+
 Group:		Libraries
