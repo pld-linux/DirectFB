@@ -24,14 +24,17 @@
 Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl.UTF-8):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
-Version:	1.7.6
-Release:	13
+Version:	1.7.7
+Release:	1
 Epoch:		1
 License:	LGPL v2+
 Group:		Libraries
-Source0:	http://www.directfb.org/downloads/Core/DirectFB-1.7/%{name}-%{version}.tar.gz
-# Source0-md5:	8a7bb06b3f58599b230b4cf314004512
-Source1:	http://www.directfb.org/downloads/Extras/DFBTutorials-0.5.0.tar.gz
+# 1.7.7 not available after restoring project website
+#Source0:	http://www.directfb.net/downloads/Core/DirectFB-1.7/%{name}-%{version}.tar.gz
+# 1.7.7 code available at https://github.com/deniskropp/DirectFB or https://github.com/lancebaiyouview/DirectFB; release tarball saved e.g. at:
+Source0:	http://sources.buildroot.net/%{name}-%{version}.tar.gz
+# Source0-md5:	152cf1863b1a3a28aa1370e9053440bf
+Source1:	http://www.directfb.net/downloads/Extras/DFBTutorials-0.5.0.tar.gz
 # Source1-md5:	13e443a64bddd68835b574045d9025e9
 Patch0:		%{name}-am.patch
 Patch1:		%{name}-pmake.patch
@@ -47,7 +50,7 @@ Patch10:	%{name}-libmpeg3.patch
 Patch11:	%{name}-format.patch
 Patch12:	x32-asm.patch
 Patch13:	ffmpeg3.patch
-URL:		http://www.directfb.org/
+URL:		http://www.directfb.net/
 BuildRequires:	Mesa-libEGL-devel
 BuildRequires:	Mesa-libGLES-devel
 BuildRequires:	Mesa-libgbm-devel
@@ -113,7 +116,7 @@ Obsoletes:	DirectFB-input-ucb1x00
 %endif
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		dfbdir	%{_libdir}/directfb-1.7-6
+%define		dfbdir	%{_libdir}/directfb-1.7-7
 
 %define		specflags	-fno-strict-aliasing
 
@@ -1047,19 +1050,19 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/voodooplay_client
 %attr(755,root,root) %{_bindir}/voodooplay_server
 %attr(755,root,root) %{_libdir}/libdirect-1.7.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libdirect-1.7.so.6
+%attr(755,root,root) %ghost %{_libdir}/libdirect-1.7.so.7
 %attr(755,root,root) %{_libdir}/libdirectfb-1.7.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libdirectfb-1.7.so.6
+%attr(755,root,root) %ghost %{_libdir}/libdirectfb-1.7.so.7
 %attr(755,root,root) %{_libdir}/libfusion-1.7.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libfusion-1.7.so.6
+%attr(755,root,root) %ghost %{_libdir}/libfusion-1.7.so.7
 %if %{with one}
 %attr(755,root,root) %{_libdir}/libone-1.7.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libone-1.7.so.6
+%attr(755,root,root) %ghost %{_libdir}/libone-1.7.so.7
 %endif
 %attr(755,root,root) %{_libdir}/libuniquewm-1.7.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libuniquewm-1.7.so.6
+%attr(755,root,root) %ghost %{_libdir}/libuniquewm-1.7.so.7
 %attr(755,root,root) %{_libdir}/libvoodoo-1.7.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libvoodoo-1.7.so.6
+%attr(755,root,root) %ghost %{_libdir}/libvoodoo-1.7.so.7
 %dir %{dfbdir}
 %dir %{dfbdir}/gfxdrivers
 %attr(755,root,root) %{dfbdir}/gfxdrivers/libdirectfb_ati128.so
@@ -1367,7 +1370,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/dfbswitch
 # library itself
 %attr(755,root,root) %{_libdir}/lib++dfb-1.7.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/lib++dfb-1.7.so.6
+%attr(755,root,root) %ghost %{_libdir}/lib++dfb-1.7.so.7
 
 %files c++-devel
 %defattr(644,root,root,755)
@@ -1384,7 +1387,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/spooky
 %attr(755,root,root) %{_libdir}/libdivine-1.7.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libdivine-1.7.so.6
+%attr(755,root,root) %ghost %{_libdir}/libdivine-1.7.so.7
 %attr(755,root,root) %{dfbdir}/inputdrivers/libdirectfb_divine.so
 %dir %{dfbdir}/interfaces/IDiVine
 %attr(755,root,root) %{dfbdir}/interfaces/IDiVine/libidivine_dispatcher.so
@@ -1406,7 +1409,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/fddump
 %attr(755,root,root) %{_bindir}/fdmaster
 %attr(755,root,root) %{_libdir}/libfusiondale-1.7.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libfusiondale-1.7.so.6
+%attr(755,root,root) %ghost %{_libdir}/libfusiondale-1.7.so.7
 %dir %{dfbdir}/interfaces/IComa
 %attr(755,root,root) %{dfbdir}/interfaces/IComa/libicoma_*.so
 %dir %{dfbdir}/interfaces/IComaComponent
@@ -1437,7 +1440,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/fsproxy
 %attr(755,root,root) %{_bindir}/fsvolume
 %attr(755,root,root) %{_libdir}/libfusionsound-1.7.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libfusionsound-1.7.so.6
+%attr(755,root,root) %ghost %{_libdir}/libfusionsound-1.7.so.7
 %dir %{dfbdir}/interfaces/IFusionSound
 %attr(755,root,root) %{dfbdir}/interfaces/IFusionSound/libifusionsound.so
 %attr(755,root,root) %{dfbdir}/interfaces/IFusionSound/libifusionsound_dispatcher.so
@@ -1501,7 +1504,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/swmdump
 %attr(755,root,root) %{_libdir}/libsawman-1.7.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libsawman-1.7.so.6
+%attr(755,root,root) %ghost %{_libdir}/libsawman-1.7.so.7
 %attr(755,root,root) %{dfbdir}/wm/libdirectfbwm_sawman.so
 
 %files -n SaWMan-devel
