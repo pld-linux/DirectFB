@@ -25,7 +25,7 @@ Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl.UTF-8):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
 Version:	1.7.7
-Release:	2
+Release:	3
 Epoch:		1
 License:	LGPL v2+
 Group:		Libraries
@@ -50,6 +50,8 @@ Patch10:	%{name}-libmpeg3.patch
 Patch11:	%{name}-format.patch
 Patch12:	x32-asm.patch
 Patch13:	ffmpeg3.patch
+Patch14:	%{name}-tslib.patch
+Patch15:	%{name}-libtimidity.patch
 URL:		http://www.directfb.net/
 BuildRequires:	Mesa-libEGL-devel
 BuildRequires:	Mesa-libGLES-devel
@@ -77,7 +79,7 @@ BuildRequires:	libpng-devel >= 2:1.4.0
 BuildRequires:	libstdc++-devel
 BuildRequires:	libsvg-cairo-devel >= 0.1.6
 BuildRequires:	libtiff-devel >= 4
-BuildRequires:	libtimidity-devel >= 0.1.0
+BuildRequires:	libtimidity-devel >= 0.2.0
 BuildRequires:	libtool
 BuildRequires:	libvdpau-devel >= 0.3
 BuildRequires:	libvncserver-devel
@@ -862,6 +864,7 @@ Summary(pl.UTF-8):	Moduł FusionSound dostarczający muzykę MIDI przez libtimid
 Group:		Libraries
 URL:		http://www.directfb.org/index.php?path=Platform/FusionSound
 Requires:	FusionSound = %{epoch}:%{version}-%{release}
+Requires:	libtimidity >= 0.2.0
 
 %description -n FusionSound-musicprovider-timidity
 MIDI libtimidity music provider module for FusionSound.
@@ -944,6 +947,8 @@ Statyczna biblioteka sawman.
 %patch11 -p1
 %patch12 -p1
 %patch13 -p1
+%patch14 -p1
+%patch15 -p1
 
 # video drivers
 %{__sed} -i -e 's/checkfor_\(cle266\|cyber5k\|radeon\|savage\|unichrome\|vmware\)=no/checkfor_\1=yes/' configure.in

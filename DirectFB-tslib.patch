@@ -1,0 +1,19 @@
+--- DirectFB-1.7.7/configure.in.orig	2017-12-17 18:38:22.309813442 +0100
++++ DirectFB-1.7.7/configure.in	2017-12-17 18:44:16.376476061 +0100
+@@ -2454,11 +2454,12 @@
+ 
+ enable_tslib=no
+ if test "$checkfor_tslib" = "yes"; then
+-  PKG_CHECK_MODULES([TSLIB], [tslib-1.0 >= 1.0.0], [enable_tslib=yes], [enable_tslib=no])
+-  if test "$enable_tslib" = "no"; then
+-     PKG_CHECK_MODULES([TSLIB], [tslib-0.0], [enable_tslib=yes], [enable_tslib=no
++  PKG_CHECK_MODULES([TSLIB], [tslib >= 1.0], [enable_tslib=yes],
++  [PKG_CHECK_MODULES([TSLIB], [tslib-1.0 >= 1.0.0], [enable_tslib=yes],
++   [PKG_CHECK_MODULES([TSLIB], [tslib-0.0], [enable_tslib=yes], [enable_tslib=no
+        AC_MSG_WARN([*** no tslib -- tslib driver will not be built.])])
+-  fi
++   ])
++  ])
+ fi
+ 
+ enable_ucb1x00_ts=no

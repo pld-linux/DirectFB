@@ -1,0 +1,50 @@
+--- DirectFB-1.7.7/interfaces/IFusionSoundMusicProvider/ifusionsoundmusicprovider_timidity.c.orig	2013-12-19 01:16:24.000000000 +0100
++++ DirectFB-1.7.7/interfaces/IFusionSoundMusicProvider/ifusionsoundmusicprovider_timidity.c	2017-12-17 20:40:00.879730101 +0100
+@@ -114,6 +114,29 @@
+ }
+ 
+ static int
++seek_callback( void *ctx, long offset, int whence )
++{
++     IFusionSoundMusicProvider_Timidity_data *data = ctx;
++     if (direct_stream_seekable( data->st )) {
++	  long newpos;
++	  switch (whence) {
++	       case SEEK_SET: newpos = offset; break;
++	       case SEEK_CUR: newpos = direct_stream_offset( data->st ) + offset; break;
++	       case SEEK_END: newpos = direct_stream_length( data->st ) + offset; break;
++	       default: return -1;
++	  }
++          direct_stream_seek( data->st, newpos );
++     } else return -1; // not seekable
++}
++
++static long
++tell_callback( void *ctx )
++{
++     IFusionSoundMusicProvider_Timidity_data *data = ctx;
++     return direct_stream_offset( data->st );
++}
++
++static int
+ close_callback( void *ctx )
+ {
+      return 0;
+@@ -363,7 +386,7 @@
+      Timidity_Stop( data, false );
+      
+      direct_stream_seek( data->st, 0 );
+-     stream = mid_istream_open_callbacks( read_callback, close_callback, data );
++     stream = mid_istream_open_callbacks( read_callback, seek_callback, tell_callback, close_callback, data );
+      if (!stream) {
+           D_ERROR( "IFusionSoundMusicProvider_Timidity: couldn't open input stream!\n" );
+           pthread_mutex_unlock( &data->lock );
+@@ -510,7 +533,7 @@
+      Timidity_Stop( data, false );
+ 
+      direct_stream_seek( data->st, 0 );
+-     stream = mid_istream_open_callbacks( read_callback, close_callback, data );
++     stream = mid_istream_open_callbacks( read_callback, seek_callback, tell_callback, close_callback, data );
+      if (!stream) {
+           D_ERROR( "IFusionSoundMusicProvider_Timidity: couldn't open input stream!\n" );
+           pthread_mutex_unlock( &data->lock );
