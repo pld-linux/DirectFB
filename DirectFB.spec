@@ -25,7 +25,7 @@ Summary:	DirectFB - Hardware graphics acceleration
 Summary(pl.UTF-8):	DirectFB - Wspomaganie grafiki
 Name:		DirectFB
 Version:	1.7.7
-Release:	3
+Release:	4
 Epoch:		1
 License:	LGPL v2+
 Group:		Libraries
@@ -52,6 +52,7 @@ Patch12:	x32-asm.patch
 Patch13:	ffmpeg3.patch
 Patch14:	%{name}-tslib.patch
 Patch15:	%{name}-libtimidity.patch
+Patch16:	ffmpeg4.patch
 URL:		http://www.directfb.net/
 BuildRequires:	Mesa-libEGL-devel
 BuildRequires:	Mesa-libGLES-devel
@@ -949,6 +950,7 @@ Statyczna biblioteka sawman.
 %patch13 -p1
 %patch14 -p1
 %patch15 -p1
+%patch16 -p1
 
 # video drivers
 %{__sed} -i -e 's/checkfor_\(cle266\|cyber5k\|radeon\|savage\|unichrome\|vmware\)=no/checkfor_\1=yes/' configure.in
