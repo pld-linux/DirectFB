@@ -54,9 +54,9 @@ Patch14:	%{name}-tslib.patch
 Patch15:	%{name}-libtimidity.patch
 Patch16:	ffmpeg4.patch
 URL:		http://www.directfb.net/
-BuildRequires:	Mesa-libEGL-devel
-BuildRequires:	Mesa-libGLES-devel
+BuildRequires:	EGL-devel
 BuildRequires:	Mesa-libgbm-devel
+BuildRequires:	OpenGLESv2-devel
 BuildRequires:	OpenGL-devel
 BuildRequires:	OpenGL-GLX-devel
 BuildRequires:	SDL-devel
@@ -90,6 +90,9 @@ BuildRequires:	libwebp-devel >= 0.2.1
 %{?with_one:BuildRequires:	linux-one-devel >= 9.0.1}
 %{?with_quicktime:BuildRequires:	openquicktime-devel}
 BuildRequires:	pkgconfig
+BuildRequires:	pkgconfig(egl)
+BuildRequires:	pkgconfig(gl)
+BuildRequires:	pkgconfig(glesv2)
 BuildRequires:	sed >= 4.0
 %{?with_swfdec:BuildRequires:	swfdec-devel >= 0.5.0}
 %{?with_swfdec:BuildRequires:	swfdec-devel < 0.6.0}
