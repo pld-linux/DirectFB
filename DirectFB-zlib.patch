@@ -8,5 +8,5 @@
 +#include <zlib.h>
 +#endif
  
- D_DEBUG_DOMAIN( Core_Surface, "Core/Surface", "DirectFB Core Surface" );
- 
+ D_DEBUG_DOMAIN( Core_Surface,         "Core/Surface",         "DirectFB Core Surface" );
+ D_DEBUG_DOMAIN( Core_Surface_Updates, "Core/Surface/Updates", "DirectFB Core Surface Updates" );
