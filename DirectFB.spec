@@ -55,6 +55,7 @@ Patch14:	%{name}-tslib.patch
 Patch15:	%{name}-libtimidity.patch
 Patch16:	ffmpeg4.patch
 Patch17:	vnc-pc.patch
+Patch18:	imlib2-pc.patch
 URL:		http://www.directfb.net/
 BuildRequires:	EGL-devel
 BuildRequires:	Mesa-libgbm-devel
@@ -70,7 +71,7 @@ BuildRequires:	automake
 BuildRequires:	freetype-devel >= 2.0.2
 %{?with_flash:BuildRequires:	gplflash-devel >= 0.4.10-5}
 %{?with_gstreamer:BuildRequires:	gstreamer-plugins-base-devel >= 1.0}
-BuildRequires:	imlib2-devel
+BuildRequires:	imlib2-devel >= 1.1.0
 BuildRequires:	jasper-devel
 BuildRequires:	libcddb-devel >= 1.0.0
 BuildRequires:	libdrm-devel
@@ -958,6 +959,7 @@ Statyczna biblioteka sawman.
 %patch15 -p1
 %patch16 -p1
 %patch17 -p1
+%patch18 -p1
 
 # video drivers
 %{__sed} -i -e 's/checkfor_\(cle266\|cyber5k\|radeon\|savage\|unichrome\|vmware\)=no/checkfor_\1=yes/' configure.in

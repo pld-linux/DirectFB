@@ -1,0 +1,20 @@
+--- DirectFB-1.7.7/configure.in.orig	2022-06-07 13:14:44.304420860 +0200
++++ DirectFB-1.7.7/configure.in	2022-06-07 13:23:58.864663661 +0200
+@@ -1452,15 +1452,9 @@
+                              [build Imlib2 image provider @<:@default=no@:>@]),
+               [], [enable_imlib2=no])
+ if test "x$enable_imlib2" = "xyes"; then
+-  AC_PATH_PROG(IMLIB2_CONFIG, imlib2-config, no)
+-  if test "x$IMLIB2_CONFIG" = xno; then
++  PKG_CHECK_MODULES(IMLIB2, [imlib2], [imlib2=yes], [imlib2=no
+     AC_MSG_WARN([*** Imlib2 library not found, building without Imlib2 support ***])
+-    imlib2="no"
+-  else
+-    IMLIB2_CFLAGS=`imlib2-config --cflags`
+-    IMLIB2_LIBS=`imlib2-config --libs`
+-    imlib2="yes"
+-  fi
++    ])
+ fi
+ 
+ AC_SUBST(IMLIB2_LIBS)
