@@ -14,6 +14,7 @@
 %bcond_with	swfdec		# swfdec FLASH video provider [not ready for swfdec >= 0.6]
 %bcond_without	xine		# Xine video provider
 %bcond_without	xine_vdpau	# Xine/VDPAU video provider
+%bcond_with	drmkms		# DRM/KMS support
 #
 %ifarch sh4
 %define		with_sh772x	1
@@ -93,6 +94,7 @@ BuildRequires:	pkgconfig
 BuildRequires:	pkgconfig(egl)
 BuildRequires:	pkgconfig(gl)
 BuildRequires:	pkgconfig(glesv2)
+BuildRequires:	rpmbuild(macros) >= 1.527
 BuildRequires:	sed >= 4.0
 %{?with_swfdec:BuildRequires:	swfdec-devel >= 0.5.0}
 %{?with_swfdec:BuildRequires:	swfdec-devel < 0.6.0}
@@ -974,6 +976,7 @@ Statyczna biblioteka sawman.
 	--disable-silent-rules \
 	%{?with_avifile:--enable-avifile} \
 	--enable-divine \
+	%{__enable_disable drmkms} \
 	--enable-fast-install \
 	%{?with_ffmpeg:--enable-ffmpeg} \
 	%{?with_flash:--enable-flash} \
@@ -1211,9 +1214,11 @@ rm -rf $RPM_BUILD_ROOT
 %doc docs/html/*.{html,png}
 %{_examplesdir}/%{name}-%{version}
 
+%if %{with drmkms}
 %files core-drmkms
 %defattr(644,root,root,755)
 %attr(755,root,root) %{dfbdir}/systems/libdirectfb_drmkms_system.so
+%endif
 
 %files core-mesa
 %defattr(644,root,root,755)
