@@ -1,0 +1,21 @@
+--- DirectFB-1.7.7/configure.in.orig	2022-06-07 13:00:38.865311931 +0200
++++ DirectFB-1.7.7/configure.in	2022-06-07 13:14:44.304420860 +0200
+@@ -1212,15 +1212,10 @@
+                              [build with VNC support @<:@default=auto@:>@]),
+               [], [enable_vnc=yes])
+ if test "$enable_vnc" = "yes"; then
+-  AC_PATH_PROG(VNC_CONFIG, libvncserver-config, no)
+-  if test "$VNC_CONFIG" = "no"; then
+-    enable_vnc=no
++  PKG_CHECK_MODULES(VNC, [libvncserver], [enable_vnc=yes], [enable_vnc=no
+     AC_MSG_WARN([
+-*** libvncserver-config not found -- building without VNC support. See http://libvncserver.sourceforge.net])
+-  else
+-    VNC_CFLAGS=`$VNC_CONFIG --cflags`
+-    VNC_LIBS=`$VNC_CONFIG --libs`
+-  fi
++*** libvncserver package not found -- building without VNC support. See http://libvncserver.sourceforge.net])
++    ])
+ fi
+ 
+ AM_CONDITIONAL(VNC_CORE, test "$enable_vnc" = "yes")

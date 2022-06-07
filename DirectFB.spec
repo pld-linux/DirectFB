@@ -54,6 +54,7 @@ Patch13:	ffmpeg3.patch
 Patch14:	%{name}-tslib.patch
 Patch15:	%{name}-libtimidity.patch
 Patch16:	ffmpeg4.patch
+Patch17:	vnc-pc.patch
 URL:		http://www.directfb.net/
 BuildRequires:	EGL-devel
 BuildRequires:	Mesa-libgbm-devel
@@ -84,7 +85,7 @@ BuildRequires:	libtiff-devel >= 4
 BuildRequires:	libtimidity-devel >= 0.2.0
 BuildRequires:	libtool
 BuildRequires:	libvdpau-devel >= 0.3
-BuildRequires:	libvncserver-devel
+BuildRequires:	libvncserver-devel >= 0.9.8
 BuildRequires:	libvorbis-devel >= 1:1.0.0
 BuildRequires:	libwebp-devel >= 0.2.1
 %{?with_multi:BuildRequires:	linux-fusion-devel >= 9.0.1}
@@ -956,6 +957,7 @@ Statyczna biblioteka sawman.
 %patch14 -p1
 %patch15 -p1
 %patch16 -p1
+%patch17 -p1
 
 # video drivers
 %{__sed} -i -e 's/checkfor_\(cle266\|cyber5k\|radeon\|savage\|unichrome\|vmware\)=no/checkfor_\1=yes/' configure.in
