@@ -104,7 +104,6 @@ BuildRequires:	sysfsutils-devel >= 1.3.0-3
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	tslib-devel >= 1.0
 %{?with_xine:BuildRequires:	xine-lib-devel >= 2:1.2.3}
-%{?with_xine_vdpau:BuildRequires:	/usr/include/xine/video_out_vdpau.h}
 BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	xorg-lib-libXext-devel
 BuildRequires:	xorg-proto-xproto-devel
